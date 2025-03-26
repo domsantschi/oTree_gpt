@@ -1,0 +1,15 @@
+[project]
+name = "otree-gpt"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "boto3==1.36.7",
+    "openai>=1.68.2",
+    "otree==5.10.3",
+    "psycopg2>=2.8.4",
+    "pydantic==2.10.5",
+    "python-dotenv>=1.1.0",
+    "requests>=2.32.3",
+]

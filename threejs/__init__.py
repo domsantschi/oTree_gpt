@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 from otree.api import *
 from os import environ
 from openai import OpenAI
@@ -389,6 +392,23 @@ def custom_export(players):
             fullText,
             m.msgText,
         ]
+
+    # Include AI messages
+    for player in players:
+        cached_messages = json.loads(player.cachedMessages)
+        for message in cached_messages:
+            # Extract AI messages (e.g., messages from bots)
+            if message['role'] == 'assistant':
+                yield [
+                    player.session.code,
+                    player.participant.code,
+                    message.get('msgId', ''),
+                    message.get('timestamp', ''),
+                    message.get('sender', ''),
+                    message.get('tone', ''),
+                    message.get('content', ''),
+                    message.get('text', ''),
+                ]
 
 
 ########################################################
