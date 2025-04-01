@@ -1,0 +1,89 @@
+{{ block title }}Instructions: Virtual Colleague Interaction{{ endblock }}
+{{ block content }}
+    <p>
+        On the next page, you will use your keyboard to <b>navigate a 3D environment</b>.
+    </p>
+    <p>
+        Your task is to <b>interact with your virtual colleagues</b>. Each virtual colleague holds valuable information about a specific position of the Cost of Goods Sold (COGS) Budget. Your goal is to <b>collect and piece together COGS-related insights</b> by engaging with them strategically.
+    </p>
+    <ul>
+        <li>Move your character through the 3D space to approach the virtual colleagues - <b>use Arrow keys to move your character</b> </li>
+        <li><b>Type and press Enter to chat.</b> Conversations with virtual colleagues will only trigger when your character is close enough (within 10 units). </li>
+        <li>Each virtual colleague specializes in a specific COGS domain:
+            <ul><b>
+                <li style="color: red;">Red Bot: Specialist in Direct Materials</li>
+                <li style="color: black;">Black Bot: Specialist in Direct Manufacturing Labor.</li>
+                <li style="color: green;">Green Bot: Specialist in Manufacturing Overhead.</li></b>
+            </ul>
+        </li>
+        <li>Ask questions relevant to their expertise to gather useful insights. If you ask something outside their expertise, they will suggest consulting another agent.</li>
+        <li>You will have <b>1 minute to gather as much information as possible</b>.</li>
+    </ul>
+    <p>
+        After the time is up, you will need to make a decision based on the information you have collected.
+    </p>
+    <p>
+        Use this opportunity to explore the environment and interact strategically to uncover the truth. Good luck!
+    </p>
+    <img src="/static/images/threejs.gif" alt="Figure1" style="max-width:100%; height:auto;">
+
+    <div id="control-check">
+        <p><b>Control Check:</b></p>
+        <form id="control-check-form">
+            <label for="question1">1) Which virtual colleague is specialized in the Direct Manufacturing Labor Position of your COGS Budget?</label><br>
+            <input type="radio" id="red" name="question1" value="Red">
+            <label for="red">Red</label><br>
+            <input type="radio" id="black" name="question1" value="Black">
+            <label for="black">Black</label><br>
+            <input type="radio" id="green" name="question1" value="Green">
+            <label for="green">Green</label><br><br>
+
+            <label for="question2">2) How can you navigate in the 3D Environment?</label><br>
+            <input type="radio" id="cursor" name="question2" value="Cursor">
+            <label for="cursor">Cursor</label><br>
+            <input type="radio" id="arrow-keys" name="question2" value="Arrow Keys">
+            <label for="arrow-keys">Arrow Keys</label><br>
+            <input type="radio" id="gaze" name="question2" value="Gaze">
+            <label for="gaze">Gaze</label><br><br>
+
+            <button type="button" id="submit-control-check">Submit</button>
+        </form>
+        <p id="error-message" style="color: red; display: none;">Please answer both questions correctly to proceed.</p>
+    </div>
+
+    <div id="confirmation-message" style="display: none; margin-top: 20px;">
+        <p style="color: green; font-weight: bold;">
+            Correct! You can now start navigating the 3D space and interacting with your virtual colleagues.
+        </p>
+    </div>
+
+    <script>
+        document.getElementById('submit-control-check').addEventListener('click', function () {
+            const question1 = document.querySelector('input[name="question1"]:checked');
+            const question2 = document.querySelector('input[name="question2"]:checked');
+            const errorMessage = document.getElementById('error-message');
+            const confirmationMessage = document.getElementById('confirmation-message');
+            const nextButton = document.querySelector('.otree-btn-next'); // Target the next button
+
+            if (question1 && question2 && question1.value === "Black" && question2.value === "Arrow Keys") {
+                errorMessage.style.display = 'none';
+                document.getElementById('control-check').style.display = 'none';
+                confirmationMessage.style.display = 'block'; // Show confirmation message
+                nextButton.style.display = 'inline-block'; // Show the next button
+            } else {
+                errorMessage.style.display = 'block';
+                confirmationMessage.style.display = 'none'; // Hide confirmation message
+            }
+        });
+
+        // Hide the next button initially
+        document.addEventListener('DOMContentLoaded', function () {
+            const nextButton = document.querySelector('.otree-btn-next'); // Target the next button
+            if (nextButton) {
+                nextButton.style.display = 'none';
+            }
+        });
+    </script>
+
+    {{ next_button }}
+{{ endblock }}

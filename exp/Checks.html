@@ -1,0 +1,37 @@
+{{ block title }}Study Recap{{ endblock }}
+{{ block content }}
+
+<p>Please answer the following questions about the case materials, to the best of your recollections.</p>
+
+<p>
+ 1. What are the <b>two factors</b> that will be used for your <b>performance evaluation</b> and the determination of your compensation?
+</p>
+<ul>
+    <li>
+        <input type="radio" name="impact_focus" value="costs" required>
+        The <b>Actual Costs</b> of Goods Sold and the <b>Deviance between the Actual Costs</b> of Goods Sold and the Budgeted Costs of Goods Sold
+    </li>
+    <li>
+        <input type="radio" name="impact_focus" value="co2" required>
+        The <b>Actual CO2 Emissions</b> of the Costs of Goods Sold and <b>the Deviance between the Actual CO2 Emissions</b> of the Costs of Goods Sold and the <b>Budgeted CO2 Emissions</b> of the Costs of Goods Sold
+    </li>
+</ul>
+{{ formfield_errors 'impact_focus' }}
+
+<p>
+2. When interacting with your virtual colleagues, were you aware that <b>each query reduces your compensation</b> and that each query you ask will cause <b>real-life CO2 emissions</b>?
+</p>
+<ul>
+    <li>
+        <input type="radio" name="impact_transparency" value="costs" required>
+        No, <b>I was not aware</b> that each query would incur a cost that would reduce my payoff and that each query I ask will cause real-life CO2 emissions.
+    </li>
+    <li>
+        <input type="radio" name="impact_transparency" value="co2" required>
+        Yes, <b>I was aware</b> that each query would incur a cost that would reduce my payoff and that each query I ask will cause real-life CO2 emissions.
+    </li>
+</ul>
+{{ formfield_errors 'impact_transparency' }}
+
+<p>{{ next_button }}</p>
+{{ endblock }}

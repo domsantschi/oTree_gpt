@@ -32,6 +32,11 @@ SESSION_CONFIGS = [
          app_sequence=['threejs',],
          num_demo_participants=1,
      ),
+        dict(
+            name='exp',
+            app_sequence=['exp',],
+            num_demo_participants=1,
+        ),
 ]
 # if you set a property in SESSION_CONFIG_DEFAULTS, it will be inherited by all configs
 # in SESSION_CONFIGS, except those that explicitly override it.
@@ -42,7 +47,10 @@ SESSION_CONFIG_DEFAULTS = dict(
     real_world_currency_per_point=1.00, participation_fee=0.00, doc=""
 )
 
-PARTICIPANT_FIELDS = []
+# Add this to your settings.py file
+PARTICIPANT_FIELDS = [
+    'failed_knowledge_check',  # Tracks whether the participant failed the knowledge check
+]
 SESSION_FIELDS = []
 
 

@@ -345,6 +345,10 @@ class CharPositionData(ExtraModel):
     posBlack = models.StringField()
     posGreen = models.StringField()
 
+    # New fields
+    closestNPC = models.StringField()  # Closest NPC
+    textPosition = models.StringField()  # Position from which the player texted
+
 
 ########################################################
 # Custom export                                        #
@@ -352,9 +356,9 @@ class CharPositionData(ExtraModel):
 
 # custom export of chatLog
 def custom_export(players):
-    # header row
+    # Header row
     yield [
-        'sessionId', 
+        'sessionId',
         'subjectId',
         'msgId',
         'timestamp',
@@ -362,26 +366,24 @@ def custom_export(players):
         'tone',
         'fullText',
         'msgText',
-        'reactionData'
+        'reactionData',
+        'posPlayer',  # Player position
+        'closestNPC',  # Closest NPC
+        'textPosition',  # Position from which the player texted
     ]
 
-    # get MessageData model
+    # Export MessageData
     mData = MessageData.filter()
     for m in mData:
-
-        # get player info
         player = m.player
         participant = player.participant
         session = player.session
 
-        # full text field
         try:
             fullText = json.loads(m.fullText)['content']
         except:
             fullText = m.fullText
-    
 
-        # write to csv
         yield [
             session.code,
             participant.code,
@@ -391,24 +393,33 @@ def custom_export(players):
             m.tone,
             fullText,
             m.msgText,
+            '',  # Placeholder for reactionData
+            '',  # Placeholder for posPlayer
+            '',  # Placeholder for closestNPC
+            '',  # Placeholder for textPosition
         ]
 
-    # Include AI messages
-    for player in players:
-        cached_messages = json.loads(player.cachedMessages)
-        for message in cached_messages:
-            # Extract AI messages (e.g., messages from bots)
-            if message['role'] == 'assistant':
-                yield [
-                    player.session.code,
-                    player.participant.code,
-                    message.get('msgId', ''),
-                    message.get('timestamp', ''),
-                    message.get('sender', ''),
-                    message.get('tone', ''),
-                    message.get('content', ''),
-                    message.get('text', ''),
-                ]
+    # Export CharPositionData
+    posData = CharPositionData.filter()
+    for pos in posData:
+        player = pos.player
+        participant = player.participant
+        session = player.session
+
+        yield [
+            session.code,
+            participant.code,
+            pos.msgId,
+            pos.timestamp,
+            '',  # Placeholder for sender
+            '',  # Placeholder for tone
+            '',  # Placeholder for fullText
+            '',  # Placeholder for msgText
+            '',  # Placeholder for reactionData
+            pos.posPlayer,
+            pos.closestNPC,
+            pos.textPosition,
+        ]
 
 
 ########################################################

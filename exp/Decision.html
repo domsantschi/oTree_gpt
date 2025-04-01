@@ -1,0 +1,191 @@
+{{ block title }}Your Budgeting Decision{{ endblock }}
+{{ block content }}
+
+<p>
+    Below is the chat protocol for your reference, which may help you in answering the following questions regarding your Cost of Goods Sold Budget and its corresponding CO2 Emission Budget for the Year Ending December 31, 2025.
+</p>
+
+<!-- Chat Protocol Section -->
+<b>Chat Protocol</b>
+<div style="border: 1px solid #ccc; padding: 10px; max-height: 300px; overflow-y: auto;">
+    {% for message in chat_messages %}
+        <p>
+            <strong>{{ message.sender }}:</strong> {{ message.text }} <br>
+            <small style="color: gray;">{{ message.timestamp }}</small>
+        </p>
+    {% empty %}
+        <p>No chat messages available.</p>
+    {% endfor %}
+</div>
+
+<p>
+    Please <b>answer the following questions</b> regarding your Cost of Goods Sold Budget and its corresponding CO2 Emission Budget for the Year Ending December 31, 2025.
+</p>
+
+<!-- Existing Decision Form -->
+<p>
+    1. What are your budgeted a) Direct materials used, b) Direct manufacturing labor, c) Manufacturing overhead?
+</p>
+
+<table border="1" style="width:100%; border-collapse:collapse; text-align:left;">
+    <thead>
+        <tr>
+            <th>Position</th>
+            <th>Total Costs in USD</th>
+            <th>Total Emissions in metric tons of CO2</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr style="background-color: #d9f7be;"> <!-- Fixed by manager -->
+            <td>Beginning finished-goods inventory, January 1, 2025</td>
+            <td>$646,000</td>
+            <td>168 mt</td>
+        </tr>
+        <tr>
+            <td colspan="3" style="border-bottom: 2px solid black;"></td>
+        </tr>
+        <tr style="background-color: #fff1b8;"> <!-- To be budgeted -->
+            <td>Direct materials used</td>
+            <td>
+                <input type="number" name="direct_materials" placeholder="Enter value" required 
+                       oninput="updateEmissions(this, 'direct_materials_emissions')">
+            </td>
+            <td id="direct_materials_emissions">Calculated</td>
+        </tr>
+        <tr style="background-color: #fff1b8;"> <!-- To be budgeted -->
+            <td>Direct manufacturing labor</td>
+            <td>
+                <input type="number" name="direct_labor" placeholder="Enter value" required 
+                       oninput="updateEmissions(this, 'direct_labor_emissions')">
+            </td>
+            <td id="direct_labor_emissions">Calculated</td>
+        </tr>
+        <tr style="background-color: #fff1b8;"> <!-- To be budgeted -->
+            <td>Manufacturing overhead</td>
+            <td>
+                <input type="number" name="manufacturing_overhead" placeholder="Enter value" required 
+                       oninput="updateEmissions(this, 'manufacturing_overhead_emissions')">
+            </td>
+            <td id="manufacturing_overhead_emissions">Calculated</td>
+        </tr>
+        <tr>
+            <td colspan="3" style="border-bottom: 2px solid black;"></td>
+        </tr>
+        <tr style="background-color: #e6f7ff;"> <!-- Automatically calculated -->
+            <td>Cost of goods manufactured</td>
+            <td id="cost_of_goods_manufactured">Calculated</td>
+            <td id="cost_of_goods_manufactured_emissions">Calculated</td>
+        </tr>
+        <tr style="background-color: #e6f7ff;"> <!-- Automatically calculated -->
+            <td>Cost of goods available for sale</td>
+            <td id="cost_of_goods_available">Calculated</td>
+            <td id="cost_of_goods_available_emissions">Calculated</td>
+        </tr>
+        <tr>
+            <td colspan="3" style="border-bottom: 2px solid black;"></td>
+        </tr>
+        <tr style="background-color: #d9f7be;"> <!-- Fixed by manager -->
+            <td>Deduct ending finished-goods inventory, December 31, 2025</td>
+            <td>$4,486,000</td>
+            <td>1,166 mt</td>
+        </tr>
+        <tr>
+            <td colspan="3" style="border-bottom: 2px solid black;"></td>
+        </tr>
+        <tr style="background-color: #e6f7ff;"> <!-- Automatically calculated -->
+            <td><b>Cost of goods sold, December 31, 2025</b></td>
+            <td id="cost_of_goods_sold">Calculated</td>
+            <td id="cost_of_goods_sold_emissions">Calculated</td>
+        </tr>
+    </tbody>
+</table>
+
+<p>
+    2. What are your budgeted Cost of Goods Sold in USD? (Insert a number in USD)
+</p>
+<input type="number" id="budgeted-cost" name="budgeted_cost" placeholder="Enter value" required>
+<br><br>
+
+<p>
+    3. What are your budgeted CO2 emissions in metric tons of CO2? (Insert a number in metric tons)
+</p>
+<input type="number" id="budgeted-emissions" name="budgeted_emissions" placeholder="Enter value" required>
+<br><br>
+
+<p>
+    4. Please provide your written justifications for your budget (Write plain text here).
+</p>
+{{ formfield "justification" }}
+<br><br>
+
+<button type="submit">Submit Decision</button>
+
+    <script>
+        const endingInventory = 4486000; // Fixed value for ending finished-goods inventory
+        const endingInventoryEmissions = 1166; // Fixed value for ending finished-goods inventory emissions
+
+        function formatNumberWithCommas(value) {
+            return value.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        }
+
+        function updateEmissions(inputElement, outputId) {
+            const value = parseFloat(inputElement.value) || 0;
+            const emissions = (value * 0.00026).toFixed(0);
+            document.getElementById(outputId).textContent = `${formatNumberWithCommas(parseInt(emissions))} mt`;
+        }
+
+        function calculateCostOfGoodsManufactured() {
+            const directMaterials = parseFloat(document.querySelector('input[name="direct_materials"]').value) || 0;
+            const directLabor = parseFloat(document.querySelector('input[name="direct_labor"]').value) || 0;
+            const manufacturingOverhead = parseFloat(document.querySelector('input[name="manufacturing_overhead"]').value) || 0;
+
+            const total = directMaterials + directLabor + manufacturingOverhead;
+            document.getElementById('cost_of_goods_manufactured').textContent = `$ ${formatNumberWithCommas(total)}`;
+        }
+
+        function calculateEmissionsForCostOfGoodsManufactured() {
+            const emissionsFactor = 0.00026; // Emissions factor
+            const costOfGoodsManufactured = parseFloat(document.getElementById('cost_of_goods_manufactured').textContent.replace(/[^0-9.-]+/g, "")) || 0;
+            const emissions = (costOfGoodsManufactured * emissionsFactor).toFixed(0);
+            document.getElementById('cost_of_goods_manufactured_emissions').textContent = `${formatNumberWithCommas(parseInt(emissions))} mt`;
+        }
+
+        function calculateCostOfGoodsAvailable() {
+            const beginningInventory = 646000; // Fixed value for Beginning finished-goods inventory
+            const costOfGoodsManufactured = parseFloat(document.getElementById('cost_of_goods_manufactured').textContent.replace(/[^0-9.-]+/g, "")) || 0;
+
+            const total = beginningInventory + costOfGoodsManufactured;
+            document.getElementById('cost_of_goods_available').textContent = `$ ${formatNumberWithCommas(total)}`;
+        }
+
+        function calculateEmissionsForCostOfGoodsAvailable() {
+            const emissionsFactor = 0.00026; // Emissions factor
+            const costOfGoodsAvailable = parseFloat(document.getElementById('cost_of_goods_available').textContent.replace(/[^0-9.-]+/g, "")) || 0;
+            const emissions = (costOfGoodsAvailable * emissionsFactor).toFixed(0);
+            document.getElementById('cost_of_goods_available_emissions').textContent = `${formatNumberWithCommas(parseInt(emissions))} mt`;
+        }
+
+        function calculateCostOfGoodsSold() {
+            const costOfGoodsAvailable = parseFloat(document.getElementById('cost_of_goods_available').textContent.replace(/[^0-9.-]+/g, "")) || 0;
+            const total = costOfGoodsAvailable - endingInventory;
+            document.getElementById('cost_of_goods_sold').textContent = `$ ${formatNumberWithCommas(total)}`;
+        }
+
+        function calculateEmissionsForCostOfGoodsSold() {
+            const costOfGoodsAvailableEmissions = parseFloat(document.getElementById('cost_of_goods_available_emissions').textContent.replace(/[^0-9.-]+/g, "")) || 0;
+            const totalEmissions = costOfGoodsAvailableEmissions - endingInventoryEmissions;
+            document.getElementById('cost_of_goods_sold_emissions').textContent = `${formatNumberWithCommas(parseInt(totalEmissions))} mt`;
+        }
+
+        document.querySelectorAll('input[name="direct_materials"], input[name="direct_labor"], input[name="manufacturing_overhead"]').forEach(input => {
+            input.addEventListener('input', () => {
+                calculateCostOfGoodsManufactured();
+                calculateEmissionsForCostOfGoodsManufactured();
+                calculateCostOfGoodsAvailable();
+                calculateEmissionsForCostOfGoodsAvailable();
+                calculateCostOfGoodsSold();
+                calculateEmissionsForCostOfGoodsSold();
+            });
+        });
+    </script>
+{{ endblock }}
