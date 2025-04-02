@@ -5,3 +5,5 @@ boto3==1.36.7
 openai
 requests
 python-dotenv
+tiktoken
+codecarbon

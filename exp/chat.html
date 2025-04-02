@@ -1,6 +1,84 @@
 {{ extends "exp/Page.html" }}
 
 {{ block styles }}
+<style>
+    .info-box {
+        position: fixed;
+        border: 1px solid #ccc;
+        padding: 15px;
+        background-color: rgba(249, 249, 249, 0.9);
+        font-size: 14px;
+        line-height: 1.5;
+        z-index: 1000;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        min-width: 200px;
+        top: 20px;
+        right: 20px;
+    }
+    .info-box h3 {
+        margin-top: 0;
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    .info-box b {
+        transition: all 0.3s ease-in-out;
+        display: inline-block;
+    }
+    
+    .info-box b.highlight {
+        color: #ff4444;
+        transform: scale(1.1);
+    }
+</style>
+{{ endblock }}
+
+{{ block content }}
+
+<!-- Single Info Box that changes based on condition -->
+<!-- Replace the existing info-box div with this version -->
+<div class="info-box">
+    <h3>Impact Information</h3>
+    {% if condition == "costs" %}
+        <p>Session Cost: $<b>0.00</b></p>
+        <p><small>Each message costs $0.1</small></p>
+        <p><small>Messages sent: <span id="message-count">0</span></small></p>
+    {% else %}
+        <p>Session CO2 Emissions: <b>0.000</b> kg</p>
+        <p><small>Each message produces 0.1 kg CO2</small></p>
+        <p><small>Messages sent: <span id="message-count">0</span></small></p>
+    {% endif %}
+</div>
+
+<!-- Rest of your existing content -->
+<div class="loading-overlay">
+    <div>Loading environment...</div>
+</div>
+
+<div id="game-container"></div>
+
+<div id="instructions">
+    <span class='timer'>
+        Time Remaining: <span class='otree-timer__time-left'></span>
+    </span>
+    <br>
+    <b>Navigate</b>: Use Arrow keys to move your character.
+    <br>
+    <b>Recall</b>: Each virtual colleague holds valuable information about a specific position of the Cost of Goods Sold (COGS) Budget.
+    <br>
+    <b>Task</b>: Collect and piece together COGS-related insights by engaging with them strategically.
+    <br>
+    <b>Chat</b>: Type and press Enter to chat.
+</div>
+
+<div id="coordinates" {% if not C.DEBUG %}style="display: none;"{% endif %}></div>
+<div id="speech-bubble"></div>
+<div id="npc-speech-bubble" class="speech-bubble"></div>
+<div id="npc2-speech-bubble" class="speech-bubble"></div>
+<div id="npc3-speech-bubble" class="speech-bubble"></div>
+<input type="text" id="chatinput" placeholder="Type to chat..." maxlength="50">
+
 {{ endblock }}
 
 
@@ -10,6 +88,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script>
+
+    // Add these variables at the top of your script
+    const condition = js_vars.condition;
+    let messages = [];  // Initialize messages array
+
+    // Add these variables at the top of your script section, after the condition variable
+    const costPerMessage = 0.10;  
+    const emissionsPerMessage = 0.10;  
+    let messageCount = 0;  // Track number of messages
+    let totalCost = 0;
+    let totalEmissions = 0;
 
     // Global variables for scene and characters
     let scene, camera, renderer;
@@ -162,6 +251,8 @@
 
             // populate speech bubble
             addSpeechBubble('Self', selfText);
+
+            updateRealTimeImpact(data);
 
         // handle bot messages
         } else if (event == 'botText') {
@@ -702,33 +793,73 @@
             animate();
         })();
     }
+
+    // Update the updateRealTimeImpact function
+    function updateRealTimeImpact(data) {
+        messageCount++;  // Increment message count
+        
+        if (condition === "costs") {
+            totalCost += costPerMessage;
+            const costDisplay = document.querySelector('.info-box p b');
+            if (costDisplay) {
+                costDisplay.textContent = totalCost.toFixed(2);
+                highlightValue(costDisplay);
+            }
+            // Update the small text to show cost per message
+            const smallText = document.querySelector('.info-box p small');
+            if (smallText) {
+                smallText.textContent = `Each message costs $${costPerMessage.toFixed(2)}`;
+            }
+        } else {
+            totalEmissions += emissionsPerMessage;
+            const emissionsDisplay = document.querySelector('.info-box p b');
+            if (emissionsDisplay) {
+                emissionsDisplay.textContent = totalEmissions.toFixed(3);
+                highlightValue(emissionsDisplay);
+            }
+            // Update the small text to show emissions per message
+            const smallText = document.querySelector('.info-box p small');
+            if (smallText) {
+                smallText.textContent = `Each message produces ${emissionsPerMessage} kg CO2`;
+            }
+        }
+    }
+
+    // Add this function after updateRealTimeImpact
+    function highlightValue(element) {
+        element.classList.add('highlight');
+        setTimeout(() => {
+            element.classList.remove('highlight');
+        }, 300);
+    }
+
+    // Modify the updateRealTimeImpact function to include the highlight
+    function updateRealTimeImpact(data) {
+        messageCount++;
+        
+        if (condition === "costs") {
+            totalCost += costPerMessage;
+            const costDisplay = document.querySelector('.info-box p b');
+            if (costDisplay) {
+                costDisplay.textContent = totalCost.toFixed(2);
+                highlightValue(costDisplay);
+            }
+        } else {
+            totalEmissions += emissionsPerMessage;
+            const emissionsDisplay = document.querySelector('.info-box p b');
+            if (emissionsDisplay) {
+                emissionsDisplay.textContent = totalEmissions.toFixed(3);
+                highlightValue(emissionsDisplay);
+            }
+        }
+        
+        // Update message count
+        const messageCountDisplay = document.getElementById('message-count');
+        if (messageCountDisplay) {
+            messageCountDisplay.textContent = messageCount;
+        }
+    }
 </script>
 
-
-{{ endblock }}
-
-{{ block content }}
-
-<div class="loading-overlay">
-    <div>Loading environment...</div>
-</div>
-
-<div id="game-container"></div>
-<div id="instructions">
-    <span class='timer'>
-        Time Remaining: <span class='otree-timer__time-left'></span>
-    </span>
-    <br>
-    Use Arrow keys to move the robot.
-    <br>
-    Type and press Enter to chat.
-</div>
-
-<div id="coordinates" {% if not C.DEBUG %}style="display: none;"{% endif %}></div>
-<div id="speech-bubble"></div>
-<div id="npc-speech-bubble" class="speech-bubble"></div>
-<div id="npc2-speech-bubble" class="speech-bubble"></div>
-<div id="npc3-speech-bubble" class="speech-bubble"></div>
-<input type="text" id="chatinput" placeholder="Type to chat..." maxlength="50">
 
 {{ endblock }}

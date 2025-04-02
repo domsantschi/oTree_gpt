@@ -9,6 +9,12 @@ import json
 from pydantic import BaseModel 
 from datetime import datetime, timezone
 import math
+# import tiktoken
+# from codecarbon import EmissionsTracker
+
+# # Initialize the emissions tracker
+# tracker = EmissionsTracker()
+# tracker.start()
 
 doc = """
 LLM chat with multiple agents, based on Cline McKenna's work.
@@ -57,6 +63,7 @@ class C(BaseConstants):
     RED_POS = {'x': -20, 'y': 2, 'z': -8}
     BLACK_POS = {'x': 10, 'y': 2, 'z': 12}
     GREEN_POS = {'x': 17, 'y': 2, 'z': -5}
+    PLAYER_POS = {'x': 0, 'y': 2, 'z': 0}    # Fixed player starting position at center
 
     # Debug settings (coordinates and distance lines)
     DEBUG = False
@@ -213,43 +220,18 @@ def runGPT(inputMessage, tone, botLabel):
 
 # initial positions
 def initializeNPCPositions():
-    
-    # get vars from constants
-    roomLength = C.ROOM_LENGTH
-    roomWidth = C.ROOM_WIDTH
-    roomHeight = C.ROOM_HEIGHT
-    npcPersonalSpace = C.NPC_PERSONAL_SPACE
-    wallBuffer = 5  # Keep some distance from walls
-
-    # Function for random player position
-    def generate_random_position():
-        x = random.uniform(-roomLength/2 + wallBuffer, roomLength/2 - wallBuffer)
-        z = random.uniform(-roomWidth/2 + wallBuffer, roomWidth/2 - wallBuffer)
-        return {'x': x, 'y': 2, 'z': z}  # y is fixed at 2 for all NPCs
-
-    # Generate a random position for the player (no distance constraints)
-    player_position = generate_random_position()
-
-    # specify hardcoded locations for red, black, green bots
-    # redPos = {'x': -20, 'y': 2, 'z': -8}
-    # blackPos = {'x': 10, 'y': 2, 'z': 12}
-    # greenPos = {'x': 17, 'y': 2, 'z': -5}
-    redPos = C.RED_POS
-    blackPos = C.BLACK_POS
-    greenPos = C.GREEN_POS
-
-    # Return a dictionary with positions for each color and player
+    """Initialize fixed positions for all characters."""
     return {
-        'red': redPos,
-        'green': greenPos,
-        'black': blackPos,
-        'player': player_position
+        'red': C.RED_POS,
+        'green': C.GREEN_POS,
+        'black': C.BLACK_POS,
+        'player': C.PLAYER_POS  # Use fixed player position instead of random
     }
 
 def calculate_distance(position1, position2):
     # Convert string values to float if needed
     x1 = float(position1['x']) if isinstance(position1['x'], str) else position1['x']
-    z1 = float(position1['z']) if isinstance(position1['z'], str) else position1['z']
+    z1 = float(position2['z']) if isinstance(position1['z'], str) else position1['z']
     x2 = float(position2['x']) if isinstance(position2['x'], str) else position2['x']
     z2 = float(position2['z']) if isinstance(position2['z'], str) else position2['z']
     
@@ -280,10 +262,13 @@ class Subsession(BaseSubsession):
 
 def creating_session(subsession: Subsession):
     players = subsession.get_players()
-
+    
     # Initialize participant fields
     for p in players:
-        p.participant.failed_knowledge_check = False  # Initialize to False
+        p.participant.failed_knowledge_check = False
+        
+        # Randomly assign impact_transparency condition
+        p.participant.vars['impact_transparency'] = random.choice(['costs', 'co2'])
 
     # Example: Randomly assign conditions to players
     conditions = ['Cost Impact Focus', 'Environmental Impact Focus']
@@ -344,7 +329,6 @@ class Player(BasePlayer):
     )
     impact_transparency = models.StringField(
         choices=['costs', 'co2'],
-        label="Were you aware that each query you ask the AI will incur a cost and cause real-life CO2 emissions?",
     )
 
     # New fields for Controls page
@@ -517,241 +501,259 @@ def calculate_cost_of_goods_sold(player: Player):
 # Pages                                                #
 ########################################################
 
-# chat page 
-class chat(Page):
-    form_model = 'player'
-    timeout_seconds = 60
+# # chat page 
+# class chat(Page):
+#     form_model = 'player'
+#     timeout_seconds = 60  # Set the timeout for the chat page
 
-    # vars that we will pass to chat.html
-    @staticmethod
-    def vars_for_template(player):
-        return dict(
-            debug = C.DEBUG,
-        )
+#     @staticmethod
+#     def vars_for_template(player):
+#         # Retrieve the condition (cost or co2)
+#         condition = player.participant.vars.get('impact_transparency', 'costs')
 
-    # vars that we will pass to chat.html
-    @staticmethod
-    def js_vars(player):
-        # playerId as seen in chat
-        currentPlayer = 'P' + str(player.id_in_group)
+#         # Calculate cumulative tokens used (for "cost" condition)
+#         cached_messages = json.loads(player.cachedMessages)
+#         total_tokens = 0
+#         if condition == 'costs':
+#             encoding = tiktoken.get_encoding("cl100k_base")
+#             for message in cached_messages:
+#                 total_tokens += len(encoding.encode(message['content']))
+
+#         # Calculate cumulative CO2 emissions (for "co2" condition)
+#         total_emissions = 0
+#         if condition == 'co2':
+#             total_emissions = tracker.stop()  # Stop the tracker to get emissions
+#             tracker.start()  # Restart the tracker for further tracking
+
+#         return dict(
+#             condition=condition,
+#             total_tokens=total_tokens,
+#             total_emissions=total_emissions,
+#         )
+
+#     # vars that we will pass to chat.html
+#     @staticmethod
+#     def js_vars(player):
+#         # playerId as seen in chat
+#         currentPlayer = 'P' + str(player.id_in_group)
         
-        return dict(
-            id_in_group=player.id_in_group,
-            playerId=currentPlayer,
-            bot_label1=C.BOT_LABEL1,
-            bot_label2=C.BOT_LABEL2,
-            roomLength = C.ROOM_LENGTH,
-            roomWidth = C.ROOM_WIDTH,
-            roomHeight = C.ROOM_HEIGHT,
-            npcPersonalSpace = C.NPC_PERSONAL_SPACE,
-            npcJitter = C.NPC_JITTER,
-            debug = C.DEBUG,
-        )
+#         return dict(
+#             id_in_group=player.id_in_group,
+#             playerId=currentPlayer,
+#             bot_label1=C.BOT_LABEL1,
+#             bot_label2=C.BOT_LABEL2,
+#             roomLength = C.ROOM_LENGTH,
+#             roomWidth = C.ROOM_WIDTH,
+#             roomHeight = C.ROOM_HEIGHT,
+#             npcPersonalSpace = C.NPC_PERSONAL_SPACE,
+#             npcJitter = C.NPC_JITTER,
+#             debug = C.DEBUG,
+#         )
 
-    # live method functions
-    @staticmethod
-    def live_method(player: Player, data):
+#     # live method functions
+#     @staticmethod
+#     def live_method(player: Player, data):
         
-        # if no new data, just return cached messages
-        if not data:
-            return {player.id_in_group: dict(
-                messages=json.loads(player.cachedMessages),
-                reactions=[]
-            )}
+#         # if no new data, just return cached messages
+#         if not data:
+#             return {player.id_in_group: dict(
+#                 messages=json.loads(player.cachedMessages),
+#                 reactions=[]
+#             )}
         
-        # if we have new data, process it and update cache
-        messages = json.loads(player.cachedMessages)
+#         # if we have new data, process it and update cache
+#         messages = json.loads(player.cachedMessages)
 
-        # create current player identifier
-        currentPlayer = 'P' + str(player.id_in_group)
+#         # create current player identifier
+#         currentPlayer = 'P' + str(player.id_in_group)
 
-        # grab tone from data
-        tone = player.tone
+#         # grab tone from data
+#         tone = player.tone
         
-        # handle different event types
-        if 'event' in data:
+#         # handle different event types
+#         if 'event' in data:
 
-            # grab event type
-            event = data['event']
+#             # grab event type
+#             event = data['event']
             
-            # handle player input logic
-            if event == 'text':
+#             # handle player input logic
+#             if event == 'text':
                 
-                # get data from request
-                text = data.get('text', '')
-                posData = data.get('pos', {})
-                currentPlayer = 'P' + str(player.id_in_group)
-                messages = json.loads(player.cachedMessages)
+#                 # get data from request
+#                 text = data.get('text', '')
+#                 posData = data.get('pos', {})
+#                 currentPlayer = 'P' + str(player.id_in_group)
+#                 messages = json.loads(player.cachedMessages)
                 
-                # calculate distance to NPCs
-                print('Player pos:', posData)
-                npcDistances = calculate_npc_distances(posData)
-                print('NPC distances:', npcDistances)
+#                 # calculate distance to NPCs
+#                 print('Player pos:', posData)
+#                 npcDistances = calculate_npc_distances(posData)
+#                 print('NPC distances:', npcDistances)
 
-                # determine closest NPC (within 10 units of distance)
-                min_distance = min(npcDistances.values())
-                closestNPC = None if min_distance > 10 else [x for x in npcDistances if npcDistances[x] == min_distance][0]
-                print('Closest NPC:', closestNPC)
+#                 # determine closest NPC (within 10 units of distance)
+#                 min_distance = min(npcDistances.values())
+#                 closestNPC = None if min_distance > 10 else [x for x in npcDistances if npcDistances[x] == min_distance][0]
+#                 print('Closest NPC:', closestNPC)
 
-                # create message id
-                dateNow = str(datetime.now(tz=timezone.utc).timestamp())
-                msgId = currentPlayer + '-' + dateNow
+#                 # create message id
+#                 dateNow = str(datetime.now(tz=timezone.utc).timestamp())
+#                 msgId = currentPlayer + '-' + dateNow
                 
-                # create message
-                msg = {'role': 'user', 'content': json.dumps({
-                    'sender': currentPlayer,
-                    'msgId': msgId,
-                    'tone': tone,
-                    'text': text,
-                })}
+#                 # create message
+#                 msg = {'role': 'user', 'content': json.dumps({
+#                     'sender': currentPlayer,
+#                     'msgId': msgId,
+#                     'tone': tone,
+#                     'text': text,
+#                 })}
                 
-                # save to database
-                MessageData.create(
-                    player=player,
-                    sender=currentPlayer,
-                    msgId=msgId,
-                    timestamp=dateNow,
-                    tone=tone,
-                    fullText=json.dumps(msg),
-                    msgText=text,
-                    target=closestNPC,
-                )
+#                 # save to database
+#                 MessageData.create(
+#                     player=player,
+#                     sender=currentPlayer,
+#                     msgId=msgId,
+#                     timestamp=dateNow,
+#                     tone=tone,
+#                     fullText=json.dumps(msg),
+#                     msgText=text,
+#                     target=closestNPC,
+#                 )
                 
-                # append to messages
-                messages.append(msg)
+#                 # append to messages
+#                 messages.append(msg)
                 
-                # update cache
-                player.cachedMessages = json.dumps(messages)
+#                 # update cache
+#                 player.cachedMessages = json.dumps(messages)
                 
-                # return output to chat.html
-                return {player.id_in_group: dict(
-                    event='text',
-                    selfText=text,
-                    sender=currentPlayer,
-                    msgId=msgId,
-                    tone=tone,
-                    phase=player.phase,
-                    target=closestNPC
-                )}
+#                 # return output to chat.html
+#                 return {player.id_in_group: dict(
+#                     event='text',
+#                     selfText=text,
+#                     sender=currentPlayer,
+#                     msgId=msgId,
+#                     tone=tone,
+#                     phase=player.phase,
+#                     target=closestNPC
+#                 )}
 
-            # handle bot messages
-            elif event == 'botMsg':
+#             # handle bot messages
+#             elif event == 'botMsg':
 
-                # get data from request
-                botId = data.get('botId')
-                dateNow = str(datetime.now(tz=timezone.utc).timestamp())
+#                 # get data from request
+#                 botId = data.get('botId')
+#                 dateNow = str(datetime.now(tz=timezone.utc).timestamp())
 
-                if botId:
-                    botText = runGPT(messages, tone, botId)
-                    print('botId:', botId)
-                    print('botText:', botText)
+#                 if botId:
+#                     botText = runGPT(messages, tone, botId)
+#                     print('botId:', botId)
+#                     print('botText:', botText)
 
-                    # extract output
-                    botContent = json.loads(botText)
-                    outputText = botContent['text']
-                    botMsgId = botContent['msgId']
-                    botMsg = {'role': 'assistant', 'content': botText}
+#                     # extract output
+#                     botContent = json.loads(botText)
+#                     outputText = botContent['text']
+#                     botMsgId = botContent['msgId']
+#                     botMsg = {'role': 'assistant', 'content': botText}
                     
-                    MessageData.create(
-                        player=player,
-                        sender=botId,
-                        msgId=botMsgId,
-                        timestamp=dateNow,
-                        tone=tone,
-                        fullText=json.dumps(botMsg),
-                        msgText=outputText,
-                        target=botId
-                    )
-                    messages.append(botMsg)
+#                     MessageData.create(
+#                         player=player,
+#                         sender=botId,
+#                         msgId=botMsgId,
+#                         timestamp=dateNow,
+#                         tone=tone,
+#                         fullText=json.dumps(botMsg),
+#                         msgText=outputText,
+#                         target=botId
+#                     )
+#                     messages.append(botMsg)
 
-                    # return data to chat.html
-                    return {player.id_in_group: dict(
-                        event='botText',
-                        botMsgId=botMsgId,
-                        text=outputText,
-                        tone=tone,
-                        sender=botId,
-                        phase=player.phase
-                    )}
+#                     # return data to chat.html
+#                     return {player.id_in_group: dict(
+#                         event='botText',
+#                         botMsgId=botMsgId,
+#                         text=outputText,
+#                         tone=tone,
+#                         sender=botId,
+#                         phase=player.phase
+#                     )}
 
 
-                # if botId is None, then no NPC is close enough to chat
-                else:
-                    print('Not near any NPCs!')
+#                 # if botId is None, then no NPC is close enough to chat
+#                 else:
+#                     print('Not near any NPCs!')
             
                 
             
-            # handle position check updates
-            elif event == 'posCheck':
+#             # handle position check updates
+#             elif event == 'posCheck':
                 
-                # get time stamp
-                dateNow = str(datetime.now(tz=timezone.utc).timestamp())
+#                 # get time stamp
+#                 dateNow = str(datetime.now(tz=timezone.utc).timestamp())
                     
-                # grab position data
-                posData = data["pos"]
+#                 # grab position data
+#                 posData = data["pos"]
 
-                # save to database
-                CharPositionData.create(
-                        player=player,
-                        msgId='initial',
-                        timestamp=dateNow,
-                        posPlayer=json.dumps(posData),
-                        posRed='',
-                        posBlack='',
-                        posGreen='',
-                    )
+#                 # save to database
+#                 CharPositionData.create(
+#                         player=player,
+#                         msgId='initial',
+#                         timestamp=dateNow,
+#                         posPlayer=json.dumps(posData),
+#                         posRed='',
+#                         posBlack='',
+#                         posGreen='',
+#                     )
 
-                print('posData')
-                print(posData)
+#                 print('posData')
+#                 print(posData)
                 
-            # handle phase updates
-            elif event == 'phase':
+#             # handle phase updates
+#             elif event == 'phase':
                 
-                # update phase
-                # currentPhase = player.phase
-                currentPhase = data["phase"]
+#                 # update phase
+#                 # currentPhase = player.phase
+#                 currentPhase = data["phase"]
 
-                if currentPhase == 0:
+#                 if currentPhase == 0:
 
-                    # increment phase
-                    currentPhase = 1
-                    player.phase = currentPhase
-                    print("Current phase:")
-                    print(currentPhase)
+#                     # increment phase
+#                     currentPhase = 1
+#                     player.phase = currentPhase
+#                     print("Current phase:")
+#                     print(currentPhase)
 
-                    # get time stamp
-                    dateNow = str(datetime.now(tz=timezone.utc).timestamp())
+#                     # get time stamp
+#                     dateNow = str(datetime.now(tz=timezone.utc).timestamp())
 
-                    # initialize npc bot posiitons
-                    pos = initializeNPCPositions()
-                    redPos = pos['red']
-                    blackPos = pos['black']
-                    greenPos = pos['green']
-                    playerPos = pos['player']
+#                     # initialize npc bot posiitons
+#                     pos = initializeNPCPositions()
+#                     redPos = pos['red']
+#                     blackPos = pos['black']
+#                     greenPos = pos['green']
+#                     playerPos = pos['player']
 
-                    # save to database
-                    CharPositionData.create(
-                        player=player,
-                        msgId='initial',
-                        timestamp=dateNow,
-                        posPlayer=json.dumps(playerPos),
-                        posRed=json.dumps(redPos),
-                        posBlack=json.dumps(blackPos),
-                        posGreen=json.dumps(greenPos),
-                    )
+#                     # save to database
+#                     CharPositionData.create(
+#                         player=player,
+#                         msgId='initial',
+#                         timestamp=dateNow,
+#                         posPlayer=json.dumps(playerPos),
+#                         posRed=json.dumps(redPos),
+#                         posBlack=json.dumps(blackPos),
+#                         posGreen=json.dumps(greenPos),
+#                     )
 
-                    return {player.id_in_group: dict(
-                        event='phase',
-                        phase=currentPhase,
-                        posPlayer=json.dumps(playerPos),
-                        posRed=json.dumps(redPos),
-                        posBlack=json.dumps(blackPos),
-                        posGreen=json.dumps(greenPos),
-                    )}
+#                     return {player.id_in_group: dict(
+#                         event='phase',
+#                         phase=currentPhase,
+#                         posPlayer=json.dumps(playerPos),
+#                         posRed=json.dumps(redPos),
+#                         posBlack=json.dumps(blackPos),
+#                         posGreen=json.dumps(greenPos),
+#                     )}
                 
                 
-                else:
-                    pass
+#                 else:
+#                     pass
 
 
 # --- Pages --------------------------------------------------------------------
@@ -785,6 +787,22 @@ class Knowledge(Page):
             # Mark the participant as having failed the knowledge check
             player.participant.failed_knowledge_check = True
 
+class Sorry(Page):
+    @staticmethod
+    def is_displayed(player: Player):
+        # Display the Thanks page in two cases:
+        # 1. If the player failed the knowledge check
+        # 2. If this is the final page after the Controls page
+        if player.participant.failed_knowledge_check:
+            return True
+
+    @staticmethod
+    def vars_for_template(player: Player):
+        return dict(
+            participant_id=player.participant.code,
+            failed_knowledge_check=player.participant.failed_knowledge_check,
+            is_final=not player.participant.failed_knowledge_check
+        )
 
 class Condition1(Page):
     @staticmethod
@@ -796,16 +814,18 @@ class Condition1(Page):
 class Explainer(Page):
     pass
 
-# chat page 
 class chat(Page):
-    form_model = 'player'
-    timeout_seconds = 60
 
-    # vars that we will pass to chat.html
+    form_model = 'player'
+    timeout_seconds = 60  # Set the timeout for the chat page
+
     @staticmethod
     def vars_for_template(player):
+        condition = player.participant.vars.get('impact_transparency', 'costs')
         return dict(
-            debug = C.DEBUG,
+            condition=condition,
+            total_tokens=0,  # Initial value
+            total_emissions=0,  # Initial value
         )
 
     # vars that we will pass to chat.html
@@ -817,14 +837,15 @@ class chat(Page):
         return dict(
             id_in_group=player.id_in_group,
             playerId=currentPlayer,
+            condition=player.participant.vars.get('impact_transparency', 'costs'),  # Add this line
             bot_label1=C.BOT_LABEL1,
             bot_label2=C.BOT_LABEL2,
-            roomLength = C.ROOM_LENGTH,
-            roomWidth = C.ROOM_WIDTH,
-            roomHeight = C.ROOM_HEIGHT,
-            npcPersonalSpace = C.NPC_PERSONAL_SPACE,
-            npcJitter = C.NPC_JITTER,
-            debug = C.DEBUG,
+            roomLength=C.ROOM_LENGTH,
+            roomWidth=C.ROOM_WIDTH,
+            roomHeight=C.ROOM_HEIGHT,
+            npcPersonalSpace=C.NPC_PERSONAL_SPACE,
+            npcJitter=C.NPC_JITTER,
+            debug=C.DEBUG,
         )
 
     # live method functions
@@ -1080,13 +1101,17 @@ class Checks(Page):
 class Thanks(Page):
     @staticmethod
     def is_displayed(player: Player):
-        # Display the Thanks page if the player failed the knowledge check
-        # or if it is the final page after the Controls page
-        return player.participant.failed_knowledge_check or player._index_in_pages == len(page_sequence)
+        # Display the Thanks page in two cases:
+        # 1. If the player failed the knowledge check
+        # 2. If this is the final page after the Controls page
+        if player.participant.failed_knowledge_check:
+            return True
+
+        # Ensure this is the final page in the sequence
+        return player.round_number == C.NUM_ROUNDS
 
     @staticmethod
     def vars_for_template(player: Player):
-        # Pass the participant ID and failure status to the template
         return dict(
             participant_id=player.participant.code,
             failed_knowledge_check=player.participant.failed_knowledge_check,
@@ -1098,7 +1123,7 @@ page_sequence = [
     Introduction,
     Background,
     Knowledge,
-    Thanks,  # Redirect failed participants here
+    Sorry,  # Redirect failed participants here
     Condition1,
     Explainer,
     chat,

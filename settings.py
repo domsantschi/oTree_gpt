@@ -2,36 +2,36 @@ from os import environ
 
 
 SESSION_CONFIGS = [
-     dict(
-         name='chat_simple',
-         app_sequence=['chat_simple',],
-         num_demo_participants=1,
-     ),
-     dict(
-         name='chat_complex',
-         app_sequence=['chat_complex',],
-         num_demo_participants=1,
-     ),
-     dict(
-         name='chat_voice',
-         app_sequence=['chat_voice',],
-         num_demo_participants=1,
-     ),
-     dict(
-         name='dictator_game',
-         app_sequence=['dictator_game',],
-         num_demo_participants=1,
-     ),
-     dict(
-         name='chat_multiple_agents',
-         app_sequence=['chat_multiple_agents',],
-         num_demo_participants=1,
-     ),
-     dict(
-         name='threejs',
-         app_sequence=['threejs',],
-         num_demo_participants=1,
-     ),
+    #  dict(
+    #      name='chat_simple',
+    #      app_sequence=['chat_simple',],
+    #      num_demo_participants=1,
+    #  ),
+    #  dict(
+    #      name='chat_complex',
+    #      app_sequence=['chat_complex',],
+    #      num_demo_participants=1,
+    #  ),
+    #  dict(
+    #      name='chat_voice',
+    #      app_sequence=['chat_voice',],
+    #      num_demo_participants=1,
+    #  ),
+    #  dict(
+    #      name='dictator_game',
+    #      app_sequence=['dictator_game',],
+    #      num_demo_participants=1,
+    #  ),
+    #  dict(
+    #      name='chat_multiple_agents',
+    #      app_sequence=['chat_multiple_agents',],
+    #      num_demo_participants=1,
+    #  ),
+    #  dict(
+    #      name='threejs',
+    #      app_sequence=['threejs',],
+    #      num_demo_participants=1,
+    #  ),
         dict(
             name='exp',
             app_sequence=['exp',],

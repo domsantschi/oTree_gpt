@@ -4,24 +4,37 @@
         <b style="color: green;">Congratulations on answering the knowledge questions correctly!</b>
     </p>
     <p>
-        You are now allowed to proceed with the study. Your manager will evaluate your performance and determine your compensation based on two factors:
+        You are now allowed to proceed with the study. Your manager will evaluate your performance and determine <b>your compensation based on</b> the factors below:
     </p>
-    {% if condition == 'Cost Impact Focus' %}
-        <ul>
-            <li><b>The Actual Costs of Goods Sold</b> for the Year Ending December 31, 2025. The lower the actual costs, the better. </li>
-            <li><b>The Deviance between the Actual Costs</b> of Goods Sold <b>and the Budgeted</b> Costs of Goods Sold for the Year Ending December 31, 2025. The lower the deviance, the better.</li>
-        </ul>
-        <p>
-            Both factors are equally weighted for your performance evaluation (both at 50%). 
-        </p>
-    {% elif condition == 'Environmental Impact Focus' %}
-    <ul>
-        <li><b>The Actual CO2 Emissions</b> of the Costs of Goods Sold for the Year Ending December 31, 2025. The lower the actual CO2 emissions, the better. </li>
-        <li><b>The Deviance between the Actual CO2 Emissions </b> of the Costs of Goods Sold <b>and the Budgeted</b> CO2 Emissions of the Costs of Goods Sold for the Year Ending December 31, 2025. The lower the deviance, the better..</li>
-    </ul>
     <p>
-        Both factors are equally weighted for your performance evaluation (both at 50%). 
+        <b>Base Compensation:</b> USD 3.
     </p>
+    <p>
+        <b>Bonus Opportunity:</b> You can earn an additional bonus of up to USD 2. The bonus is determined by two factors:
+    </p>
+    
+    {% if condition == 'Cost Impact Focus' %}
+    <ol>
+        <li>
+            <b>The Deviance between the Actual Cost of Goods Sold (COGS) and the Budget:</b> 
+            Your virtual colleagues have all the information to get the Deviance down to zero. The lower the deviance, the higher your bonus.
+        </li>
+        <li>
+            <b>Your Engagement with Virtual Colleagues:</b> 
+            While engaging with your virtual colleagues can help reduce uncertainty, more engagement reduces your bonus.
+        </li>
+    </ol>
+    {% elif condition == 'Environmental Impact Focus' %}
+    <ol>
+        <li>
+            <b>The Deviance between the Actual CO2 Emissions and the Budget:</b> 
+            Your virtual colleagues have all the information to get the Deviance down to zero. The lower the deviance, the higher your bonus.
+        </li>
+        <li>
+            <b>Your Engagement with Virtual Colleagues:</b> 
+            While engaging with your virtual colleagues can help reduce uncertainty, more engagement reduces your bonus.
+        </li>
+    </ol>
     {% endif %}
     <p>
         {{ next_button }}
