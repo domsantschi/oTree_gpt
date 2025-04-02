@@ -287,7 +287,11 @@ class Player(BasePlayer):
     tone = models.StringField()
     phase = models.IntegerField(initial=0)
     cachedMessages = models.LongStringField(initial='[]')
+    cachedMessagesRed = models.LongStringField(initial='[]')  # Cached messages for Red bot
+    cachedMessagesBlack = models.LongStringField(initial='[]')  # Cached messages for Black bot
+    cachedMessagesGreen = models.LongStringField(initial='[]')  # Cached messages for Green bot
     condition = models.StringField()
+    pos_data_history = models.LongStringField(initial='[]')  # Field to store position history
 
     # Knowledge check fields
     q1 = models.StringField(
@@ -358,16 +362,16 @@ class Player(BasePlayer):
 
 # message information
 class MessageData(ExtraModel):
-    # data links
+    # Data links
     player = models.Link(Player)
 
-    # msg info
+    # Message info
     msgId = models.StringField()
     timestamp = models.StringField()
     sender = models.StringField()
     tone = models.StringField()
-    fullText = models.StringField()
-    msgText = models.StringField()
+    fullText = models.StringField()  # Store the full botText JSON object
+    msgText = models.StringField()  # Store the 'text' field from the botText
 
     # NPC target
     target = models.StringField()
@@ -399,67 +403,42 @@ def custom_export(players):
     # Header row
     yield [
         'sessionId',
-        'subjectId',
+        'participantId',
+        'posDataHistory',  # Include position history
+        'cachedMessagesRed',  # Include Red bot's conversation thread
+        'cachedMessagesBlack',  # Include Black bot's conversation thread
+        'cachedMessagesGreen',  # Include Green bot's conversation thread
         'msgId',
         'timestamp',
         'sender',
         'tone',
-        'fullText',
+        'fullText',  # Include the full botText JSON object
         'msgText',
-        'reactionData',
-        'posPlayer',  # Player position
-        'closestNPC',  # Closest NPC
-        'textPosition',  # Position from which the player texted
     ]
 
-    # Export MessageData
-    mData = MessageData.filter()
-    for m in mData:
-        player = m.player
+    # Export data for each player
+    for player in players:
         participant = player.participant
         session = player.session
 
-        try:
-            fullText = json.loads(m.fullText)['content']
-        except:
-            fullText = m.fullText
+        # Retrieve all messages for the player
+        messages = MessageData.filter(player=player)
 
-        yield [
-            session.code,
-            participant.code,
-            m.msgId,
-            m.timestamp,
-            m.sender,
-            m.tone,
-            fullText,
-            m.msgText,
-            '',  # Placeholder for reactionData
-            '',  # Placeholder for posPlayer
-            '',  # Placeholder for closestNPC
-            '',  # Placeholder for textPosition,
-        ]
-
-    # Export CharPositionData
-    posData = CharPositionData.filter()
-    for pos in posData:
-        player = pos.player
-        participant = player.participant
-        session = player.session
-
-        yield [
-            session.code,
-            participant.code,
-            pos.msgId,
-            pos.timestamp,
-            '',  # Placeholder for sender
-            '',  # Placeholder for tone
-            '',  # Placeholder for fullText
-            '',  # Placeholder for msgText
-            '',  # Placeholder for reactionData
-            pos.posPlayer,
-            pos.closestNPC,
-            pos.textPosition,
-        ]
+        for message in messages:
+            yield [
+                session.code,
+                participant.code,
+                player.pos_data_history,  # Include the position history
+                player.cachedMessagesRed,  # Include Red bot's conversation thread
+                player.cachedMessagesBlack,  # Include Black bot's conversation thread
+                player.cachedMessagesGreen,  # Include Green bot's conversation thread
+                message.msgId,
+                message.timestamp,
+                message.sender,
+                message.tone,
+                message.fullText,  # Include the full botText JSON object
+                message.msgText,
+            ]
 
 
 ########################################################
@@ -500,263 +479,6 @@ def calculate_cost_of_goods_sold(player: Player):
 ########################################################
 # Pages                                                #
 ########################################################
-
-# # chat page 
-# class chat(Page):
-#     form_model = 'player'
-#     timeout_seconds = 60  # Set the timeout for the chat page
-
-#     @staticmethod
-#     def vars_for_template(player):
-#         # Retrieve the condition (cost or co2)
-#         condition = player.participant.vars.get('impact_transparency', 'costs')
-
-#         # Calculate cumulative tokens used (for "cost" condition)
-#         cached_messages = json.loads(player.cachedMessages)
-#         total_tokens = 0
-#         if condition == 'costs':
-#             encoding = tiktoken.get_encoding("cl100k_base")
-#             for message in cached_messages:
-#                 total_tokens += len(encoding.encode(message['content']))
-
-#         # Calculate cumulative CO2 emissions (for "co2" condition)
-#         total_emissions = 0
-#         if condition == 'co2':
-#             total_emissions = tracker.stop()  # Stop the tracker to get emissions
-#             tracker.start()  # Restart the tracker for further tracking
-
-#         return dict(
-#             condition=condition,
-#             total_tokens=total_tokens,
-#             total_emissions=total_emissions,
-#         )
-
-#     # vars that we will pass to chat.html
-#     @staticmethod
-#     def js_vars(player):
-#         # playerId as seen in chat
-#         currentPlayer = 'P' + str(player.id_in_group)
-        
-#         return dict(
-#             id_in_group=player.id_in_group,
-#             playerId=currentPlayer,
-#             bot_label1=C.BOT_LABEL1,
-#             bot_label2=C.BOT_LABEL2,
-#             roomLength = C.ROOM_LENGTH,
-#             roomWidth = C.ROOM_WIDTH,
-#             roomHeight = C.ROOM_HEIGHT,
-#             npcPersonalSpace = C.NPC_PERSONAL_SPACE,
-#             npcJitter = C.NPC_JITTER,
-#             debug = C.DEBUG,
-#         )
-
-#     # live method functions
-#     @staticmethod
-#     def live_method(player: Player, data):
-        
-#         # if no new data, just return cached messages
-#         if not data:
-#             return {player.id_in_group: dict(
-#                 messages=json.loads(player.cachedMessages),
-#                 reactions=[]
-#             )}
-        
-#         # if we have new data, process it and update cache
-#         messages = json.loads(player.cachedMessages)
-
-#         # create current player identifier
-#         currentPlayer = 'P' + str(player.id_in_group)
-
-#         # grab tone from data
-#         tone = player.tone
-        
-#         # handle different event types
-#         if 'event' in data:
-
-#             # grab event type
-#             event = data['event']
-            
-#             # handle player input logic
-#             if event == 'text':
-                
-#                 # get data from request
-#                 text = data.get('text', '')
-#                 posData = data.get('pos', {})
-#                 currentPlayer = 'P' + str(player.id_in_group)
-#                 messages = json.loads(player.cachedMessages)
-                
-#                 # calculate distance to NPCs
-#                 print('Player pos:', posData)
-#                 npcDistances = calculate_npc_distances(posData)
-#                 print('NPC distances:', npcDistances)
-
-#                 # determine closest NPC (within 10 units of distance)
-#                 min_distance = min(npcDistances.values())
-#                 closestNPC = None if min_distance > 10 else [x for x in npcDistances if npcDistances[x] == min_distance][0]
-#                 print('Closest NPC:', closestNPC)
-
-#                 # create message id
-#                 dateNow = str(datetime.now(tz=timezone.utc).timestamp())
-#                 msgId = currentPlayer + '-' + dateNow
-                
-#                 # create message
-#                 msg = {'role': 'user', 'content': json.dumps({
-#                     'sender': currentPlayer,
-#                     'msgId': msgId,
-#                     'tone': tone,
-#                     'text': text,
-#                 })}
-                
-#                 # save to database
-#                 MessageData.create(
-#                     player=player,
-#                     sender=currentPlayer,
-#                     msgId=msgId,
-#                     timestamp=dateNow,
-#                     tone=tone,
-#                     fullText=json.dumps(msg),
-#                     msgText=text,
-#                     target=closestNPC,
-#                 )
-                
-#                 # append to messages
-#                 messages.append(msg)
-                
-#                 # update cache
-#                 player.cachedMessages = json.dumps(messages)
-                
-#                 # return output to chat.html
-#                 return {player.id_in_group: dict(
-#                     event='text',
-#                     selfText=text,
-#                     sender=currentPlayer,
-#                     msgId=msgId,
-#                     tone=tone,
-#                     phase=player.phase,
-#                     target=closestNPC
-#                 )}
-
-#             # handle bot messages
-#             elif event == 'botMsg':
-
-#                 # get data from request
-#                 botId = data.get('botId')
-#                 dateNow = str(datetime.now(tz=timezone.utc).timestamp())
-
-#                 if botId:
-#                     botText = runGPT(messages, tone, botId)
-#                     print('botId:', botId)
-#                     print('botText:', botText)
-
-#                     # extract output
-#                     botContent = json.loads(botText)
-#                     outputText = botContent['text']
-#                     botMsgId = botContent['msgId']
-#                     botMsg = {'role': 'assistant', 'content': botText}
-                    
-#                     MessageData.create(
-#                         player=player,
-#                         sender=botId,
-#                         msgId=botMsgId,
-#                         timestamp=dateNow,
-#                         tone=tone,
-#                         fullText=json.dumps(botMsg),
-#                         msgText=outputText,
-#                         target=botId
-#                     )
-#                     messages.append(botMsg)
-
-#                     # return data to chat.html
-#                     return {player.id_in_group: dict(
-#                         event='botText',
-#                         botMsgId=botMsgId,
-#                         text=outputText,
-#                         tone=tone,
-#                         sender=botId,
-#                         phase=player.phase
-#                     )}
-
-
-#                 # if botId is None, then no NPC is close enough to chat
-#                 else:
-#                     print('Not near any NPCs!')
-            
-                
-            
-#             # handle position check updates
-#             elif event == 'posCheck':
-                
-#                 # get time stamp
-#                 dateNow = str(datetime.now(tz=timezone.utc).timestamp())
-                    
-#                 # grab position data
-#                 posData = data["pos"]
-
-#                 # save to database
-#                 CharPositionData.create(
-#                         player=player,
-#                         msgId='initial',
-#                         timestamp=dateNow,
-#                         posPlayer=json.dumps(posData),
-#                         posRed='',
-#                         posBlack='',
-#                         posGreen='',
-#                     )
-
-#                 print('posData')
-#                 print(posData)
-                
-#             # handle phase updates
-#             elif event == 'phase':
-                
-#                 # update phase
-#                 # currentPhase = player.phase
-#                 currentPhase = data["phase"]
-
-#                 if currentPhase == 0:
-
-#                     # increment phase
-#                     currentPhase = 1
-#                     player.phase = currentPhase
-#                     print("Current phase:")
-#                     print(currentPhase)
-
-#                     # get time stamp
-#                     dateNow = str(datetime.now(tz=timezone.utc).timestamp())
-
-#                     # initialize npc bot posiitons
-#                     pos = initializeNPCPositions()
-#                     redPos = pos['red']
-#                     blackPos = pos['black']
-#                     greenPos = pos['green']
-#                     playerPos = pos['player']
-
-#                     # save to database
-#                     CharPositionData.create(
-#                         player=player,
-#                         msgId='initial',
-#                         timestamp=dateNow,
-#                         posPlayer=json.dumps(playerPos),
-#                         posRed=json.dumps(redPos),
-#                         posBlack=json.dumps(blackPos),
-#                         posGreen=json.dumps(greenPos),
-#                     )
-
-#                     return {player.id_in_group: dict(
-#                         event='phase',
-#                         phase=currentPhase,
-#                         posPlayer=json.dumps(playerPos),
-#                         posRed=json.dumps(redPos),
-#                         posBlack=json.dumps(blackPos),
-#                         posGreen=json.dumps(greenPos),
-#                     )}
-                
-                
-#                 else:
-#                     pass
-
-
-# --- Pages --------------------------------------------------------------------
 
 class Introduction(Page):
     pass
@@ -936,35 +658,52 @@ class chat(Page):
 
             # handle bot messages
             elif event == 'botMsg':
-
-                # get data from request
+                # Get data from the request
                 botId = data.get('botId')
                 dateNow = str(datetime.now(tz=timezone.utc).timestamp())
 
                 if botId:
+                    # Run the GPT function to generate the bot's response
                     botText = runGPT(messages, tone, botId)
                     print('botId:', botId)
                     print('botText:', botText)
 
-                    # extract output
+                    # Extract output
                     botContent = json.loads(botText)
                     outputText = botContent['text']
                     botMsgId = botContent['msgId']
                     botMsg = {'role': 'assistant', 'content': botText}
-                    
+
+                    # Save the bot message to the appropriate thread
+                    if botId == C.BOT_LABEL1:  # Red bot
+                        cachedMessagesRed = json.loads(player.cachedMessagesRed)
+                        cachedMessagesRed.append(botMsg)
+                        player.cachedMessagesRed = json.dumps(cachedMessagesRed)
+                    elif botId == C.BOT_LABEL2:  # Black bot
+                        cachedMessagesBlack = json.loads(player.cachedMessagesBlack)
+                        cachedMessagesBlack.append(botMsg)
+                        player.cachedMessagesBlack = json.dumps(cachedMessagesBlack)
+                    elif botId == C.BOT_LABEL3:  # Green bot
+                        cachedMessagesGreen = json.loads(player.cachedMessagesGreen)
+                        cachedMessagesGreen.append(botMsg)
+                        player.cachedMessagesGreen = json.dumps(cachedMessagesGreen)
+
+                    # Save the bot message to the database
                     MessageData.create(
                         player=player,
                         sender=botId,
                         msgId=botMsgId,
                         timestamp=dateNow,
                         tone=tone,
-                        fullText=json.dumps(botMsg),
-                        msgText=outputText,
+                        fullText=json.dumps(botContent),  # Save the full botText JSON object
+                        msgText=outputText,  # Save only the 'text' field
                         target=botId
                     )
+
+                    # Append the bot message to the cached messages
                     messages.append(botMsg)
 
-                    # return data to chat.html
+                    # Return data to chat.html
                     return {player.id_in_group: dict(
                         event='botText',
                         botMsgId=botMsgId,
@@ -983,26 +722,20 @@ class chat(Page):
             
             # handle position check updates
             elif event == 'posCheck':
-                
-                # get time stamp
-                dateNow = str(datetime.now(tz=timezone.utc).timestamp())
-                    
-                # grab position data
-                posData = data["pos"]
+                # Get position data from the request
+                pos_data = data.get('pos', {})
+                print('Received posData:', pos_data)
 
-                # save to database
-                CharPositionData.create(
-                        player=player,
-                        msgId='initial',
-                        timestamp=dateNow,
-                        posPlayer=json.dumps(posData),
-                        posRed='',
-                        posBlack='',
-                        posGreen='',
-                    )
+                # Append the position data to the player's position history
+                pos_data_history = json.loads(player.pos_data_history)  # Load existing history
+                pos_data_history.append(pos_data)  # Append new position
+                player.pos_data_history = json.dumps(pos_data_history)  # Save updated history
 
-                print('posData')
-                print(posData)
+                # Return acknowledgment to the client
+                return {player.id_in_group: dict(
+                    event='posCheck',
+                    pos_data=pos_data
+                )}
                 
             # handle phase updates
             elif event == 'phase':
