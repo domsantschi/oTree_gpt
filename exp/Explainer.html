@@ -4,7 +4,8 @@
         On the next page, you will use your keyboard to <b>navigate a 3D environment</b>.
     </p>
     <p>
-        Your task is to <b>interact with your virtual colleagues</b>. Each virtual colleague holds valuable information about a specific position of the Cost of Goods Sold (COGS) Budget. Your goal is to <b>collect and piece together COGS-related insights</b> by engaging with them strategically.
+        Your task is to <b>interact with your virtual colleagues</b>. Each virtual colleague holds valuable information about a specific position of the Cost of Goods Sold (COGS) Budget. Use this opportunity to explore the environment and interact strategically to <b>minimize your budgetary deviance (i.e., Static-Budget Variance)</b>. 
+
     </p>
     <ul>
         <li>Move your character through the 3D space to approach the virtual colleagues - <b>use Arrow keys to move your character</b> </li>
@@ -16,19 +17,26 @@
                 <li style="color: green;">Green Bot: Specialist in Manufacturing Overhead.</li></b>
             </ul>
         </li>
-        <li>Ask questions relevant to their expertise to gather useful insights. If you ask something outside their expertise, they will suggest consulting another virtual colleague.</li>
+        <li>Ask questions relevant to their expertise to <b>gather useful insights about the Actual COGS</b>. If you ask something outside their expertise, they will suggest consulting another virtual colleague.</li>
         <li>You will have <b>1 minute to gather as much information as possible</b>.</li>
     </ul>
     <p>
-        After the time is up, you will need to make a decision based on the information you have collected.
+        After the time is up, you will need to define your budgeted COGS based on the information you have collected. Note that the <b>protocol of your conversations</b> with the virtual colleagues will be <b>recorded and provided to you</b> for the budgeting decision. This is important for the study, and you will not be able to delete or modify this information.
     </p>
+
     <p>
-        Use this opportunity to explore the environment and interact strategically to uncover the truth. Good luck!
+        Note: The 3D environment is a simulation and does not represent real-world interactions. Behind the virtual colleagues is a large language model (LLM), not a real person. Your engagement with virtual colleagues is for research purposes only.
+    
     </p>
+
+    <p>
+        Below is an example of the 3D environment. The actual task differs from the example shown (a murder mystery). In your task, you will interact with colleagues to gather budgeting information. Good luck! </p>
+
     <img src="/static/images/threejs.gif" alt="Figure1" style="max-width:100%; height:auto;">
 
+
     <div id="control-check">
-        <p><b>Control Check:</b></p>
+        <p><b>Control Check:</b> Please answer the following questions to confirm your understanding.</p>
         <form id="control-check-form">
             <label for="question1">1) Which virtual colleague is specialized in the Direct Manufacturing Labor Position of your COGS Budget?</label><br>
             <input type="radio" id="red" name="question1" value="Red">
@@ -84,6 +92,7 @@
             }
         });
     </script>
+
 
     {{ next_button }}
 {{ endblock }}

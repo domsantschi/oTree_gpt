@@ -332,7 +332,8 @@ class Player(BasePlayer):
         label="What are the two factors that will be used for your performance evaluation and the determination of your compensation?",
     )
     impact_transparency = models.StringField(
-        choices=['costs', 'co2'],
+        choices=['costs', 'co2', 'none'],  # Add 'none' as a valid choice
+        label="When interacting with your virtual colleagues, did you receive any information about the impact of your queries?",
     )
 
     # New fields for Controls page

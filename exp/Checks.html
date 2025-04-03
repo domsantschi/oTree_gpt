@@ -9,26 +9,29 @@
 <ul>
     <li>
         <input type="radio" name="impact_focus" value="costs" required>
-        The <b>Actual Costs</b> of Goods Sold and the <b>Deviance between the Actual Costs</b> of Goods Sold and the Budgeted Costs of Goods Sold
+        The Deviance (i.e., the Static-Budget Variance) between the <b>Actual Cost of Goods Sold (COGS)</b> and your Budget. Your Engagement with Virtual Colleagues.
     </li>
     <li>
         <input type="radio" name="impact_focus" value="co2" required>
-        The <b>Actual CO2 Emissions</b> of the Costs of Goods Sold and <b>the Deviance between the Actual CO2 Emissions</b> of the Costs of Goods Sold and the <b>Budgeted CO2 Emissions</b> of the Costs of Goods Sold
-    </li>
+        The Deviance (i.e., the Static-Budget Variance) between the between the <b>Actual COGS-related CO2 Emissions</b> and your Budget. Your Engagement with Virtual Colleagues.    </li>
 </ul>
 {{ formfield_errors 'impact_focus' }}
 
 <p>
-2. When interacting with your virtual colleagues, were you aware that <b>each query reduces your compensation</b> and that each query you ask will cause <b>real-life CO2 emissions</b>?
+2. When interacting with your virtual colleagues, did you receive any information about the <b>impact of your queries</b>?
 </p>
 <ul>
     <li>
         <input type="radio" name="impact_transparency" value="costs" required>
-        No, <b>I was not aware</b> that each query would incur a cost that would reduce my payoff and that each query I ask will cause real-life CO2 emissions.
+        Yes, <b>I was aware</b> that each query will <b>incur a cost</b> that would reduce my compensation.
     </li>
     <li>
         <input type="radio" name="impact_transparency" value="co2" required>
-        Yes, <b>I was aware</b> that each query would incur a cost that would reduce my payoff and that each query I ask will cause real-life CO2 emissions.
+        Yes, <b>I was aware</b> that each query will <b>cause real-life CO2 emissions</b> that would reduce my compensation.
+    </li>
+    <li>
+        <input type="radio" name="impact_transparency" value="none" required>
+        No, <b>I was not aware</b> that each query will incure a cost or cause real-life CO2 emissions.
     </li>
 </ul>
 {{ formfield_errors 'impact_transparency' }}
