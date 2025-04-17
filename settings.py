@@ -32,9 +32,14 @@ SESSION_CONFIGS = [
     #      app_sequence=['threejs',],
     #      num_demo_participants=1,
     #  ),
+    #     dict(
+    #         name='exp',
+    #         app_sequence=['exp',],
+    #         num_demo_participants=1,
+    #     ),
         dict(
-            name='exp',
-            app_sequence=['exp',],
+            name='stakeholder',
+            app_sequence=['stakeholder',],
             num_demo_participants=1,
         ),
 ]
@@ -49,7 +54,7 @@ SESSION_CONFIG_DEFAULTS = dict(
 
 # Add this to your settings.py file
 PARTICIPANT_FIELDS = [
-    'failed_knowledge_check',  # Tracks whether the participant failed the knowledge check
+    'failed_knowledge_check', 'part_id' # Tracks whether the participant failed the knowledge check and their ID
 ]
 SESSION_FIELDS = []
 
