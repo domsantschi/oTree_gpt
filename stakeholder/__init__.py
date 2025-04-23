@@ -159,15 +159,39 @@ class Player(BasePlayer):
 
 # --- Functions ----------------------------------------------------------------
 
+# Function for testing
+
 def creating_session(subsession: Subsession):
     if subsession.round_number == 1:
-        for p in subsession.get_players():
+        conditions = ['Low Stakeholder Relevance', 'High Stakeholder Relevance']
+        stakeholder_consensus_conditions = ['Negative Stakeholder Consensus', 'Positive Stakeholder Consensus']
+        
+        # Ensure each condition is assigned once across four sessions
+        combined_conditions = [
+            (c, sc) for c in conditions for sc in stakeholder_consensus_conditions
+        ]
+        random.shuffle(combined_conditions)
+
+        for i, p in enumerate(subsession.get_players()):
             p.participant.wealth = cu(0)
             p.participant.part_id = create_id()
-            # Randomly assign a condition
-            p.condition = random.choice(['Low Stakeholder Relevance', 'High Stakeholder Relevance'])
-            # Randomly assign Stakeholder Consensus (Condition 3 or 4)
-            p.stakeholder_consensus = random.choice(['Negative Stakeholder Consensus', 'Positive Stakeholder Consensus'])
+            condition, stakeholder_consensus = combined_conditions[i % len(combined_conditions)]
+            p.condition = condition
+            p.stakeholder_consensus = stakeholder_consensus
+
+
+# # Function for live experiment << random assignment
+# def creating_session(subsession: Subsession):
+#     if subsession.round_number == 1:
+#         for p in subsession.get_players():
+#             p.participant.wealth = cu(0)
+#             p.participant.part_id = create_id()
+#             # Randomly assign a condition
+#             p.condition = random.choice(['Low Stakeholder Relevance', 'High Stakeholder Relevance'])
+#             # Randomly assign Stakeholder Consensus (Condition 3 or 4)
+#             p.stakeholder_consensus = random.choice(['Negative Stakeholder Consensus', 'Positive Stakeholder Consensus'])
+
+## Not needed for single player game
 
 # def set_payoffs(group: Group):
 #     player = group.get_player_by_id(1)
