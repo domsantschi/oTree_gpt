@@ -1,27 +1,107 @@
 {{ block title }}Thank you!{{ endblock }}
 {{ block content }}
 
-<p style="color: green; font-weight: bold; text-align: center;">
-    Congratulations! You have successfully completed the experiment.
-</p>
+<style>
+    .thanks-container {
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 25px;
+        background: linear-gradient(to right, #ffffff, #f8f9fa);
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .success-message {
+        text-align: center;
+        margin-bottom: 30px;
+        animation: fadeIn 1s ease-in;
+    }
+    
+    .success-icon {
+        font-size: 48px;
+        color: #28a745;
+        margin-bottom: 15px;
+    }
+    
+    .participant-id-box {
+        background-color: #e9ecef;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 20px 0;
+        text-align: center;
+        border: 2px dashed #6c757d;
+    }
+    
+    .participant-id {
+        font-family: monospace;
+        font-size: 24px;
+        color: #007bff;
+        letter-spacing: 2px;
+        margin: 10px 0;
+    }
+    
+    .feedback-section {
+        border-left: 4px solid #007bff;
+        padding: 20px;
+        background-color: #f8f9fa;
+        margin: 20px 0;
+        transition: transform 0.2s;
+    }
+    
+    .feedback-section:hover {
+        transform: translateX(5px);
+    }
+    
+    textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        margin: 10px 0;
+        resize: vertical;
+        min-height: 120px;
+        transition: border-color 0.2s;
+    }
+    
+    textarea:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
 
-<p>
-    After taking a screenshot to save your participant ID,
-    you can close this browser tab.
-</p>
-<p style="text-align: center;">
-    <i><b>{{ participant.part_id }}</b></i>
-</p>
+<div class="thanks-container">
+    <div class="success-message">
+        <div class="success-icon">✅</div>
+        <h3>Congratulations!</h3>
+        <p class="lead">You have successfully completed the experiment.</p>
+    </div>
 
+    <div class="participant-id-box">
+        <h5>Your Participant ID</h5>
+        <p class="text-muted">Please take a screenshot to save this ID before closing the browser tab</p>
+        <div class="participant-id">{{ participant.part_id }}</div>
+    </div>
 
-<!-- Feedback Section -->
-<p>
-    <strong>We value your feedback!</strong> Please leave any comments or suggestions about the study below:
-</p>
-<form method="post">
-    <textarea name="feedback" rows="5" cols="50" placeholder="Enter your feedback here..." required></textarea>
-    <br>
-    <button type="submit" style="margin-top: 10px;">Submit Feedback</button>
-</form>
+    <div class="feedback-section">
+        <h5>📝 We Value Your Feedback!</h5>
+        <p class="text-muted">Please share any comments or suggestions about the study:</p>
+        <textarea 
+            name="feedback" 
+            placeholder="Your feedback helps us improve future studies..."
+            class="form-control"
+        ></textarea>
+        {{ formfield_errors 'feedback' }}
+    </div>
+
+    <!-- <div class="text-center mt-4">
+        {{ next_button }}
+    </div> -->
+</div>
 
 {{ endblock }}

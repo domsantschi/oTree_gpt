@@ -1,48 +1,149 @@
 {{ block title }}Video: End of Life Care Machine{{ endblock }}
 {{ block content }}
-  
+
+<style>
+    .condition-container {
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 25px;
+        background: linear-gradient(to right, #ffffff, #f8f9fa);
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .header-section {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .video-icon {
+        font-size: 48px;
+        color: #007bff;
+        margin-bottom: 15px;
+    }
+    
+    .content-box {
+        border-left: 4px solid #007bff;
+        padding: 20px;
+        background-color: #f8f9fa;
+        margin: 20px 0;
+        border-radius: 0 10px 10px 0;
+    }
+    
+    .video-container {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+        margin: 20px 0;
+        background-color: #000;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .video-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+    
+    .timer-box {
+        background-color: #e9ecef;
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin-top: 20px;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+    
+    .timer-count {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #007bff;
+        margin: 0 5px;
+    }
+    
+    .notice-box {
+        background-color: rgba(0, 123, 255, 0.1);
+        border-left: 4px solid #007bff;
+        padding: 15px 20px;
+        margin: 20px 0;
+        border-radius: 0 8px 8px 0;
+    }
+    
+    .success-message {
+        color: #28a745;
+        font-weight: bold;
+    }
+</style>
+
+<div class="condition-container">
     {% if speculative_design == 'Speculative Design Absent' %}
-    <p>
-        The <b>probable futures</b> condition relies on <b>existing data and trends</b>, such as current healthcare regulations. 
-        Participants assess ESG themes based on these established trends.
-    </p>
+        <div class="header-section">
+            <div class="video-icon">📊</div>
+            <h4>Probable Futures Analysis</h4>
+        </div>
+        <div class="content-box">
+            <p>
+                The <b>probable futures</b> condition relies on <b>existing data and trends</b>, 
+                such as current healthcare regulations. Participants assess ESG themes based on 
+                these established trends.
+            </p>
+        </div>
 
     {% elif speculative_design == 'Speculative Design Present' %}
-    <p>
-        This video showcases a prototype of the End of Life Care Machine, developed by Livit Tech. 
-    </p>
-    <p>
-        <b>Please watch the video carefully</b> as it contains important information about the technology. You will be asked questions about it later.
-        <br><br>
-        <b>Note:</b> To ensure you have time to watch the full video, you will need to stay on this page for at least 1 minute before proceeding.
-    </p>
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/vDHstslg8Vo" 
-            title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <div class="header-section">
+            <div class="video-icon">🎥</div>
+            <h4>End of Life Care Machine Prototype</h4>
+        </div>
+        
+        <div class="notice-box">
+            <p><b>Please watch the video carefully</b> as it contains important information about 
+            the technology. You will be asked questions about it later.</p>
+        </div>
 
-    <div id="timer" style="margin-top: 20px; color: #666;">
-        Please wait... (<span id="countdown">60</span> seconds remaining)
-    </div>
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/vDHstslg8Vo" 
+                    title="YouTube video player" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen></iframe>
+        </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var nextButton = document.querySelector('.otree-btn-next');
-            if (nextButton) {
-                nextButton.style.display = 'none';
-                var timeLeft = 60;
-                var timer = setInterval(function() {
-                    timeLeft--;
-                    document.getElementById('countdown').textContent = timeLeft;
-                    if (timeLeft <= 0) {
-                        clearInterval(timer);
-                        document.getElementById('timer').innerHTML = 'You can now proceed to the next page.';
-                        nextButton.style.display = 'block';
-                    }
-                }, 1000);
-            }
-        });
-    </script>
+        <div class="timer-box" id="timer">
+            <p style="margin: 0">
+                Please wait... <span class="timer-count" id="countdown">60</span> seconds remaining
+            </p>
+        </div>
 
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var nextButton = document.querySelector('.otree-btn-next');
+                var timerBox = document.getElementById('timer');
+                
+                if (nextButton) {
+                    nextButton.style.display = 'none';
+                    var timeLeft = 60;
+                    var timer = setInterval(function() {
+                        timeLeft--;
+                        document.getElementById('countdown').textContent = timeLeft;
+                        if (timeLeft <= 0) {
+                            clearInterval(timer);
+                            timerBox.innerHTML = '<p class="success-message">✅ You can now proceed to the next page</p>';
+                            timerBox.style.backgroundColor = '#d4edda';
+                            nextButton.style.display = 'block';
+                        }
+                    }, 1000);
+                }
+            });
+        </script>
     {% endif %}
 
-    <p>{{ next_button }}</p>
+    <div class="text-center mt-4">
+        {{ next_button }}
+    </div>
+</div>
+
 {{ endblock }}

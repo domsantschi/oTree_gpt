@@ -1,25 +1,128 @@
 {{ block title }}About Livit Tech{{ endblock }}
 {{ block content }}
 
-<p>
-    Livit Tech is developing an <b>End of Life Care Machine</b>, an automated healthcare solution designed to provide comfort and support during patients' final moments. The technology includes:
-</p>
+<style>
+    .background-container {
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 25px;
+        background: linear-gradient(to right, #ffffff, #f8f9fa);
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .company-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .company-icon {
+        font-size: 48px;
+        color: #007bff;
+        margin-bottom: 15px;
+    }
+    
+    .tech-overview {
+        border-left: 4px solid #007bff;
+        padding: 20px;
+        background-color: #f8f9fa;
+        margin: 20px 0;
+        border-radius: 0 10px 10px 0;
+    }
+    
+    .features-list {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        margin: 20px 0;
+    }
+    
+    .feature-item {
+        display: flex;
+        align-items: center;
+        margin: 15px 0;
+        padding: 10px;
+        border-radius: 5px;
+        transition: transform 0.2s;
+    }
+    
+    .feature-item:hover {
+        transform: translateX(5px);
+        background-color: rgba(0, 123, 255, 0.05);
+    }
+    
+    .feature-icon {
+        width: 30px;
+        margin-right: 15px;
+        color: #007bff;
+        text-align: center;
+    }
+    
+    .designer-quote {
+        background-color: #e9ecef;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        position: relative;
+    }
+    
+    .quote-mark {
+        font-size: 24px;
+        color: #007bff;
+        position: absolute;
+        left: -10px;
+        top: -10px;
+    }
+</style>
 
-<ul>
-    <li>Advanced <b>voice interaction systems</b> for patient comfort</li>
-    <li><b>Robotic assistance</b> capabilities for physical support</li>
-    <li><b>Automated care</b> delivery mechanisms</li>
-</ul>
+<div class="background-container">
+    <div class="company-header">
+        <div class="company-icon">🏥</div>
+        <h3>Livit Tech</h3>
+        <p class="text-muted">Healthcare Innovation</p>
+    </div>
 
-<p>
-    According to the Lead Designer, Dan Chen, this innovative yet sensitive healthcare automation project represents a <b>significant technological advancement</b> in patient care. However, it <b>also raises important questions</b> about the intersection of healthcare automation, patient dignity, and ethical care delivery.
-</p>
+    <div class="tech-overview">
+        <h5>End of Life Care Machine</h5>
+        <p>
+            Livit Tech is developing an automated healthcare solution designed to provide 
+            comfort and support during patients' final moments.
+        </p>
+    </div>
 
-<!-- Add the image -->
-<div style="text-align: center; margin-top: 20px;">
-    <img src="{% static 'images/livit.jpg' %}" alt="Livit Tech Logo" style="max-width: 100%; height: auto;">
+    <div class="features-list">
+        <h5>Key Technologies</h5>
+        <div class="feature-item">
+            <span class="feature-icon">🗣️</span>
+            <div>Advanced <b>voice interaction systems</b> for patient comfort</div>
+        </div>
+        <div class="feature-item">
+            <span class="feature-icon">🤖</span>
+            <div><b>Robotic assistance</b> capabilities for physical support</div>
+        </div>
+        <div class="feature-item">
+            <span class="feature-icon">⚕️</span>
+            <div><b>Automated care</b> delivery mechanisms</div>
+        </div>
+    </div>
+
+    <div class="designer-quote">
+        <span class="quote-mark">"</span>
+        <p style="margin-bottom: 0">
+            This innovative yet sensitive healthcare automation project represents a 
+            <b>significant technological advancement</b> in patient care. However, it 
+            <b>also raises important questions</b> about the intersection of healthcare 
+            automation, patient dignity, and ethical care delivery.
+        </p>
+        <p class="text-muted mt-2" style="margin-bottom: 0">
+            — Dan Chen, Lead Designer
+        </p>
+    </div>
+
+    <div class="text-center mt-4">
+        {{ next_button }}
+    </div>
 </div>
-
-<p>{{ next_button }}</p>
 
 {{ endblock }}

@@ -1,25 +1,111 @@
 {{ block title }}Consent{{ endblock }}
 {{ block content }}
 
-<ul style="margin-top: 20px; line-height: 1.8;">
-    <li>In this study, we will ask you to conduct a task, which will take about 10 minutes to complete.</li>
-    <li>There is no psychological discomfort, no physical discomfort, nor any deception in this study.</li>
-    <li>Your decisions and answers will only be used in anonymous form. We will not store any personally identifying information.</li>
-    <li>Your anonymized data will be used for academic purposes and may be shared with other academics for research purposes.</li>
-    <li>Participation is completely voluntary, and you can quit at any time.</li>
-    <li>Please note that you cannot go back to a previous screen.</li>
-</ul>
+<style>
+    .consent-container {
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 25px;
+        background: linear-gradient(to right, #ffffff, #f8f9fa);
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .header-section {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .consent-icon {
+        font-size: 48px;
+        color: #007bff;
+        margin-bottom: 15px;
+    }
+    
+    .consent-list {
+        border-left: 4px solid #007bff;
+        padding: 20px 20px 20px 40px;
+        background-color: #f8f9fa;
+        margin: 20px 0;
+        border-radius: 0 10px 10px 0;
+    }
+    
+    .consent-list li {
+        margin: 15px 0;
+        line-height: 1.6;
+        position: relative;
+    }
+    
+    .consent-list li::before {
+        content: "•";
+        color: #007bff;
+        font-weight: bold;
+        position: absolute;
+        left: -20px;
+    }
+    
+    .checkbox-container {
+        background-color: #e9ecef;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        display: flex;
+        align-items: center;
+        transition: background-color 0.2s;
+    }
+    
+    .checkbox-container:hover {
+        background-color: #dee2e6;
+    }
+    
+    .custom-checkbox {
+        margin-right: 12px;
+        transform: scale(1.2);
+    }
+    
+    .checkbox-label {
+        font-weight: 500;
+        color: #495057;
+        cursor: pointer;
+    }
 
-<!-- Checkbox for accepting conditions -->
-<div style="margin-top: 20px;">
-    <label>
-        <input type="checkbox" id="accept-conditions" name="accept" />
-        I accept the conditions and would like to continue.
-    </label>
-</div>
+    .next-button-container {
+        text-align: center;
+        margin-top: 30px;
+    }
 
-<div id="next-button-container" style="margin-top: 20px;">
-    {{ next_button }}
+    .next-button-container button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+</style>
+
+<div class="consent-container">
+    <div class="header-section">
+        <div class="consent-icon">📋</div>
+        <h3>Study Participation Consent</h3>
+        <p class="text-muted">Please review the following information carefully</p>
+    </div>
+
+    <ul class="consent-list">
+        <li>In this study, we will ask you to conduct a task, which will take about 10 minutes to complete.</li>
+        <li>There is no psychological discomfort, no physical discomfort, nor any deception in this study.</li>
+        <li>Your decisions and answers will only be used in anonymous form. We will not store any personally identifying information.</li>
+        <li>Your anonymized data will be used for academic purposes and may be shared with other academics for research purposes.</li>
+        <li>Participation is completely voluntary, and you can quit at any time.</li>
+        <li>Please note that you cannot go back to a previous screen.</li>
+    </ul>
+
+    <div class="checkbox-container">
+        <input type="checkbox" id="accept-conditions" name="accept" class="custom-checkbox" />
+        <label for="accept-conditions" class="checkbox-label">
+            I accept the conditions and would like to continue.
+        </label>
+    </div>
+
+    <div class="next-button-container">
+        {{ next_button }}
+    </div>
 </div>
 
 {{ endblock }}
@@ -28,14 +114,18 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const checkbox = document.getElementById('accept-conditions');
-        const nextButton = document.querySelector('#next-button-container button');
+        const nextButton = document.querySelector('.next-button-container button');
         
         // Initially disable the next button
         nextButton.disabled = true;
+        nextButton.style.opacity = '0.6';
+        nextButton.style.cursor = 'not-allowed';
         
         // Enable/disable next button based on checkbox state
         checkbox.addEventListener('change', function() {
             nextButton.disabled = !this.checked;
+            nextButton.style.opacity = this.checked ? '1' : '0.6';
+            nextButton.style.cursor = this.checked ? 'pointer' : 'not-allowed';
         });
     });
 </script>
