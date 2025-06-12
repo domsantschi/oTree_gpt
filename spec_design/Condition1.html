@@ -1,0 +1,20 @@
+{{ block title }}Instructions (3 of 4){{ endblock }}
+{{ block content }}
+    <p>
+        The <b>time horizon</b> for the scenarios presented focuses on the following risks:
+    </p>
+    {% if condition == 'Short-term risks' %}
+        <ul>
+            <li>The scenario addresses <b>immediate technological or regulatory challenges</b></li>
+            <li>The focus is on risks that could materialize within the <b>next 1–2 years</b></li>
+        </ul>
+    {% elif condition == 'Long-term risks' %}
+        <ul>
+            <li>The scenario addresses <b>future societal or market shifts</b></li>
+            <li>The focus is on risks that could materialize <b>10–15 years into the future</b></li>
+        </ul>
+    {% endif %}
+    <p>
+        {{ next_button }}
+    </p>
+{{ endblock }}

@@ -1,0 +1,21 @@
+{{ block title }}Instructions (4 of 4){{ endblock }}
+{{ block content }}
+  
+    {% if speculative_design == 'Speculative Design Absent' %}
+    <p>
+        The <b>probable futures</b> condition relies on <b>existing data and trends</b>, such as current healthcare regulations. 
+        Participants assess ESG themes based on these established trends.
+    </p>
+
+    {% elif speculative_design == 'Speculative Design Present' %}
+    <p>
+        The <b>possible futures</b> condition uses a <b>speculative design toolkit</b> to create artifacts, such as prototypes or narratives, 
+        that explore hypothetical scenarios like the widespread adoption of robotic caregivers.
+    </p>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/vDHstslg8Vo" 
+            title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+    {% endif %}
+
+    <p>{{ next_button }}</p>
+{{ endblock }}

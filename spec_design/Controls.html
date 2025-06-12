@@ -1,0 +1,84 @@
+{{ block title }}A Few Final Questions{{ endblock }}
+{{ block content }}
+
+<style>
+    /* Ensure all radio button cells have the same width */
+    .radio-cell {
+        width: 12.5%; /* Divide evenly for 8 columns */
+        text-align: center;
+    }
+    .radio-label {
+        font-size: 0.9em;
+        margin-top: 5px;
+        display: block;
+    }
+</style>
+
+<div style="margin-bottom: 30px;">
+    <b>1. To what extent did the speculative design artifact help you identify risks you might have otherwise overlooked?</b>
+    <table style="margin: 15px 0; width: 100%; text-align: center;">
+        <tr>
+            {% for i in range(1, 8) %}
+                <td class="radio-cell">
+                    <input type="radio" name="blind_spot_detection" value="{{ i }}" required>
+                    <span class="radio-label">
+                        {% if i == 1 %}Strongly disagree{% endif %}
+                        {% if i == 2 %}Disagree{% endif %}
+                        {% if i == 3 %}Somewhat disagree{% endif %}
+                        {% if i == 4 %}Neutral{% endif %}
+                        {% if i == 5 %}Somewhat agree{% endif %}
+                        {% if i == 6 %}Agree{% endif %}
+                        {% if i == 7 %}Strongly agree{% endif %}
+                    </span>
+                </td>
+            {% endfor %}
+        </tr>
+    </table>
+</div>
+
+<div style="margin-bottom: 30px;">
+    <b>2. To what extent did the artifact make the risk scenario easier to understand through its narrative structure?</b>
+    <table style="margin: 15px 0; width: 100%; text-align: center;">
+        <tr>
+            {% for i in range(1, 8) %}
+                <td class="radio-cell">
+                    <input type="radio" name="narrative_accessibility" value="{{ i }}" required>
+                    <span class="radio-label">
+                        {% if i == 1 %}Strongly disagree{% endif %}
+                        {% if i == 2 %}Disagree{% endif %}
+                        {% if i == 3 %}Somewhat disagree{% endif %}
+                        {% if i == 4 %}Neutral{% endif %}
+                        {% if i == 5 %}Somewhat agree{% endif %}
+                        {% if i == 6 %}Agree{% endif %}
+                        {% if i == 7 %}Strongly agree{% endif %}
+                    </span>
+                </td>
+            {% endfor %}
+        </tr>
+    </table>
+</div>
+
+<div style="margin-bottom: 30px;">
+    <b>3. To what extent did the artifact make abstract risks feel more concrete and tangible?</b>
+    <table style="margin: 15px 0; width: 100%; text-align: center;">
+        <tr>
+            {% for i in range(1, 8) %}
+                <td class="radio-cell">
+                    <input type="radio" name="risk_embodiment" value="{{ i }}" required>
+                    <span class="radio-label">
+                        {% if i == 1 %}Strongly disagree{% endif %}
+                        {% if i == 2 %}Disagree{% endif %}
+                        {% if i == 3 %}Somewhat disagree{% endif %}
+                        {% if i == 4 %}Neutral{% endif %}
+                        {% if i == 5 %}Somewhat agree{% endif %}
+                        {% if i == 6 %}Agree{% endif %}
+                        {% if i == 7 %}Strongly agree{% endif %}
+                    </span>
+                </td>
+            {% endfor %}
+        </tr>
+    </table>
+</div>
+
+<p>{{ next_button }}</p>
+{{ endblock }}

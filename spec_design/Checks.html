@@ -1,0 +1,26 @@
+{{ block title }}Post-Task Questions{{ endblock }}
+{{ block content }}
+
+<p>Please answer the following manipulation check questions based on your experience during the task.</p>
+
+<!-- Manipulation Check for Time Horizon -->
+<p>
+    1. Which of the following describes the <b>time horizon</b> of the risks you assessed?
+</p>
+<ul>
+    <li><input type="radio" name="time_horizon" value="Short-term risks" required> The risks focused on <b>short-term challenges</b> (1–2 years).</li>
+    <li><input type="radio" name="time_horizon" value="Long-term risks"> The risks focused on <b>long-term challenges</b> (10–15 years).</li>
+</ul>
+
+<!-- Manipulation Check for Speculative Design -->
+<p>
+    2. Which of the following describes the <b>approach</b> used to assess the risks?
+</p>
+<ul>
+    <li><input type="radio" name="speculative_design" value="Speculative Design Absent" required> The approach relied on <b>existing data and trends</b>.</li>
+    <li><input type="radio" name="speculative_design" value="Speculative Design Present"> The approach used a <b>speculative design toolkit</b> to explore hypothetical scenarios.</li>
+</ul>
+
+<p>{{ next_button }}</p>
+
+{{ endblock }}

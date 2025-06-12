@@ -32,11 +32,11 @@ SESSION_CONFIGS = [
     #      app_sequence=['threejs',],
     #      num_demo_participants=1,
     #  ),
-    #     dict(
-    #         name='exp',
-    #         app_sequence=['exp',],
-    #         num_demo_participants=1,
-    #     ),
+        dict(
+            name='spec_design',
+            app_sequence=['spec_design',],
+            num_demo_participants=1,
+        ),
         dict(
             name='stakeholder',
             app_sequence=['stakeholder',],

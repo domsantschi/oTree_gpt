@@ -1,0 +1,62 @@
+{{ block title }}Tell Us About Yourself{{ endblock }}
+{{ block content }}
+
+<p>Please answer the following questions to help us better understand your background.</p>
+
+<p>
+    <strong>1. What is your gender?</strong>
+</p>
+<ul>
+    <li><input type="radio" name="gender" value="Male" required> Male</li>
+    <li><input type="radio" name="gender" value="Female"> Female</li>
+    <li><input type="radio" name="gender" value="Other"> Other</li>
+</ul>
+{{ formfield_errors 'gender' }}
+
+<p>
+    <strong>2. What is your age?</strong>
+</p>
+<ul>
+    <li><input type="radio" name="age" value="Less than 25 years old" required> Less than 25 years old</li>
+    <li><input type="radio" name="age" value="25-34 years old"> 25-34 years old</li>
+    <li><input type="radio" name="age" value="35-44 years old"> 35-44 years old</li>
+    <li><input type="radio" name="age" value="45-54 years old"> 45-54 years old</li>
+    <li><input type="radio" name="age" value="55-64 years old"> 55-64 years old</li>
+    <li><input type="radio" name="age" value="65-74 years old"> 65-74 years old</li>
+    <li><input type="radio" name="age" value="Above 74 years old"> Above 74 years old</li>
+</ul>
+{{ formfield_errors 'age' }}
+
+<p>
+    <strong>3. What is your highest level of education?</strong>
+</p>
+<ul>
+    <li><input type="radio" name="qualification" value="Diploma" required> Diploma</li>
+    <li><input type="radio" name="qualification" value="Bachelor Degree"> Bachelor Degree</li>
+    <li><input type="radio" name="qualification" value="Masters Degree"> Masters Degree</li>
+    <li><input type="radio" name="qualification" value="Doctoral Degree"> Doctoral Degree</li>
+    <li><input type="radio" name="qualification" value="None of the above"> None of the above</li>
+</ul>
+{{ formfield_errors 'qualification' }}
+
+<p>
+    <strong>4. How many years of full-time work experience do you have?</strong>
+</p>
+<p>
+    <label for="work_experience">Please type here:</label>
+    <input type="number" id="work_experience" name="work_experience" min="0" step="1" required> years
+</p>
+{{ formfield_errors 'work_experience' }}
+
+<p>
+    <strong>5. How many years of management experience do you have?</strong>
+</p>
+<p>
+    <label for="management_experience">Please type here:</label>
+    <input type="number" id="management_experience" name="management_experience" min="0" step="1" required> years
+</p>
+{{ formfield_errors 'management_experience' }}
+
+<p>{{ next_button }}</p>
+
+{{ endblock }}
