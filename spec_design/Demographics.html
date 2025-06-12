@@ -16,14 +16,11 @@
 <p>
     <strong>2. What is your age?</strong>
 </p>
-<ul>
-    <li><input type="radio" name="age" value="Less than 25 years old" required> Less than 25 years old</li>
-    <li><input type="radio" name="age" value="25-34 years old"> 25-34 years old</li>
-    <li><input type="radio" name="age" value="35-44 years old"> 35-44 years old</li>
-    <li><input type="radio" name="age" value="45-54 years old"> 45-54 years old</li>
-    <li><input type="radio" name="age" value="55-64 years old"> 55-64 years old</li>
-    <li><input type="radio" name="age" value="65-74 years old"> 65-74 years old</li>
-    <li><input type="radio" name="age" value="Above 74 years old"> Above 74 years old</li>
+<ul>    <li><input type="radio" name="age" value="18-24 years" required> 18-24 years</li>
+    <li><input type="radio" name="age" value="25-34 years"> 25-34 years</li>
+    <li><input type="radio" name="age" value="35-50 years"> 35-50 years</li>
+    <li><input type="radio" name="age" value="51-65 years"> 51-65 years</li>
+    <li><input type="radio" name="age" value="Over 65 years"> Over 65 years</li>
 </ul>
 {{ formfield_errors 'age' }}
 
@@ -49,13 +46,13 @@
 {{ formfield_errors 'work_experience' }}
 
 <p>
-    <strong>5. How many years of management experience do you have?</strong>
+    <strong>5. How many years of risk management experience do you have?</strong>
 </p>
 <p>
-    <label for="management_experience">Please type here:</label>
-    <input type="number" id="management_experience" name="management_experience" min="0" step="1" required> years
+    <label for="rm_experience">Please type here:</label>
+    <input type="number" id="rm_experience" name="rm_experience" min="0" step="1" required> years
 </p>
-{{ formfield_errors 'management_experience' }}
+{{ formfield_errors 'rm_experience' }}
 
 <p>{{ next_button }}</p>
 

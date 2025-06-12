@@ -41,13 +41,11 @@ class Player(BasePlayer):
     age = models.StringField(
         label="Age",
         choices=[
-            "Less than 25 years old",
-            "25-34 years old",
-            "35-44 years old",
-            "45-54 years old",
-            "55-64 years old",
-            "65-74 years old",
-            "Above 74 years old",
+            "18-24 years",
+            "25-34 years",
+            "35-50 years",
+            "51-65 years",
+            "Over 65 years",
         ],
     )
     qualification = models.StringField(
@@ -64,8 +62,8 @@ class Player(BasePlayer):
         label="Years of Full-Time Work Experience",
         min=0,
     )
-    management_experience = models.IntegerField(
-        label="Years of Management Experience",
+    rm_experience = models.IntegerField(
+        label="Years of Risk Management Experience",
         min=0,
     )
     time_horizon = models.StringField(
@@ -122,6 +120,23 @@ class Player(BasePlayer):
         max=7,
         doc="To what extent did the artifact make abstract risks feel more concrete"
     )
+    # Risk anticipation game score
+    risk_score = models.IntegerField(
+        initial=0,
+        doc="Score from the risk anticipation word puzzle game"
+    )
+    
+    # Dynamic risk allocations
+    risk_social_interaction = models.IntegerField(initial=0, min=0)
+    risk_usability = models.IntegerField(initial=0, min=0)
+    risk_privacy = models.IntegerField(initial=0, min=0)
+    risk_regulatory = models.IntegerField(initial=0, min=0)
+    risk_funding = models.IntegerField(initial=0, min=0)
+    risk_workforce = models.IntegerField(initial=0, min=0)
+    risk_standards = models.IntegerField(initial=0, min=0)
+    risk_startup_cost = models.IntegerField(initial=0, min=0)
+    risk_confidentiality = models.IntegerField(initial=0, min=0)
+    risk_planning = models.IntegerField(initial=0, min=0)
 
 # --- Functions ----------------------------------------------------------------
 
@@ -165,34 +180,28 @@ class Condition1(Page):
 
 class Assessment(Page):
     form_model = 'player'
-    form_fields = [
-        'risk_event_1',
-        'risk_event_2',
-        'risk_event_3',
-        'risk_event_4',
-    ]
+    form_fields = ['risk_score']
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
-        # Calculate total allocation
-        total_allocation = (
-            player.risk_event_1 +
-            player.risk_event_2 +
-            player.risk_event_3 +
-            player.risk_event_4
-        )
-        print(f"Total allocation: {total_allocation}")
-        # Ensure total allocation does not exceed 100,000
-        if total_allocation > 100000:
-            raise ValueError("Total allocation exceeds the budget of 100,000 dollars.")
+        # Convert risk_score from dollars to cents for data analysis
+        print(f"Risk identification earnings: ${player.risk_score:.2f}")
 
 class Condition2(Page):
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.speculative_design == 'Speculative Design Present'
+        
     @staticmethod
     def vars_for_template(player: Player):
         return dict(
             condition=player.condition,
-            speculative_design=player.speculative_design,  # Pass speculative_design to the template
+            speculative_design=player.speculative_design,
         )
+    
+    @staticmethod
+    def get_timeout_seconds(player: Player):
+        return 60 if player.speculative_design == 'Speculative Design Present' else None
 
 class Controls(Page):
     form_model = 'player'
@@ -201,6 +210,10 @@ class Controls(Page):
         'narrative_accessibility',
         'risk_embodiment',
     ]
+
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.speculative_design == 'Speculative Design Present'
 
 class Checks(Page):
     form_model = 'player'
@@ -216,7 +229,7 @@ class Demographics(Page):
         'age',
         'qualification',
         'work_experience',
-        'management_experience',
+        'rm_experience',
     ]
 
 class Thanks(Page):

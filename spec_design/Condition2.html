@@ -1,4 +1,4 @@
-{{ block title }}Instructions (4 of 4){{ endblock }}
+{{ block title }}Video: End of Life Care Machine{{ endblock }}
 {{ block content }}
   
     {% if speculative_design == 'Speculative Design Absent' %}
@@ -9,11 +9,38 @@
 
     {% elif speculative_design == 'Speculative Design Present' %}
     <p>
-        The <b>possible futures</b> condition uses a <b>speculative design toolkit</b> to create artifacts, such as prototypes or narratives, 
-        that explore hypothetical scenarios like the widespread adoption of robotic caregivers.
+        This video showcases a prototype of the End of Life Care Machine, developed by Livit Tech. 
+    </p>
+    <p>
+        <b>Please watch the video carefully</b> as it contains important information about the technology. You will be asked questions about it later.
+        <br><br>
+        <b>Note:</b> To ensure you have time to watch the full video, you will need to stay on this page for at least 1 minute before proceeding.
     </p>
     <iframe width="560" height="315" src="https://www.youtube.com/embed/vDHstslg8Vo" 
             title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+    <div id="timer" style="margin-top: 20px; color: #666;">
+        Please wait... (<span id="countdown">60</span> seconds remaining)
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var nextButton = document.querySelector('.otree-btn-next');
+            if (nextButton) {
+                nextButton.style.display = 'none';
+                var timeLeft = 60;
+                var timer = setInterval(function() {
+                    timeLeft--;
+                    document.getElementById('countdown').textContent = timeLeft;
+                    if (timeLeft <= 0) {
+                        clearInterval(timer);
+                        document.getElementById('timer').innerHTML = 'You can now proceed to the next page.';
+                        nextButton.style.display = 'block';
+                    }
+                }, 1000);
+            }
+        });
+    </script>
 
     {% endif %}
 

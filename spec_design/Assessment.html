@@ -1,100 +1,131 @@
 {% load static %}
-{{ block title }}Your Risk Assessment of End-of-Life Care Machine{{ endblock }}
+{{ block title }}Your Task: Anticipate Risks{{ endblock }}
 {{ block content }}
-<p>
-    As a production manager, you are tasked with allocating a budget of <b>100,000 dollars</b> to manage the following risks related to the development of a new healthcare technology: the End-of-Life Care Machine.
-</p>
-<p>
-    Please distribute the funds between the two risk events below. Your allocation will reflect your strategic priorities.
-</p>
 
-<!-- Risk Events Section -->
-<div style="margin-top: 30px;">
-    <h5>Risk Events</h5>
-    <ul>
-        <li><b>Risk Event 1:</b> Regulatory challenges due to stringent healthcare compliance requirements.</li>
-        <li><b>Risk Event 2:</b> High development costs leading to budget overruns.</li>
-        <li><b>Risk Event 3:</b> Ethical concerns from stakeholders regarding the use of AI in end-of-life care.</li>
-        <li><b>Risk Event 4:</b> Market rejection due to cultural resistance to automated healthcare solutions.</li>
-    </ul>
+<style>
+    .word-puzzle {
+        margin: 20px 0;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+    }
+    .scrambled {
+        font-weight: bold;
+        color: #dc3545;
+        font-size: 1.2em;
+    }
+    .hint {
+        color: #6c757d;
+        font-style: italic;
+        margin-top: 5px;
+    }
+    .solved {
+        color: #28a745;
+        text-decoration: line-through;
+    }
+    .earnings {
+        background-color: #28a745;
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        margin: 10px 0;
+        font-weight: bold;
+        font-size: 1.2em;
+    }
+    .instructions {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-left: 4px solid #007bff;
+        margin-bottom: 20px;
+    }
+</style>
 
-    <!-- Budget Allocation Task -->
-    <div style="margin-top: 20px;">
-        <h5></p>Budget Allocation Task</h5>
-        <p>You have a total budget of 100,000 dollars to manage all these risk events. How much will you allocate to each risk event?</p>
-        <table style="width: 100%; border-collapse: collapse; text-align: center;">
-            <thead>
-                <tr style="background-color: #f2f2f2;">
-                    <th>Risk Event</th>
-                    <th>Allocation (USD)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Risk Event 1</td>
-                    <td><input type="number" id="risk_event_1" name="risk_event_1" step="1" placeholder="0" required style="text-align: center;"></td>
-                </tr>
-                <tr>
-                    <td>Risk Event 2</td>
-                    <td><input type="number" id="risk_event_2" name="risk_event_2" step="1" placeholder="0" required style="text-align: center;"></td>
-                </tr>
-                <tr>
-                    <td>Risk Event 3</td>
-                    <td><input type="number" id="risk_event_3" name="risk_event_3" step="1" placeholder="0" required style="text-align: center;"></td>
-                </tr>
-                <tr>
-                    <td>Risk Event 4</td>
-                    <td><input type="number" id="risk_event_4" name="risk_event_4" step="1" placeholder="0" required style="text-align: center;"></td>
-                </tr>
-            </tbody>
-        </table>
-        <p><b>Total Allocation:</b> <span id="total_allocation">0</span> USD</p>
+<div class="container">
+    <div class="instructions">
+        <h5>📝 Instructions:</h5>
+        <ul>
+            <li>Below are scrambled words related to potential risks for the new healthcare technology</li>
+            <li>Each word you unscramble earns you <b>USD 0.25</b></li>
+            <li>Hints are provided to help you anticipate each risk</li>
+            <li>You can continue at any time by clicking the Next button</li>
+            <li>Try to anticipate as many risks as you can to maximize your earnings!</li>
+        </ul>
     </div>
 
-    <!-- JavaScript for Real-Time Calculations -->
-    <script>
-        document.addEventListener('input', function () {
-            const risk1 = parseFloat(document.getElementById('risk_event_1').value) || 0;
-            const risk2 = parseFloat(document.getElementById('risk_event_2').value) || 0;
-            const risk3 = parseFloat(document.getElementById('risk_event_3').value) || 0;
-            const risk4 = parseFloat(document.getElementById('risk_event_4').value) || 0;
-
-            const totalAllocation = risk1 + risk2 + risk3 + risk4;
-            const totalDisplay = document.getElementById('total_allocation');
-            totalDisplay.textContent = totalAllocation;
-            
-            // Add visual feedback
-            if (totalAllocation > 100000) {
-                totalDisplay.style.color = 'red';
-                document.getElementById('warning').style.display = 'block';
-                document.getElementById('next_button').disabled = true;
-            } else {
-                totalDisplay.style.color = 'black';
-                document.getElementById('warning').style.display = 'none';
-                document.getElementById('next_button').disabled = false;
-            }
-        });
-
-        // Add validation before form submission
-        document.querySelector('form').addEventListener('submit', function(e) {
-            const risk1 = parseFloat(document.getElementById('risk_event_1').value) || 0;
-            const risk2 = parseFloat(document.getElementById('risk_event_2').value) || 0;
-            const risk3 = parseFloat(document.getElementById('risk_event_3').value) || 0;
-            const risk4 = parseFloat(document.getElementById('risk_event_4').value) || 0;
-            
-            const totalAllocation = risk1 + risk2 + risk3 + risk4;
-            if (totalAllocation > 100000) {
-                e.preventDefault();
-                alert('Total allocation cannot exceed 100,000 dollars.');
-            }
-        });
-    </script>
-    
-    <!-- Add warning message -->
-    <div id="warning" style="color: red; display: none; margin-top: 10px;">
-        Warning: Total allocation exceeds the budget of 100,000 dollars!
+    <div class="earnings">
+        Your Current Earnings: $<span id="earnings">0.00</span>
     </div>
 
-    <!-- Change the next button to have an id -->
-    <p><button class="otree-btn-next btn btn-primary" id="next_button">Next</button></p>
+    <div class="word-puzzle">
+        <div id="puzzle-container">
+            <!-- Puzzles will be dynamically added here -->
+        </div>
+    </div>
+
+    <div class="alert alert-info" role="alert">
+        You can proceed at any time - your earnings will be added to your final payment.
+        <input type="hidden" name="risk_score" id="risk_score" value="0">
+        {{ formfield_errors 'risk_score' }}
+    </div>
+</div>
+
+<script>
+    const riskWords = [
+        { scrambled: "YTEFAS", original: "SAFETY", hint: "Protecting users from harm" },
+        { scrambled: "YCAVIRP", original: "PRIVACY", hint: "Keeping patient information secure" },
+        { scrambled: "TSURT", original: "TRUST", hint: "Patient confidence in the system" },
+        { scrambled: "SCIHTE", original: "ETHICS", hint: "Moral principles in healthcare" },
+        { scrambled: "TSOC", original: "COST", hint: "Financial considerations" }
+    ];
+
+    let score = 0;
+    const solvedWords = new Set();
+
+    function initializePuzzles() {
+        const container = document.getElementById('puzzle-container');
+        riskWords.forEach((word, index) => {
+            const puzzleDiv = document.createElement('div');
+            puzzleDiv.innerHTML = `
+                <div class="word-challenge" id="puzzle-${index}" style="margin-bottom: 20px;">
+                    <p>Unscramble: <span class="scrambled">${word.scrambled}</span></p>
+                    <p class="hint">💡 Hint: ${word.hint}</p>
+                    <div class="input-group" style="max-width: 300px;">
+                        <input type="text" class="form-control word-input" placeholder="Type your answer" 
+                               onkeyup="checkWord(${index}, this.value)">
+                    </div>
+                    <p class="feedback" style="display: none; margin-top: 5px;"></p>
+                </div>
+            `;
+            container.appendChild(puzzleDiv);
+        });
+    }
+
+    function checkWord(index, answer) {
+        const word = riskWords[index];
+        const puzzleDiv = document.getElementById(`puzzle-${index}`);
+        const feedback = puzzleDiv.querySelector('.feedback');
+        
+        if (answer.toUpperCase() === word.original) {
+            if (!solvedWords.has(index)) {
+                score += 0.25; // 25 cents per solved word
+                solvedWords.add(index);
+                document.getElementById('earnings').textContent = score.toFixed(2);
+                document.getElementById('risk_score').value = score;
+                
+                puzzleDiv.querySelector('.scrambled').classList.add('solved');
+                feedback.style.display = 'block';
+                feedback.style.color = 'green';
+                feedback.textContent = 'Correct! +$0.25 earned';
+                
+                // Disable the input field after correct answer
+                puzzleDiv.querySelector('input').disabled = true;
+            }
+        }
+    }
+
+    // Initialize on page load
+    initializePuzzles();
+</script>
+
+<p><button class="otree-btn-next btn btn-primary" id="next_button">Continue</button></p>
 {{ endblock }}
