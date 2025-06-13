@@ -1,6 +1,6 @@
-{{ block title }}<span style="display: none;">Video Feedback Questions</span>{{ endblock }}
+{% block title %}<span style="display: none;">Video Feedback Questions</span>{% endblock %}
 
-{{ block content }}
+{% block content %}
 
 <style>
     .controls-container {
@@ -82,16 +82,15 @@
     }
 </style>
 
-<div class="controls-container">
-    <div class="mb-4">
-        <h4>🎥 Video Feedback</h4>
-        <p class="text-muted">Please rate your level of agreement with the following statements about the video you watched.</p>
+<div class="controls-container">    <div class="mb-4">
+        <h4>📋 Information Feedback</h4>
+        <p class="text-muted">Please indicate your level of agreement with the following statements. The statements refer to the information provided about the new healthcare technology.</p>
     </div>
 
     <div class="question-box">
         <p class="mb-3">
             <span class="question-number">1</span>
-            The video helped me identify risks I might have otherwise overlooked.
+            The information helped me identify risks that I might have otherwise overlooked.
         </p>
         <div class="likert-scale">
             {% for i in range(1, 8) %}
@@ -115,7 +114,7 @@
     <div class="question-box">
         <p class="mb-3">
             <span class="question-number">2</span>
-            The narrative structure of the video made the different risks more accessible.
+            The narrative structure of the information made the risks of the new healthcare technology more accessible.
         </p>
         <div class="likert-scale">
             {% for i in range(1, 8) %}
@@ -139,7 +138,7 @@
     <div class="question-box">
         <p class="mb-3">
             <span class="question-number">3</span>
-            The video made the risks more concrete and tangible.
+            The information made the risks of the new healthcare technology more concrete and tangible.
         </p>
         <div class="likert-scale">
             {% for i in range(1, 8) %}
@@ -157,8 +156,7 @@
                 </div>
             {% endfor %}
         </div>
-        {{ formfield_errors 'risk_embodiment' }}
-    </div>
+        {{ formfield_errors 'risk_embodiment' }}    </div>
 
     <div class="text-center mt-4">
         {{ next_button }}

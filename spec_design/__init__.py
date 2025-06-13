@@ -262,11 +262,7 @@ class Controls(Page):
         import time
         player.participant._start_time = time.time()
         return None
-
-    @staticmethod
-    def is_displayed(player: Player):
-        return player.speculative_design == 'Speculative Design Present'
-    
+ 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
         player.controls_page_time = time.time() - player.participant._start_time
@@ -335,7 +331,7 @@ page_sequence = [
     Condition1,
     Condition2,
     Assessment,
-    Controls,  # Only shown for Speculative Design Present due to is_displayed condition
+    Controls, 
     Checks,
     Demographics,
     Thanks,
