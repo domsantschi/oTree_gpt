@@ -1,5 +1,6 @@
-{{ block title }}Video: End of Life Care Machine{{ endblock }}
-{{ block content }}
+{% block title %}<span style="display: none;">Video: End of Life Care Machine</span>{% endblock %}
+
+{% block content %}
 
 <style>
     .condition-container {
@@ -99,14 +100,11 @@
             <div class="video-icon">🎥</div>
             <h4>End of Life Care Machine Prototype</h4>
         </div>
-        
-        <div class="notice-box">
+          <div class="notice-box">
             <p><b>Please watch the video carefully</b> as it contains important information about 
             the technology. You will be asked questions about it later.</p>
-        </div>
-
-        <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/vDHstslg8Vo" 
+        </div>        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/vDHstslg8Vo?autoplay=1&mute=0&cc_load_policy=1&cc_lang_pref=en" 
                     title="YouTube video player" 
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                     allowfullscreen></iframe>
@@ -116,24 +114,28 @@
             <p style="margin: 0">
                 Please wait... <span class="timer-count" id="countdown">60</span> seconds remaining
             </p>
-        </div>
-
-        <script>
+        </div>        <script>
             document.addEventListener('DOMContentLoaded', function() {
-                var nextButton = document.querySelector('.otree-btn-next');
-                var timerBox = document.getElementById('timer');
+                const nextButton = document.querySelector('.otree-btn-next');
+                const timerBox = document.getElementById('timer');
+                const countdownSpan = document.getElementById('countdown');
                 
                 if (nextButton) {
-                    nextButton.style.display = 'none';
-                    var timeLeft = 60;
-                    var timer = setInterval(function() {
+                    // Initially disable the button
+                    nextButton.disabled = true;
+                    nextButton.style.display = 'none'; // Hide button initially
+                    
+                    let timeLeft = 60;
+                    const timer = setInterval(function() {
                         timeLeft--;
-                        document.getElementById('countdown').textContent = timeLeft;
+                        countdownSpan.textContent = timeLeft;
                         if (timeLeft <= 0) {
                             clearInterval(timer);
-                            timerBox.innerHTML = '<p class="success-message">✅ You can now proceed to the next page</p>';
+                            timerBox.innerHTML = '<p class="success-message">✅ You may now proceed</p>';
                             timerBox.style.backgroundColor = '#d4edda';
-                            nextButton.style.display = 'block';
+                            nextButton.style.display = 'block'; // Show button
+                            nextButton.disabled = false;
+                            nextButton.textContent = 'Continue';
                         }
                     }, 1000);
                 }

@@ -54,7 +54,9 @@ SESSION_CONFIG_DEFAULTS = dict(
 
 # Add this to your settings.py file
 PARTICIPANT_FIELDS = [
-    'failed_knowledge_check', 'part_id' # Tracks whether the participant failed the knowledge check and their ID
+    'failed_knowledge_check',  # Tracks whether the participant failed the knowledge check
+    'part_id',                # Tracks participant ID
+    '_start_time',            # Used for tracking page timing
 ]
 SESSION_FIELDS = []
 

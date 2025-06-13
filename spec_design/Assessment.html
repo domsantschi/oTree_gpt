@@ -1,6 +1,6 @@
 {% load static %}
-{{ block title }}Your Task: Anticipate Risks{{ endblock }}
-{{ block content }}
+{% block title %}<span style="display: none;">Your Task: Anticipate Risks</span>{% endblock %}
+{% block content %}
 
 <style>
     .word-puzzle {
@@ -60,10 +60,15 @@
         <div id="puzzle-container">
             <!-- Puzzles will be dynamically added here -->
         </div>
-    </div>
-
-    <div class="alert alert-info" role="alert">
+    </div>    <div class="alert alert-info" role="alert">
         You can proceed at any time - your earnings will be added to your final payment.
+        <!-- Hidden fields to store individual risk identification -->
+        <input type="hidden" name="risk_safety" id="risk_safety" value="0">
+        <input type="hidden" name="risk_privacy" id="risk_privacy" value="0">
+        <input type="hidden" name="risk_trust" id="risk_trust" value="0">
+        <input type="hidden" name="risk_ethics" id="risk_ethics" value="0">
+        <input type="hidden" name="risk_cost" id="risk_cost" value="0">
+        <!-- Total score field -->
         <input type="hidden" name="risk_score" id="risk_score" value="0">
         {{ formfield_errors 'risk_score' }}
     </div>
@@ -98,9 +103,7 @@
             `;
             container.appendChild(puzzleDiv);
         });
-    }
-
-    function checkWord(index, answer) {
+    }    function checkWord(index, answer) {
         const word = riskWords[index];
         const puzzleDiv = document.getElementById(`puzzle-${index}`);
         const feedback = puzzleDiv.querySelector('.feedback');
@@ -110,7 +113,13 @@
                 score += 0.25; // 25 cents per solved word
                 solvedWords.add(index);
                 document.getElementById('earnings').textContent = score.toFixed(2);
-                document.getElementById('risk_score').value = score;
+                
+                // Record individual risk scores
+                const riskField = `risk_${word.original.toLowerCase()}`;
+                document.getElementById(riskField).value = '1';
+                
+                // Update total score
+                document.getElementById('risk_score').value = Math.round(score * 100);
                 
                 puzzleDiv.querySelector('.scrambled').classList.add('solved');
                 feedback.style.display = 'block';
@@ -127,5 +136,7 @@
     initializePuzzles();
 </script>
 
-<p><button class="otree-btn-next btn btn-primary" id="next_button">Continue</button></p>
-{{ endblock }}
+<div class="d-flex align-items-center">
+    <button class="otree-btn-next btn btn-primary">Continue</button>
+</div>
+{% endblock %}

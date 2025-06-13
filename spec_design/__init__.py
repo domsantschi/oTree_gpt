@@ -1,6 +1,7 @@
 from otree.api import *
 import random
 import string  # Missing import for string module
+import time  # Import time module for tracking time spent on pages
 
 doc = """
 Single player variant of the investment game. The player acts as an investor
@@ -125,18 +126,24 @@ class Player(BasePlayer):
         initial=0,
         doc="Score from the risk anticipation word puzzle game"
     )
-    
-    # Dynamic risk allocations
-    risk_social_interaction = models.IntegerField(initial=0, min=0)
-    risk_usability = models.IntegerField(initial=0, min=0)
-    risk_privacy = models.IntegerField(initial=0, min=0)
-    risk_regulatory = models.IntegerField(initial=0, min=0)
-    risk_funding = models.IntegerField(initial=0, min=0)
-    risk_workforce = models.IntegerField(initial=0, min=0)
-    risk_standards = models.IntegerField(initial=0, min=0)
-    risk_startup_cost = models.IntegerField(initial=0, min=0)
-    risk_confidentiality = models.IntegerField(initial=0, min=0)
-    risk_planning = models.IntegerField(initial=0, min=0)
+      # Risk fields matching word puzzle
+    risk_safety = models.IntegerField(initial=0, min=0, doc="Safety risks identified")
+    risk_privacy = models.IntegerField(initial=0, min=0, doc="Privacy risks identified")
+    risk_trust = models.IntegerField(initial=0, min=0, doc="Trust risks identified")
+    risk_ethics = models.IntegerField(initial=0, min=0, doc="Ethics risks identified")
+    risk_cost = models.IntegerField(initial=0, min=0, doc="Cost risks identified")
+
+    # Page timing fields
+    welcome_page_time = models.FloatField(doc="Time spent on welcome page in seconds")
+    introduction_page_time = models.FloatField(doc="Time spent on introduction page in seconds")
+    background_page_time = models.FloatField(doc="Time spent on background page in seconds")
+    condition1_page_time = models.FloatField(doc="Time spent on condition 1 page in seconds")
+    condition2_page_time = models.FloatField(doc="Time spent on condition 2 page in seconds")
+    assessment_page_time = models.FloatField(doc="Time spent on assessment page in seconds")
+    checks_page_time = models.FloatField(doc="Time spent on checks page in seconds")
+    controls_page_time = models.FloatField(doc="Time spent on controls page in seconds")
+    demographics_page_time = models.FloatField(doc="Time spent on demographics page in seconds")
+    thanks_page_time = models.FloatField(doc="Time spent on thanks page in seconds")
 
 # --- Functions ----------------------------------------------------------------
 
@@ -163,29 +170,85 @@ def creating_session(subsession: Subsession):
 # --- Pages --------------------------------------------------------------------
 
 class Welcome(Page):
-    pass
+    @staticmethod
+    def get_timeout_seconds(player: Player):
+        import time
+        player.participant._start_time = time.time()
+        return None
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        import time
+        player.welcome_page_time = time.time() - player.participant._start_time
 
 class Introduction(Page):
-    pass
+    @staticmethod
+    def get_timeout_seconds(player: Player):
+        import time
+        player.participant._start_time = time.time()
+        return None
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        import time
+        player.introduction_page_time = time.time() - player.participant._start_time
 
 class Background(Page):
-    pass
+    @staticmethod
+    def get_timeout_seconds(player: Player):
+        import time
+        player.participant._start_time = time.time()
+        return None
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        player.background_page_time = time.time() - player.participant._start_time
 
 class Condition1(Page):
+    @staticmethod
+    def get_timeout_seconds(player: Player):
+        import time
+        player.participant._start_time = time.time()
+        return None
+
     @staticmethod
     def vars_for_template(player: Player):
         return dict(
             condition=player.condition
         )
+    
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        player.condition1_page_time = time.time() - player.participant._start_time
 
 class Assessment(Page):
     form_model = 'player'
-    form_fields = ['risk_score']
+    form_fields = [
+        'risk_score',
+        'risk_safety',
+        'risk_privacy',
+        'risk_trust',
+        'risk_ethics',
+        'risk_cost'
+    ]
+
+    @staticmethod
+    def get_timeout_seconds(player: Player):
+        import time
+        player.participant._start_time = time.time()
+        return None
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
-        # Convert risk_score from dollars to cents for data analysis
-        print(f"Risk identification earnings: ${player.risk_score:.2f}")
+        # Save timing
+        player.assessment_page_time = time.time() - player.participant._start_time
+        # The risk_score is stored in cents, convert to dollars for display
+        if player.risk_score:
+            dollars = player.risk_score / 100
+            print(f"Risk identification earnings: ${dollars:.2f}")
+        else:
+            player.risk_score = 0
+            print("No words solved")
 
 class Condition2(Page):
     @staticmethod
@@ -198,10 +261,13 @@ class Condition2(Page):
             condition=player.condition,
             speculative_design=player.speculative_design,
         )
-    
     @staticmethod
     def get_timeout_seconds(player: Player):
-        return 60 if player.speculative_design == 'Speculative Design Present' else None
+        return None
+    
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        player.condition2_page_time = time.time() - player.participant._start_time
 
 class Controls(Page):
     form_model = 'player'
@@ -212,8 +278,18 @@ class Controls(Page):
     ]
 
     @staticmethod
+    def get_timeout_seconds(player: Player):
+        import time
+        player.participant._start_time = time.time()
+        return None
+
+    @staticmethod
     def is_displayed(player: Player):
         return player.speculative_design == 'Speculative Design Present'
+    
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        player.controls_page_time = time.time() - player.participant._start_time
 
 class Checks(Page):
     form_model = 'player'
@@ -221,6 +297,16 @@ class Checks(Page):
         'time_horizon',
         'speculative_design',
     ]
+    
+    @staticmethod
+    def get_timeout_seconds(player: Player):
+        import time
+        player.participant._start_time = time.time()
+        return None
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        player.checks_page_time = time.time() - player.participant._start_time
 
 class Demographics(Page):
     form_model = 'player'
@@ -231,6 +317,16 @@ class Demographics(Page):
         'work_experience',
         'rm_experience',
     ]
+    
+    @staticmethod
+    def get_timeout_seconds(player: Player):
+        import time
+        player.participant._start_time = time.time()
+        return None
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        player.demographics_page_time = time.time() - player.participant._start_time
 
 class Thanks(Page):
     form_model = 'player'
@@ -244,6 +340,8 @@ class Thanks(Page):
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
+        # Save timing
+        player.thanks_page_time = time.time() - player.participant._start_time
         # Save feedback to the database
         feedback = player.feedback
         if feedback:
@@ -257,8 +355,8 @@ page_sequence = [
     Condition1,
     Condition2,
     Assessment,
+    Controls,  # Only shown for Speculative Design Present due to is_displayed condition
     Checks,
-    Controls,
     Demographics,
     Thanks,
 ]

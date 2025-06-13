@@ -1,4 +1,5 @@
-{{ block title }}Thank you!{{ endblock }}
+{{ block title }}<span style="display: none;">Thank you!</span>{{ endblock }}
+
 {{ block content }}
 
 <style>
@@ -86,9 +87,7 @@
         <h5>Your Participant ID</h5>
         <p class="text-muted">Please take a screenshot to save this ID before closing the browser tab</p>
         <div class="participant-id">{{ participant.part_id }}</div>
-    </div>
-
-    <div class="feedback-section">
+    </div>    <div class="feedback-section">
         <h5>📝 We Value Your Feedback!</h5>
         <p class="text-muted">Please share any comments or suggestions about the study:</p>
         <textarea 
@@ -97,11 +96,12 @@
             class="form-control"
         ></textarea>
         {{ formfield_errors 'feedback' }}
+        <div class="text-center mt-3">
+            <button class="otree-btn-next btn btn-primary btn-lg">
+                <i class="fas fa-paper-plane"></i> Send Feedback
+            </button>
+        </div>
     </div>
-
-    <!-- <div class="text-center mt-4">
-        {{ next_button }}
-    </div> -->
 </div>
 
 {{ endblock }}
