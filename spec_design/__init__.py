@@ -79,26 +79,6 @@ class Player(BasePlayer):
         label="Time Horizon",
         choices=["Short-term risks", "Long-term risks"],
     )
-    risk_event_1 = models.IntegerField(
-        label="Risk Event 1 Allocation",
-        min=0,
-        initial=0
-    )
-    risk_event_2 = models.IntegerField(
-        label="Risk Event 2 Allocation",
-        min=0,
-        initial=0
-    )
-    risk_event_3 = models.IntegerField(
-        label="Risk Event 3 Allocation",
-        min=0,
-        initial=0
-    )
-    risk_event_4 = models.IntegerField(
-        label="Risk Event 4 Allocation",
-        min=0,
-        initial=0
-    )
     feedback = models.LongStringField(
         label="Any feedback about the study?",
         blank=True
@@ -134,7 +114,7 @@ class Player(BasePlayer):
     risk_cost = models.IntegerField(initial=0, min=0, doc="Cost risks identified")
 
     # Page timing fields
-    welcome_page_time = models.FloatField(doc="Time spent on welcome page in seconds")
+    consent_page_time = models.FloatField(doc="Time spent on consent page in seconds")
     introduction_page_time = models.FloatField(doc="Time spent on introduction page in seconds")
     background_page_time = models.FloatField(doc="Time spent on background page in seconds")
     condition1_page_time = models.FloatField(doc="Time spent on condition 1 page in seconds")
@@ -169,7 +149,7 @@ def creating_session(subsession: Subsession):
 
 # --- Pages --------------------------------------------------------------------
 
-class Welcome(Page):
+class Consent(Page):
     @staticmethod
     def get_timeout_seconds(player: Player):
         import time
@@ -179,7 +159,7 @@ class Welcome(Page):
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
         import time
-        player.welcome_page_time = time.time() - player.participant._start_time
+        player.consent_page_time = time.time() - player.participant._start_time
 
 class Introduction(Page):
     @staticmethod
@@ -349,7 +329,7 @@ class Thanks(Page):
 
 # Update the page sequence
 page_sequence = [
-    Welcome,
+    Consent,
     Introduction,
     Background,
     Condition1,
