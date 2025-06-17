@@ -118,19 +118,18 @@ class Player(BasePlayer):
     age = models.StringField(
         label="What is your age?",
         choices=[
-            "Less than 25 years old",
+            "Less than 18 years old",
+            "18-24 years old",
             "25-34 years old",
-            "35-44 years old",
-            "45-54 years old",
-            "55-64 years old",
-            "65-74 years old",
-            "Above 74 years old",
+            "35-50 years old",
+            "51-65 years old",
+            "Above 65 years old",
         ],
         widget=widgets.RadioSelect,
     )
     gender = models.StringField(
         label="What is your gender?",
-        choices=["Male", "Female", "Other"],
+        choices=["Male", "Female", "Prefer not to say"],
         widget=widgets.RadioSelect,
     )
     qualification = models.StringField(
@@ -145,18 +144,34 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect,
     )
     finance_experience = models.IntegerField(
-        label="How many years of full-time working experience in a finance role do you have?",
+        label="How many years of full-time working experience in a financial analyst role do you have?",
         min=0,
     )
-    investment_research = models.IntegerField(
+    investment_research = models.StringField(
         label="How involved are you with investment research?",
-        choices=[[i, str(i)] for i in range(1, 8)],
-        widget=widgets.RadioSelectHorizontal,
+        choices=[
+            "Not at all",
+            "Very little",
+            "Not much",
+            "Neutral",
+            "Somewhat",
+            "Quite a bit",
+            "A lot",
+        ],
+        widget=widgets.RadioSelectHorizontal,  # Use horizontal layout for Likert scale
     )
-    risk_assessments = models.IntegerField(
+    risk_assessments = models.StringField(
         label="How involved are you with risk assessments?",
-        choices=[[i, str(i)] for i in range(1, 8)],
-        widget=widgets.RadioSelectHorizontal,
+        choices=[
+            "Not at all",
+            "Very little",
+            "Not much",
+            "Neutral",
+            "Somewhat",
+            "Quite a bit",
+            "A lot",
+        ],
+        widget=widgets.RadioSelectHorizontal,  # Use horizontal layout for Likert scale
     )
 
     # New field to store feedback
@@ -295,13 +310,9 @@ class Checks(Page):
             
             print(f"External stakeholders selected: {', '.join(selected)}")
 
-class Controls(Page):
+class StakeholderSelection(Page):
     form_model = 'player'
     form_fields = [
-        'risk_attitudes',
-        'esg_familiarity',
-        'esg_relevance',
-        'disclosure_credibility',
         'internal_stakeholders_responses',
         'external_stakeholders_responses',
         'internal_stakeholders_other_text',
@@ -339,6 +350,15 @@ class Controls(Page):
                 selected[-1] = f"Other: {player.external_stakeholders_other_text}"
             
             print(f"External stakeholders selected: {', '.join(selected)}")
+
+class Controls(Page):
+    form_model = 'player'
+    form_fields = [
+        'risk_attitudes',
+        'esg_familiarity', 
+        'disclosure_credibility',
+        'esg_relevance'
+    ]
 
 class Demographics(Page):
     form_model = 'player'
@@ -441,6 +461,7 @@ page_sequence = [
     AssessmentBefore,  # Only shown if checks_before_assessment is False
     ChecksAfter,       # Only shown if checks_before_assessment is False
     # Continue with normal flow
+    StakeholderSelection,
     Controls,
     Demographics,
     Thanks,
