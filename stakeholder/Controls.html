@@ -1,6 +1,11 @@
 {{ block title }}A Few Final Questions{{ endblock }}
 {{ block content }}
 
+<div style="display: none;">
+    <input type="text" class="hidden-field" id="id_internal_stakeholders_responses" name="internal_stakeholders_responses" value="" required>
+    <input type="text" class="hidden-field" id="id_external_stakeholders_responses" name="external_stakeholders_responses" value="" required>
+</div>
+
 <div class="card mb-3">
     <div class="card-body">
         <h5 class="mb-3">1. Are you generally a person who is willing to take risks or do you try to avoid taking risks?</h5>
@@ -55,106 +60,250 @@
 </div>
 
 <div class="card mb-3">    <div class="card-body">
-        <h5 class="mb-3">2. Do you believe that Acme should provide additional information about its ESG impacts and stakeholder engagement process?</h5>
+        <h5 class="mb-3">2. What is your level of familiarity with ESG Disclosures?</h5>
         
         <div class="form-group">            <div class="row text-center g-0">
                 <div class="col">
                     <div class="form-check d-flex flex-column align-items-center">
-                        <input class="form-check-input mb-2" type="radio" name="disclosure_transparency" value="1" required id="disclosure_1">
-                        <label class="form-check-label small" for="disclosure_1">Strongly<br>disagree</label>
+                        <input class="form-check-input mb-2" type="radio" name="esg_familiarity" value="1" required id="esg_familiarity_1">
+                        <label class="form-check-label small" for="esg_familiarity_1">Not at all<br>familiar</label>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-check d-flex flex-column align-items-center">
-                        <input class="form-check-input mb-2" type="radio" name="disclosure_transparency" value="2" required id="disclosure_2">
-                        <label class="form-check-label small" for="disclosure_2">Disagree</label>
+                        <input class="form-check-input mb-2" type="radio" name="esg_familiarity" value="2" required id="esg_familiarity_2">
+                        <label class="form-check-label small" for="esg_familiarity_2">Not<br>familiar</label>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-check d-flex flex-column align-items-center">
-                        <input class="form-check-input mb-2" type="radio" name="disclosure_transparency" value="3" required id="disclosure_3">
-                        <label class="form-check-label small" for="disclosure_3">Somewhat<br>disagree</label>
+                        <input class="form-check-input mb-2" type="radio" name="esg_familiarity" value="3" required id="esg_familiarity_3">
+                        <label class="form-check-label small" for="esg_familiarity_3">Somewhat<br>unfamiliar</label>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-check d-flex flex-column align-items-center">
-                        <input class="form-check-input mb-2" type="radio" name="disclosure_transparency" value="4" required id="disclosure_4">
-                        <label class="form-check-label small" for="disclosure_4">Neutral</label>
+                        <input class="form-check-input mb-2" type="radio" name="esg_familiarity" value="4" required id="esg_familiarity_4">
+                        <label class="form-check-label small" for="esg_familiarity_4">Neutral</label>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-check d-flex flex-column align-items-center">
-                        <input class="form-check-input mb-2" type="radio" name="disclosure_transparency" value="5" required id="disclosure_5">
-                        <label class="form-check-label small" for="disclosure_5">Somewhat<br>agree</label>
+                        <input class="form-check-input mb-2" type="radio" name="esg_familiarity" value="5" required id="esg_familiarity_5">
+                        <label class="form-check-label small" for="esg_familiarity_5">Somewhat<br>familiar</label>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-check d-flex flex-column align-items-center">
-                        <input class="form-check-input mb-2" type="radio" name="disclosure_transparency" value="6" required id="disclosure_6">
-                        <label class="form-check-label small" for="disclosure_6">Agree</label>
+                        <input class="form-check-input mb-2" type="radio" name="esg_familiarity" value="6" required id="esg_familiarity_6">
+                        <label class="form-check-label small" for="esg_familiarity_6">Familiar</label>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-check d-flex flex-column align-items-center">
-                        <input class="form-check-input mb-2" type="radio" name="disclosure_transparency" value="7" required id="disclosure_7">
-                        <label class="form-check-label small" for="disclosure_7">Strongly<br>agree</label>
+                        <input class="form-check-input mb-2" type="radio" name="esg_familiarity" value="7" required id="esg_familiarity_7">
+                        <label class="form-check-label small" for="esg_familiarity_7">Very<br>familiar</label>
                     </div>
                 </div>
             </div>
         </div>
-        {{ formfield_errors 'disclosure_transparency' }}
+        {{ formfield_errors 'esg_familiarity' }}
     </div>
 </div>
 
 <div class="card mb-3">    <div class="card-body">
-        <h5 class="mb-3">3. How strongly do you personally agree that companies should sacrifice profitability to promote ESG themes?</h5>
+        <h5 class="mb-3">3. How do you assess the credibility of Acme's Disclosures?</h5>
         
         <div class="form-group">            <div class="row text-center g-0">
                 <div class="col">
                     <div class="form-check d-flex flex-column align-items-center">
-                        <input class="form-check-input mb-2" type="radio" name="esg_relevance" value="1" required id="esg_1">
-                        <label class="form-check-label small" for="esg_1">Strongly<br>disagree</label>
+                        <input class="form-check-input mb-2" type="radio" name="disclosure_credibility" value="1" required id="disclosure_credibility_1">
+                        <label class="form-check-label small" for="disclosure_credibility_1">Not at all<br>credible</label>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-check d-flex flex-column align-items-center">
-                        <input class="form-check-input mb-2" type="radio" name="esg_relevance" value="2" required id="esg_2">
-                        <label class="form-check-label small" for="esg_2">Disagree</label>
+                        <input class="form-check-input mb-2" type="radio" name="disclosure_credibility" value="2" required id="disclosure_credibility_2">
+                        <label class="form-check-label small" for="disclosure_credibility_2">Not<br>credible</label>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-check d-flex flex-column align-items-center">
-                        <input class="form-check-input mb-2" type="radio" name="esg_relevance" value="3" required id="esg_3">
-                        <label class="form-check-label small" for="esg_3">Somewhat<br>disagree</label>
+                        <input class="form-check-input mb-2" type="radio" name="disclosure_credibility" value="3" required id="disclosure_credibility_3">
+                        <label class="form-check-label small" for="disclosure_credibility_3">Somewhat<br>not credible</label>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-check d-flex flex-column align-items-center">
-                        <input class="form-check-input mb-2" type="radio" name="esg_relevance" value="4" required id="esg_4">
-                        <label class="form-check-label small" for="esg_4">Neutral</label>
+                        <input class="form-check-input mb-2" type="radio" name="disclosure_credibility" value="4" required id="disclosure_credibility_4">
+                        <label class="form-check-label small" for="disclosure_credibility_4">Neutral</label>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-check d-flex flex-column align-items-center">
-                        <input class="form-check-input mb-2" type="radio" name="esg_relevance" value="5" required id="esg_5">
-                        <label class="form-check-label small" for="esg_5">Somewhat<br>agree</label>
+                        <input class="form-check-input mb-2" type="radio" name="disclosure_credibility" value="5" required id="disclosure_credibility_5">
+                        <label class="form-check-label small" for="disclosure_credibility_5">Somewhat<br>credible</label>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-check d-flex flex-column align-items-center">
-                        <input class="form-check-input mb-2" type="radio" name="esg_relevance" value="6" required id="esg_6">
-                        <label class="form-check-label small" for="esg_6">Agree</label>
+                        <input class="form-check-input mb-2" type="radio" name="disclosure_credibility" value="6" required id="disclosure_credibility_6">
+                        <label class="form-check-label small" for="disclosure_credibility_6">Credible</label>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-check d-flex flex-column align-items-center">
-                        <input class="form-check-input mb-2" type="radio" name="esg_relevance" value="7" required id="esg_7">
-                        <label class="form-check-label small" for="esg_7">Strongly<br>agree</label>
+                        <input class="form-check-input mb-2" type="radio" name="disclosure_credibility" value="7" required id="disclosure_credibility_7">
+                        <label class="form-check-label small" for="disclosure_credibility_7">Very<br>credible</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{ formfield_errors 'disclosure_credibility' }}
+    </div>
+</div>
+
+<div class="card mb-3">    <div class="card-body">
+        <h5 class="mb-3">4. How strongly do you personally agree that companies should sacrifice profitability to promote ESG themes?</h5>        <div class="form-group">            <div class="row text-center g-0">
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="esg_relevance" value="1" required id="esg_relevance_1">
+                        <label class="form-check-label small" for="esg_relevance_1">Strongly<br>disagree</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="esg_relevance" value="2" required id="esg_relevance_2">
+                        <label class="form-check-label small" for="esg_relevance_2">Disagree</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="esg_relevance" value="3" required id="esg_relevance_3">
+                        <label class="form-check-label small" for="esg_relevance_3">Somewhat<br>disagree</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="esg_relevance" value="4" required id="esg_relevance_4">
+                        <label class="form-check-label small" for="esg_relevance_4">Neutral</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="esg_relevance" value="5" required id="esg_relevance_5">
+                        <label class="form-check-label small" for="esg_relevance_5">Somewhat<br>agree</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="esg_relevance" value="6" required id="esg_relevance_6">
+                        <label class="form-check-label small" for="esg_relevance_6">Agree</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="esg_relevance" value="7" required id="esg_relevance_7">
+                        <label class="form-check-label small" for="esg_relevance_7">Strongly<br>agree</label>
                     </div>
                 </div>
             </div>
         </div>
         {{ formfield_errors 'esg_relevance' }}
+    </div>
+</div>
+
+<div class="card mb-3">    <div class="card-body">
+        <h5>5. Internal Stakeholders</h5>
+        <p>When considering <b>internal stakeholders</b>, who did you think about? (Select all that apply)</p>
+        
+        <div id="internal-stakeholders-list">
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input internal-checkbox" id="internal_employees">
+                <label class="form-check-label" for="internal_employees">Employees</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input internal-checkbox" id="internal_management">
+                <label class="form-check-label" for="internal_management">Executive Management</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input internal-checkbox" id="internal_board">
+                <label class="form-check-label" for="internal_board">Board of Directors</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input internal-checkbox" id="internal_chairman">
+                <label class="form-check-label" for="internal_chairman">Chairman</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input internal-checkbox" id="internal_ceo">
+                <label class="form-check-label" for="internal_ceo">CEO</label>
+            </div>
+            <div class="form-group mt-2">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input internal-checkbox" id="internal-other-checkbox">
+                    <label class="form-check-label" for="internal-other-checkbox">Other:</label>
+                </div>
+                <input type="text" 
+                       id="internal-other-text" 
+                       name="internal_stakeholders_other_text" 
+                       class="form-control mt-2"
+                       placeholder="Please specify"
+                       style="max-width: 300px;"
+                       oninput="updateInternalSelections()">
+            </div>
+        </div>
+        {{ formfield_errors 'internal_stakeholders_responses' }}
+    </div>
+</div>
+
+<div class="card mb-3">    <div class="card-body">
+        <h5>6. External Stakeholders</h5>
+        <p>When considering <b>external stakeholders</b>, who did you think about? (Select all that apply)</p>
+        
+        <div id="external-stakeholders-list">
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input external-checkbox" id="external_investors">
+                <label class="form-check-label" for="external_investors">Investors</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input external-checkbox" id="external_suppliers">
+                <label class="form-check-label" for="external_suppliers">Suppliers</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input external-checkbox" id="external_customers">
+                <label class="form-check-label" for="external_customers">Customers</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input external-checkbox" id="external_regulators">
+                <label class="form-check-label" for="external_regulators">Regulators</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input external-checkbox" id="external_ngos">
+                <label class="form-check-label" for="external_ngos">NGOs</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input external-checkbox" id="external_community">
+                <label class="form-check-label" for="external_community">Community</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input external-checkbox" id="external_media">
+                <label class="form-check-label" for="external_media">Media</label>
+            </div>
+            <div class="form-group mt-2">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input external-checkbox" id="external-other-checkbox">
+                    <label class="form-check-label" for="external-other-checkbox">Other:</label>
+                </div>
+                <input type="text" 
+                       id="external-other-text" 
+                       name="external_stakeholders_other_text" 
+                       class="form-control mt-2"
+                       placeholder="Please specify"
+                       style="max-width: 300px;"
+                       oninput="updateExternalSelections()">
+            </div>
+        </div>
+        {{ formfield_errors 'external_stakeholders_responses' }}
     </div>
 </div>
 
@@ -164,4 +313,102 @@
     </div>
 </div>
 
+{{ endblock }}
+
+{{ block scripts }}
+<script>
+    // Initialize checkbox arrays
+    const internalCheckboxes = document.querySelectorAll('.internal-checkbox');
+    const externalCheckboxes = document.querySelectorAll('.external-checkbox');
+    
+    // Get the hidden fields
+    const internalResponsesField = document.getElementById('id_internal_stakeholders_responses');
+    const externalResponsesField = document.getElementById('id_external_stakeholders_responses');
+    
+    // Get other text input elements
+    const internalOtherCheckbox = document.getElementById('internal-other-checkbox');
+    const internalOtherText = document.getElementById('internal-other-text');
+    const externalOtherCheckbox = document.getElementById('external-other-checkbox');
+    const externalOtherText = document.getElementById('external-other-text');
+    
+    // Initial strings with all falses
+    let internalResponses = 'F'.repeat(internalCheckboxes.length);
+    let externalResponses = 'F'.repeat(externalCheckboxes.length);
+    
+    // Set up event listeners for internal checkboxes
+    internalCheckboxes.forEach((checkbox, index) => {
+        checkbox.addEventListener('change', function() {
+            updateInternalSelections();
+        });
+    });
+    
+    // Set up event listeners for external checkboxes
+    externalCheckboxes.forEach((checkbox, index) => {
+        checkbox.addEventListener('change', function() {
+            updateExternalSelections();
+        });
+    });
+    
+    // Function to update internal selections
+    function updateInternalSelections() {
+        let tempResponses = '';
+        let atLeastOneSelected = false;
+        
+        internalCheckboxes.forEach((checkbox, index) => {
+            if (checkbox.checked) {
+                tempResponses += 'T';
+                atLeastOneSelected = true;
+            } else {
+                tempResponses += 'F';
+            }
+        });
+        
+        // Only update if at least one is selected
+        if (atLeastOneSelected) {
+            internalResponses = tempResponses;
+            internalResponsesField.value = internalResponses;
+        } else {
+            internalResponses = '';
+            internalResponsesField.value = '';
+        }
+        
+        // Ensure the "Other" text field is enabled only when the checkbox is checked
+        internalOtherText.disabled = !internalOtherCheckbox.checked;
+    }
+    
+    // Function to update external selections
+    function updateExternalSelections() {
+        let tempResponses = '';
+        let atLeastOneSelected = false;
+        
+        externalCheckboxes.forEach((checkbox, index) => {
+            if (checkbox.checked) {
+                tempResponses += 'T';
+                atLeastOneSelected = true;
+            } else {
+                tempResponses += 'F';
+            }
+        });
+        
+        // Only update if at least one is selected
+        if (atLeastOneSelected) {
+            externalResponses = tempResponses;
+            externalResponsesField.value = externalResponses;
+        } else {
+            externalResponses = '';
+            externalResponsesField.value = '';
+        }
+        
+        // Ensure the "Other" text field is enabled only when the checkbox is checked
+        externalOtherText.disabled = !externalOtherCheckbox.checked;
+    }
+    
+    // Initialize the text fields (disabled by default)
+    internalOtherText.disabled = true;
+    externalOtherText.disabled = true;
+    
+    // Initialize the form when the page loads
+    updateInternalSelections();
+    updateExternalSelections();
+</script>
 {{ endblock }}

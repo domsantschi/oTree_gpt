@@ -34,10 +34,13 @@ class Group(BaseGroup):
     returned_amount = models.CurrencyField()  # Automatically calculated
 
 class Player(BasePlayer):
+    # Field to store whether checks come before assessment
+    checks_before_assessment = models.BooleanField(initial=None)
+    
     # Add the missing 'stakeholder_consensus' field
     stakeholder_consensus = models.StringField(
         label="Stakeholder Consensus",
-        choices=["Negative Stakeholder Consensus", "Positive Stakeholder Consensus"],
+        choices=["Low Stakeholder Consensus", "High Stakeholder Consensus"],
     )
 
     # Existing fields
@@ -46,22 +49,27 @@ class Player(BasePlayer):
         choices=["Low Stakeholder Relevance", "High Stakeholder Relevance"],
     )    # Fields to store user inputs
     predicted_price = models.FloatField(
-        label="Your 12-month target price prediction",
+        label="Your target price prediction",
         min=30.00,
         max=70.00
     )
     justifications = models.LongStringField(
         label="Please provide your written justifications for your assessment."
-    )
-
-    # Fields for Controls
+    )    # Fields for Controls
     risk_attitudes = models.IntegerField(
         label="Are you generally a person who is willing to take risks or do you try to avoid taking risks?",
         choices=[[i, str(i)] for i in range(1, 8)],
         widget=widgets.RadioSelectHorizontal,
     )
-    disclosure_transparency = models.IntegerField(
-        label="Do you believe that Acme LLC should provide additional information about its ESG impacts and stakeholder engagement process?",
+    
+    esg_familiarity = models.IntegerField(
+        label="What is your level of familiarity with ESG Disclosures?",
+        choices=[[i, str(i)] for i in range(1, 8)],
+        widget=widgets.RadioSelectHorizontal,
+    )
+    
+    disclosure_credibility = models.IntegerField(
+        label="How do you assess the credibility of Acme's Disclosures?",
         choices=[[i, str(i)] for i in range(1, 8)],
         widget=widgets.RadioSelectHorizontal,
     )
@@ -83,8 +91,8 @@ class Player(BasePlayer):
     trendline = models.StringField(
         label="Which of the following describes the trendline of the stakeholder consensus depicted in Acme's ESG theme prioritization chart?",
         choices=[
-            "Negative correlation",
-            "Positive correlation",
+            "Low correlation",
+            "High correlation",
         ],
         widget=widgets.RadioSelect,
     )
@@ -164,20 +172,28 @@ class Player(BasePlayer):
 def creating_session(subsession: Subsession):
     if subsession.round_number == 1:
         conditions = ['Low Stakeholder Relevance', 'High Stakeholder Relevance']
-        stakeholder_consensus_conditions = ['Negative Stakeholder Consensus', 'Positive Stakeholder Consensus']
+        stakeholder_consensus_conditions = ['Low Stakeholder Consensus', 'High Stakeholder Consensus']
         
-        # Ensure each condition is assigned once across four sessions
-        combined_conditions = [
-            (c, sc) for c in conditions for sc in stakeholder_consensus_conditions
-        ]
+        # Create all combinations of conditions
+        combined_conditions = []
+        for c in conditions:
+            for sc in stakeholder_consensus_conditions:
+                combined_conditions.append((c, sc))
+        
+        # Shuffle the conditions
         random.shuffle(combined_conditions)
-
+        
         for i, p in enumerate(subsession.get_players()):
             p.participant.wealth = cu(0)
             p.participant.part_id = create_id()
+            
+            # Assign conditions
             condition, stakeholder_consensus = combined_conditions[i % len(combined_conditions)]
             p.condition = condition
             p.stakeholder_consensus = stakeholder_consensus
+            
+            # Randomly determine if checks come before or after assessment
+            p.checks_before_assessment = random.choice([True, False])
 
 
 # # Function for live experiment << random assignment
@@ -221,13 +237,6 @@ class Condition1(Page):
             condition=player.condition
         )
 
-class Assessment(Page):
-    form_model = 'player'
-    form_fields = [
-        'predicted_price',
-        'justifications',
-    ]
-
 class Condition2(Page):
     @staticmethod
     def vars_for_template(player: Player):
@@ -236,12 +245,11 @@ class Condition2(Page):
             stakeholder_consensus=player.stakeholder_consensus,  # Pass stakeholder_consensus to the template
         )
 
-class Controls(Page):
+class Assessment(Page):
     form_model = 'player'
     form_fields = [
-        'risk_attitudes',
-        'disclosure_transparency',
-        'esg_relevance',
+        'predicted_price',
+        'justifications',
     ]
 
 class Checks(Page):
@@ -249,12 +257,8 @@ class Checks(Page):
     form_fields = [
         'stakeholder_attributes',
         'trendline',
-        'internal_stakeholders_responses',
-        'external_stakeholders_responses',
-        'internal_stakeholders_other_text',
-        'external_stakeholders_other_text'
     ]
-
+            
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
         # Process the internal stakeholders string
@@ -291,6 +295,51 @@ class Checks(Page):
             
             print(f"External stakeholders selected: {', '.join(selected)}")
 
+class Controls(Page):
+    form_model = 'player'
+    form_fields = [
+        'risk_attitudes',
+        'esg_familiarity',
+        'esg_relevance',
+        'disclosure_credibility',
+        'internal_stakeholders_responses',
+        'external_stakeholders_responses',
+        'internal_stakeholders_other_text',
+        'external_stakeholders_other_text'
+    ]
+    
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        # Process the internal stakeholders string
+        if player.field_maybe_none('internal_stakeholders_responses'):
+            options = ["Investors", "Suppliers", "Customers", "Regulators", 
+                      "NGOs", "Community", "Media", "Other"]
+            
+            selected = []
+            for i, char in enumerate(player.internal_stakeholders_responses):
+                if char == 'T' and i < len(options):
+                    selected.append(options[i])
+            
+            if "Other" in selected and player.field_maybe_none('internal_stakeholders_other_text'):
+                selected[-1] = f"Other: {player.internal_stakeholders_other_text}"
+            
+            print(f"Internal stakeholders selected: {', '.join(selected)}")
+        
+        # Process the external stakeholders string
+        if player.field_maybe_none('external_stakeholders_responses'):
+            options = ["Employees", "Executive Management", "Board of Directors", 
+                      "Chairman", "CEO", "Other"]
+            
+            selected = []
+            for i, char in enumerate(player.external_stakeholders_responses):
+                if char == 'T' and i < len(options):
+                    selected.append(options[i])
+            
+            if "Other" in selected and player.field_maybe_none('external_stakeholders_other_text'):
+                selected[-1] = f"Other: {player.external_stakeholders_other_text}"
+            
+            print(f"External stakeholders selected: {', '.join(selected)}")
+
 class Demographics(Page):
     form_model = 'player'
     form_fields = [
@@ -319,16 +368,79 @@ class Thanks(Page):
         if feedback:
             print(f"Feedback received: {feedback}")
 
-# Update the page sequence
+# Create two separate classes for the two versions of both Assessment and Checks
+
+class ChecksBefore(Page):
+    form_model = 'player'
+    form_fields = [
+        'stakeholder_attributes',
+        'trendline',
+    ]
+    
+    @staticmethod
+    def is_displayed(player):
+        return player.checks_before_assessment
+        
+    def get_template_name(self):
+        return 'stakeholder/Checks.html'
+
+class ChecksAfter(Page):
+    form_model = 'player'
+    form_fields = [
+        'stakeholder_attributes',
+        'trendline',
+    ]
+    
+    @staticmethod
+    def is_displayed(player):
+        return not player.checks_before_assessment
+        
+    def get_template_name(self):
+        return 'stakeholder/Checks.html'
+
+class AssessmentBefore(Page):
+    form_model = 'player'
+    form_fields = [
+        'predicted_price',
+        'justifications',
+    ]
+    
+    @staticmethod
+    def is_displayed(player):
+        return not player.checks_before_assessment
+        
+    def get_template_name(self):
+        return 'stakeholder/Assessment.html'
+
+class AssessmentAfter(Page):
+    form_model = 'player'
+    form_fields = [
+        'predicted_price',
+        'justifications',
+    ]
+    
+    @staticmethod
+    def is_displayed(player):
+        return player.checks_before_assessment
+        
+    def get_template_name(self):
+        return 'stakeholder/Assessment.html'
+
+# Define the page sequence with both possible paths explicitly included
 page_sequence = [
     Welcome,
     Introduction,
     Background,
-    Strategy,
+    Strategy, 
     Condition1,
     Condition2,
-    Assessment,
-    Checks,
+    # Path 1: Checks before Assessment (only one path will be shown)
+    ChecksBefore,      # Only shown if checks_before_assessment is True
+    AssessmentAfter,   # Only shown if checks_before_assessment is True
+    # Path 2: Assessment before Checks (only one path will be shown)
+    AssessmentBefore,  # Only shown if checks_before_assessment is False
+    ChecksAfter,       # Only shown if checks_before_assessment is False
+    # Continue with normal flow
     Controls,
     Demographics,
     Thanks,
