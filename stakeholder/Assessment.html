@@ -1,38 +1,43 @@
 {{ block title }}Target Price Assessment{{ endblock }}
 {{ block content }}
 
-<h5>Set Your Target Price</h5>
+<!-- <h5>Set Your Target Price</h5> -->
 
 <p>
-    As a financial analyst, you are asked to provide your target price assessment for Acme LLC, considering recent developments and the stakeholder engagement initiative:
+    As a financial analyst, you are asked to provide your target price assessment for Acme, following their latest ESG materiality disclosures.
 </p>
 
 <div class="card">
     <div class="card-body">
         <p><b>Context:</b></p>
         <ul>
-            <li>Relevance of Engaged Stakeholders: <b>{{ player.condition }}</b></li>
-            <li>Results of ESG Theme Prioritization: <b>{{ player.stakeholder_consensus }}</b></li>
+            <li>Relevance of the stakeholders engaged by Acme: <b>{{ player.condition }}</b></li>
+            <li>Results of the ESG theme prioritization: <b>{{ player.stakeholder_consensus }}</b></li>
         </ul>
     </div>
 </div>
 
 <div class="card mt-4">
-    <div class="card-body">
-        <h5>Price Assessment</h5>
+    <div class="card-body">        <h5>Target Price Assessment</h5>
         <!-- Price Range -->
-        <p>Yesterday's Stock Price: $50.00 (Range: $30.00 - $70.00)</p>        <!-- Input Controls -->
+        <p>Use the slider or input box below to set your target price.</p>
+        <p>Yesterday's Price: $50.00</p>
+        <p>52-Week Range: Low $25.00 - High $75.00</p>        <!-- Input Controls -->
         <div class="form-group">
+            <!-- Hidden field for form submission -->
+            <input type="hidden" 
+                   name="predicted_price" 
+                   id="predicted_price_hidden" 
+                   value="50.00">
+            
             <input type="range" 
                    id="price_slider" 
-                   name="predicted_price" 
-                   min="30.00" 
-                   max="70.00" 
+                   min="0.00" 
+                   max="100.00" 
                    step="0.01" 
                    value="50.00"
                    class="form-control-range"
-                   style="width: 100%;"
-                   required>
+                   style="width: 100%;">
             
             <div class="input-group mt-3">
                 <div class="input-group-prepend">
@@ -40,8 +45,8 @@
                 </div>
                 <input type="number"
                        id="price_input"
-                       min="30.00"
-                       max="70.00"
+                       min="0.00"
+                       max="100.00"
                        step="0.01"
                        value="50.00"
                        class="form-control"
@@ -49,50 +54,54 @@
             </div>
             
             <div id="direction_text" class="text-muted mt-2">
-                No change from current price
+                No change from previous price
             </div>
             {{ formfield_errors 'predicted_price' }}
         </div>
     </div>
 </div>
 
-<script>
-        document.addEventListener('DOMContentLoaded', function() {
+<script>        document.addEventListener('DOMContentLoaded', function() {
             const slider = document.getElementById('price_slider');
             const display = document.getElementById('price_display');
             const directionText = document.getElementById('direction_text');
-            const currentPrice = 50.00;            function updateUI(value) {
+            const hiddenField = document.getElementById('predicted_price_hidden');
+            const currentPrice = 50.00;function updateUI(value) {
                 // Calculate percentage change
                 const percentChange = ((value - currentPrice) / currentPrice) * 100;
                 
                 // Update direction text with percentage
                 if (value > currentPrice) {
-                    directionText.textContent = `+${percentChange.toFixed(1)}% from current price`;
+                    directionText.textContent = `+${percentChange.toFixed(1)}% from previous price`;
                     directionText.style.color = '#00aa00';
                     document.querySelector('.target-price-display').style.background = '#f1f8e9';
                 } else if (value < currentPrice) {
-                    directionText.textContent = `-${Math.abs(percentChange).toFixed(1)}% from current price`;
+                    directionText.textContent = `-${Math.abs(percentChange).toFixed(1)}% from previous price`;
                     directionText.style.color = '#ff4444';
                     document.querySelector('.target-price-display').style.background = '#fff3f3';
                 } else {
-                    directionText.textContent = 'No change from current price';
+                    directionText.textContent = 'No change from previous price';
                     directionText.style.color = '#1a237e';
                     document.querySelector('.target-price-display').style.background = '#f8f9fa';
                 }
-            }
-
-            function updateDisplay(source, value) {
+            }            function updateDisplay(source, value) {
                 // Ensure value is within bounds and properly formatted
-                value = Math.min(Math.max(parseFloat(value) || 50, 30), 70);
+                const parsedValue = parseFloat(value);
+                // Only use default 50 if the value is NaN, not if it's legitimately 0
+                value = isNaN(parsedValue) ? 50 : parsedValue;
+                // Keep within range
+                value = Math.min(Math.max(value, 0), 100);
                 value = parseFloat(value.toFixed(2));
                 
                 // Update both controls without triggering their events
                 if (source !== 'slider') slider.value = value;
                 if (source !== 'input') priceInput.value = value.toFixed(2);
+                  // Store the value in the hidden form field for submission
+                document.getElementById('predicted_price_hidden').value = value;
                 
                 // Update UI
                 updateUI(value);
-            }            const priceInput = document.getElementById('price_input');
+            }const priceInput = document.getElementById('price_input');
 
             // Event listeners for synchronized updates
             slider.addEventListener('input', function() {

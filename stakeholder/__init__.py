@@ -41,21 +41,23 @@ class Player(BasePlayer):
     stakeholder_consensus = models.StringField(
         label="Stakeholder Consensus",
         choices=["Low Stakeholder Consensus", "High Stakeholder Consensus"],
-    )
-
-    # Existing fields
+    )    # Existing fields
     condition = models.StringField(
         label="Condition assigned to the player",
         choices=["Low Stakeholder Relevance", "High Stakeholder Relevance"],
-    )    # Fields to store user inputs
+    )
+    
+    # Fields to store user inputs
     predicted_price = models.FloatField(
         label="Your target price prediction",
-        min=30.00,
-        max=70.00
+        min=0.00,
+        max=100.00
     )
     justifications = models.LongStringField(
         label="Please provide your written justifications for your assessment."
-    )    # Fields for Controls
+    )
+    
+    # Fields for Controls
     risk_attitudes = models.IntegerField(
         label="Are you generally a person who is willing to take risks or do you try to avoid taking risks?",
         choices=[[i, str(i)] for i in range(1, 8)],
@@ -240,9 +242,6 @@ class Introduction(Page):
     pass
 
 class Background(Page):
-    pass
-
-class Strategy(Page):
     pass
 
 class Condition1(Page):
@@ -451,7 +450,6 @@ page_sequence = [
     Welcome,
     Introduction,
     Background,
-    Strategy, 
     Condition1,
     Condition2,
     # Path 1: Checks before Assessment (only one path will be shown)
