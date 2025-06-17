@@ -1,14 +1,34 @@
 {{ block title }}Instructions (3 of 5){{ endblock }}
 {{ block content }}
 
-<p>
-    To inform its “back-to-financial-strength” strategy and strengthen brand reputation, <b>Acme engaged with their internal and external stakeholders</b>. 
-    <p>
-    As part of this initiative, <b>stakeholders were asked to prioritize</b> the company's key ESG themes. </p>
-    
-    Acme's CEO has promised that key <b>ESG priorities will directly inform Acme's strategy</b>, aiming to mitigate the risk of ESG incidents in the future.
-</p>
+<div class="card mb-3">
+    <div class="card-body">
+        <h4>Company Strategy</h4>
+        
+        <div class="form-group mb-4">
+            <p class="card-text">
+                To inform its "back-to-financial-strength" strategy and strengthen brand reputation, <b>Acme engaged with their internal and external stakeholders</b>.
+            </p>
+        </div>
 
-<p>{{ next_button }}</p>
+        <div class="form-group mb-4">
+            <p class="card-text">
+                As part of this initiative, <b>stakeholders were asked to prioritize</b> the company's key ESG themes.
+            </p>
+        </div>
+
+        <div class="form-group">
+            <p class="card-text">
+                Acme's CEO has promised that key <b>ESG priorities will directly inform Acme's strategy</b>, aiming to mitigate the risk of ESG incidents in the future.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body text-center">
+        {{ next_button }}
+    </div>
+</div>
 
 {{ endblock }}

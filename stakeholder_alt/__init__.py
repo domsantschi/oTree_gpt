@@ -44,12 +44,12 @@ class Player(BasePlayer):
     condition = models.StringField(
         label="Condition assigned to the player",
         choices=["Low Stakeholder Relevance", "High Stakeholder Relevance"],
-    )    # Fields to store user inputs
-    predicted_price = models.FloatField(
-        label="Your 12-month target price prediction",
-        min=30.00,
-        max=70.00
     )
+    # Fields to store user inputs
+    ebit = models.FloatField(label="EBIT")
+    net_sales = models.FloatField(label="Net Sales")
+    market_cap = models.FloatField(label="Market Capitalization")
+    altman_z = models.FloatField(label="Altman Z-Score", initial=0)  # Calculated Z-Score
     justifications = models.LongStringField(
         label="Please provide your written justifications for your assessment."
     )
@@ -224,9 +224,30 @@ class Condition1(Page):
 class Assessment(Page):
     form_model = 'player'
     form_fields = [
-        'predicted_price',
+        'ebit',
+        'net_sales',
+        'market_cap',
         'justifications',
     ]
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        # Calculate the Z-Score and store it in the player model
+        total_assets = 90000
+        total_liabilities = 65000
+        current_assets = 50000
+        current_liabilities = 40000
+        retained_earnings = 5000
+
+        # Financial ratios
+        x1 = (current_assets - current_liabilities) / total_assets
+        x2 = retained_earnings / total_assets
+        x3 = player.ebit / total_assets
+        x4 = player.market_cap / total_liabilities
+        x5 = player.net_sales / total_assets
+
+        # Calculate Z-Score
+        player.altman_z = 1.2 * x1 + 1.4 * x2 + 3.3 * x3 + 0.6 * x4 + 1 * x5
 
 class Condition2(Page):
     @staticmethod

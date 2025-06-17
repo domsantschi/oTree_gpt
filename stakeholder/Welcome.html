@@ -1,25 +1,37 @@
-{{ block title }}Welcome!{{ endblock }}
+{{ block title }}Welcome{{ endblock }}
 {{ block content }}
 
-<ul style="margin-top: 20px; line-height: 1.8;">
-    <li>In this study, we will ask you to conduct a task, which will take about 10 minutes to complete.</li>
-    <li>There is no psychological discomfort, no physical discomfort, nor any deception in this study.</li>
-    <li>Your decisions and answers will only be used in anonymous form. We will not store any personally identifying information.</li>
-    <li>Your anonymized data will be used for academic purposes and may be shared with other academics for research purposes.</li>
-    <li>Participation is completely voluntary, and you can quit at any time.</li>
-    <li>Please note that you cannot go back to a previous screen.</li>
-</ul>
+<div class="card mb-3">
+    <div class="card-body">
+        <h4>Welcome to the Study</h4>
+        <p class="card-text mb-4">Please read the following information carefully before proceeding.</p>
+        
+        <div class="form-group mb-4">
+            <ul class="list-unstyled">
+                <li class="mb-2">• In this study, we will ask you to conduct a task, which will take about 10 minutes to complete.</li>
+                <li class="mb-2">• There is no psychological discomfort, no physical discomfort, nor any deception in this study.</li>
+                <li class="mb-2">• Your decisions and answers will only be used in anonymous form. We will not store any personally identifying information.</li>
+                <li class="mb-2">• Your anonymized data will be used for academic purposes and may be shared with other academics for research purposes.</li>
+                <li class="mb-2">• Participation is completely voluntary, and you can quit at any time.</li>
+                <li class="mb-2">• Please note that you cannot go back to a previous screen.</li>
+            </ul>
+        </div>
 
-<!-- Checkbox for accepting conditions -->
-<div style="margin-top: 20px;">
-    <label>
-        <input type="checkbox" id="accept-conditions" name="accept" />
-        I accept the conditions and would like to continue.
-    </label>
+        <div class="form-group">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="accept-conditions" name="accept">
+                <label class="form-check-label" for="accept-conditions">
+                    I accept the conditions and would like to continue.
+                </label>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div id="next-button-container" style="margin-top: 20px;">
-    {{ next_button }}
+<div class="card">
+    <div class="card-body text-center" id="next-button-container">
+        {{ next_button }}
+    </div>
 </div>
 
 {{ endblock }}

@@ -1,90 +1,167 @@
 {{ block title }}A Few Final Questions{{ endblock }}
 {{ block content }}
 
-<style>
-    /* Ensure all radio button cells have the same width */
-    .radio-cell {
-        width: 12.5%; /* Divide evenly for 8 columns */
-        text-align: center;
-    }
-    .radio-label {
-        font-size: 0.9em;
-        margin-top: 5px;
-        display: block;
-    }
-</style>
-
-<div style="margin-bottom: 30px;">
-    <b>1. Are you generally a person who is willing to take risks or do you try to avoid taking risks?</b>
-    <table style="margin: 15px 0; width: 100%; text-align: center;">
-        <tr>
-            <!-- <td style="text-align: left;">Not at all willing to take risks</td> -->
-            {% for i in range(1, 8) %}
-                <td class="radio-cell">
-                    <input type="radio" name="risk_attitudes" value="{{ i }}" required>
-                    <span class="radio-label">
-                        {% if i == 1 %}Not at all willing to take risks{% endif %}
-                        {% if i == 2 %}Not willing to take risks{% endif %}
-                        {% if i == 3 %}Rather not willing to take risks{% endif %}
-                        {% if i == 4 %}Neutral{% endif %}
-                        {% if i == 5 %}Rather willing to take risks{% endif %}
-                        {% if i == 6 %}Willing to take risks{% endif %}
-                        {% if i == 7 %}Very willing to take risks{% endif %}
-                    </span>
-                </td>
-            {% endfor %}
-            <!-- <td style="text-align: right;">Very willing to take risks</td> -->
-        </tr>
-    </table>
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="mb-3">1. Are you generally a person who is willing to take risks or do you try to avoid taking risks?</h5>
+        
+        <div class="form-group">            <div class="row text-center g-0">
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="risk_attitudes" value="1" required id="risk_1">
+                        <label class="form-check-label small" for="risk_1">Not at all<br>willing</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="risk_attitudes" value="2" required id="risk_2">
+                        <label class="form-check-label small" for="risk_2">Not<br>willing</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="risk_attitudes" value="3" required id="risk_3">
+                        <label class="form-check-label small" for="risk_3">Rather not<br>willing</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="risk_attitudes" value="4" required id="risk_4">
+                        <label class="form-check-label small" for="risk_4">Neutral</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="risk_attitudes" value="5" required id="risk_5">
+                        <label class="form-check-label small" for="risk_5">Rather<br>willing</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="risk_attitudes" value="6" required id="risk_6">
+                        <label class="form-check-label small" for="risk_6">Willing</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="risk_attitudes" value="7" required id="risk_7">
+                        <label class="form-check-label small" for="risk_7">Very<br>willing</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{ formfield_errors 'risk_attitudes' }}
+    </div>
 </div>
 
-<div style="margin-bottom: 30px;">
-    <b>2. Do you believe that Acme should provide additional information about its ESG impacts and stakeholder engagement process?</b>
-    <table style="margin: 15px 0; width: 100%; text-align: center;">
-        <tr>
-            <!-- <td style="text-align: left;">Strongly disagree</td> -->
-            {% for i in range(1, 8) %}
-                <td class="radio-cell">
-                    <input type="radio" name="disclosure_transparency" value="{{ i }}" required>
-                    <span class="radio-label">
-                        {% if i == 1 %}Strongly disagree{% endif %}
-                        {% if i == 2 %}Disagree{% endif %}
-                        {% if i == 3 %}Somewhat disagree{% endif %}
-                        {% if i == 4 %}Neutral{% endif %}
-                        {% if i == 5 %}Somewhat agree{% endif %}
-                        {% if i == 6 %}Agree{% endif %}
-                        {% if i == 7 %}Strongly agree{% endif %}
-                    </span>
-                </td>
-            {% endfor %}
-            <!-- <td style="text-align: right;">Strongly agree</td> -->
-        </tr>
-    </table>
+<div class="card mb-3">    <div class="card-body">
+        <h5 class="mb-3">2. Do you believe that Acme should provide additional information about its ESG impacts and stakeholder engagement process?</h5>
+        
+        <div class="form-group">            <div class="row text-center g-0">
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="disclosure_transparency" value="1" required id="disclosure_1">
+                        <label class="form-check-label small" for="disclosure_1">Strongly<br>disagree</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="disclosure_transparency" value="2" required id="disclosure_2">
+                        <label class="form-check-label small" for="disclosure_2">Disagree</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="disclosure_transparency" value="3" required id="disclosure_3">
+                        <label class="form-check-label small" for="disclosure_3">Somewhat<br>disagree</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="disclosure_transparency" value="4" required id="disclosure_4">
+                        <label class="form-check-label small" for="disclosure_4">Neutral</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="disclosure_transparency" value="5" required id="disclosure_5">
+                        <label class="form-check-label small" for="disclosure_5">Somewhat<br>agree</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="disclosure_transparency" value="6" required id="disclosure_6">
+                        <label class="form-check-label small" for="disclosure_6">Agree</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="disclosure_transparency" value="7" required id="disclosure_7">
+                        <label class="form-check-label small" for="disclosure_7">Strongly<br>agree</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{ formfield_errors 'disclosure_transparency' }}
+    </div>
 </div>
 
-<div style="margin-bottom: 30px;">
-    <b>3. How strongly do you personally agree that companies should sacrifice profitability to promote ESG themes?</b>
-    <table style="margin: 15px 0; width: 100%; text-align: center;">
-        <tr>
-            <!-- <td style="text-align: left;">Strongly disagree</td> -->
-            {% for i in range(1, 8) %}
-                <td class="radio-cell">
-                    <input type="radio" name="esg_relevance" value="{{ i }}" required>
-                    <span class="radio-label">
-                        {% if i == 1 %}Strongly disagree{% endif %}
-                        {% if i == 2 %}Disagree{% endif %}
-                        {% if i == 3 %}Somewhat disagree{% endif %}
-                        {% if i == 4 %}Neutral{% endif %}
-                        {% if i == 5 %}Somewhat agree{% endif %}
-                        {% if i == 6 %}Agree{% endif %}
-                        {% if i == 7 %}Strongly agree{% endif %}
-                    </span>
-                </td>
-            {% endfor %}
-            <!-- <td style="text-align: right;">Strongly agree</td> -->
-        </tr>
-    </table>
+<div class="card mb-3">    <div class="card-body">
+        <h5 class="mb-3">3. How strongly do you personally agree that companies should sacrifice profitability to promote ESG themes?</h5>
+        
+        <div class="form-group">            <div class="row text-center g-0">
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="esg_relevance" value="1" required id="esg_1">
+                        <label class="form-check-label small" for="esg_1">Strongly<br>disagree</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="esg_relevance" value="2" required id="esg_2">
+                        <label class="form-check-label small" for="esg_2">Disagree</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="esg_relevance" value="3" required id="esg_3">
+                        <label class="form-check-label small" for="esg_3">Somewhat<br>disagree</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="esg_relevance" value="4" required id="esg_4">
+                        <label class="form-check-label small" for="esg_4">Neutral</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="esg_relevance" value="5" required id="esg_5">
+                        <label class="form-check-label small" for="esg_5">Somewhat<br>agree</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="esg_relevance" value="6" required id="esg_6">
+                        <label class="form-check-label small" for="esg_6">Agree</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="esg_relevance" value="7" required id="esg_7">
+                        <label class="form-check-label small" for="esg_7">Strongly<br>agree</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{ formfield_errors 'esg_relevance' }}
+    </div>
 </div>
 
-<p>{{ next_button }}</p>
+<div class="card">
+    <div class="card-body text-center">
+        {{ next_button }}
+    </div>
+</div>
+
 {{ endblock }}

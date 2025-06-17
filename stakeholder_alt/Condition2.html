@@ -1,0 +1,32 @@
+{{ block title }}Instructions (5 of 5){{ endblock }}
+{{ block content }}
+    <p>
+        In addition to the information about the engaged stakeholder's relevance, you noted <b> the following ESG theme prioritization chart</b>.
+    </p>
+    
+
+    {% if stakeholder_consensus == 'Negative Stakeholder Consensus' %}
+    <p>
+        The <b>negative trendline</b> indicates a <b>negative consensus</b> between the internal and external stakeholder priorities. 
+        In other words, internal stakeholders deem ESG themes as relevant that are not deemed as relevant by external stakeholders and vice versa.
+    </p>
+    <img src="/static/images/Negative.png" alt="Figure1" style="max-width:100%; height:auto;">
+        <p>
+            On the horizontal (x-axis) of the chart, you see how internal stakeholders prioritized the different ESG themes. 
+            On the vertical (y-axis) of the chart, you see how external stakeholders prioritized the different ESG themes.
+        </p>
+
+    {% elif stakeholder_consensus == 'Positive Stakeholder Consensus' %}
+    <p>
+        The <b>positive trendline</b> indicates a <b>positive consensus</b> between the internal and external stakeholder priorities. 
+        In other words, <b>internal stakeholders deem ESG themes as relevant that are also deemed as relevant by external stakeholders and vice versa</b>.
+    </p>
+    <img src="/static/images/Positive.png" alt="Figure1" style="max-width:100%; height:auto;">
+        <p>
+            On the horizontal (x-axis) of the chart, you see how internal stakeholders prioritized the different ESG themes. 
+            On the vertical (y-axis) of the chart, you see how external stakeholders prioritized the different ESG themes.
+        </p>
+    {% endif %}
+
+    <p>{{ next_button }}</p>
+{{ endblock }}
