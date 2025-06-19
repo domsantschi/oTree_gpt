@@ -69,7 +69,7 @@ class Player(BasePlayer):
     )
     time_horizon = models.StringField(
         label="Time Horizon",
-        choices=["Short-term risks", "Long-term risks"],
+        choices=["Near future risks", "Distant future risks"],
     )
     speculative_design = models.StringField(
         label="Speculative Design",
@@ -77,7 +77,7 @@ class Player(BasePlayer):
     )
     condition = models.StringField(
         label="Time Horizon",
-        choices=["Short-term risks", "Long-term risks"],
+        choices=["Near future risks", "Distant future risks"],
     )
     feedback = models.LongStringField(
         label="Any feedback about the study?",
@@ -131,7 +131,7 @@ class Player(BasePlayer):
 
 def creating_session(subsession: Subsession):
     if subsession.round_number == 1:
-        conditions = ['Short-term risks', 'Long-term risks']
+        conditions = ['Near future risks', 'Distant future risks']
         speculative_design_conditions = ['Speculative Design Absent', 'Speculative Design Present']
         
         # Ensure each condition is assigned once across four sessions

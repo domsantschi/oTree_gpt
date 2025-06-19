@@ -45,7 +45,7 @@
         <h5>📝 Instructions:</h5>
         <ul>
             <li>Below are scrambled words related to potential risks for the new healthcare technology</li>
-            <li>Each word you unscramble earns you <b>USD 0.25</b></li>
+            <li>Each word you unscramble earns you <b>USD 0.20</b></li>
             <li>Hints are provided to help you anticipate each risk</li>
             <li>You can continue at any time by clicking the Next button</li>
             <li>Try to anticipate as many risks as you can to maximize your earnings!</li>
@@ -110,7 +110,7 @@
         
         if (answer.toUpperCase() === word.original) {
             if (!solvedWords.has(index)) {
-                score += 0.25; // 25 cents per solved word
+                score += 0.20; // 20 cents per solved word
                 solvedWords.add(index);
                 document.getElementById('earnings').textContent = score.toFixed(2);
                 
@@ -124,7 +124,7 @@
                 puzzleDiv.querySelector('.scrambled').classList.add('solved');
                 feedback.style.display = 'block';
                 feedback.style.color = 'green';
-                feedback.textContent = 'Correct! +$0.25 earned';
+                feedback.textContent = 'Correct! +$0.20 earned';
                 
                 // Disable the input field after correct answer
                 puzzleDiv.querySelector('input').disabled = true;

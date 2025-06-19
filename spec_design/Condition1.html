@@ -38,7 +38,7 @@
 
 <div class="time-horizon-container">
     <div class="text-center">
-        {% if condition == 'Short-term risks' %}
+        {% if condition == 'Near future risks' %}
             <div class="timeline-icon">⏱️</div>
         {% else %}
             <div class="timeline-icon">🔭</div>
@@ -49,17 +49,17 @@
         <h4 class="mb-3">Your Risk Assessment Focus</h4>
         <p class="lead">According to your supervisor, you should <b>focus your risk anticipation efforts</b> on</p>
         
-        {% if condition == 'Short-term risks' %}
+        {% if condition == 'Near future risks' %}
             <div class="time-period">
-                risks that could materialize within the <b>next 1–2 years</b> ⚡
+                risks that could materialize within the <b>first few days after product launch</b> ⚡
             </div>
             <p class="mt-3">
                 These are immediate concerns that require prompt attention and could impact the project in the near future.
             </p>
 
-        {% elif condition == 'Long-term risks' %}
+        {% elif condition == 'Distant future risks' %}
             <div class="time-period">
-                risks that could materialize <b>10–15 years into the future</b> 🌟
+                risks that could materialize <b>sometime in the distant future</b> 🌟
             </div>
             <p class="mt-3">
                 These are strategic considerations that could shape the long-term trajectory of the project.
