@@ -301,6 +301,14 @@ class Thanks(Page):
         if feedback:
             print(f"Feedback received: {feedback}")
 
+    @staticmethod              
+    def js_vars(player):
+        return dict(
+            completionlink=
+              player.subsession.session.config['completionlink']
+        )
+    pass
+
 # Create two separate classes for the two versions of both Assessment and Checks
 
 class ChecksBefore(Page):
