@@ -64,8 +64,12 @@ SESSION_FIELDS = []
 # rooms
 ROOMS = [
     dict(
-        name='studyRoom1',
-        display_name='Study Room 1',
+        name='stakeholder',
+        display_name='Stakeholder Room',
+    ),
+    dict(
+        name='spec_design',
+        display_name='Spec Design Room',
     ),
 ]
 
