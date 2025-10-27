@@ -67,6 +67,10 @@ class Player(BasePlayer):
         label="Years of Risk Management Experience",
         min=0,
     )
+    english_native = models.StringField(
+        label="Is English your native language?",
+        choices=["Yes", "No"],
+    )
     time_horizon = models.StringField(
         label="Time Horizon",
         choices=["Near future risks", "Distant future risks"],
@@ -146,6 +150,7 @@ def creating_session(subsession: Subsession):
             condition, speculative_design = combined_conditions[i % len(combined_conditions)]
             p.condition = condition
             p.speculative_design = speculative_design
+            print(f"Player {i+1} assigned: Time Horizon = {condition}, Speculative Design = {speculative_design}")
 
 # --- Pages --------------------------------------------------------------------
 
@@ -232,10 +237,6 @@ class Assessment(Page):
 
 class Condition2(Page):
     @staticmethod
-    def is_displayed(player: Player):
-        return player.speculative_design == 'Speculative Design Present'
-        
-    @staticmethod
     def vars_for_template(player: Player):
         return dict(
             condition=player.condition,
@@ -243,6 +244,8 @@ class Condition2(Page):
         )
     @staticmethod
     def get_timeout_seconds(player: Player):
+        import time
+        player.participant._start_time = time.time()
         return None
     
     @staticmethod
@@ -292,6 +295,7 @@ class Demographics(Page):
         'qualification',
         'work_experience',
         'rm_experience',
+        'english_native',
     ]
     
     @staticmethod

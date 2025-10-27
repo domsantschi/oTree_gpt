@@ -199,6 +199,24 @@
         {{ formfield_errors 'rm_experience' }}
     </div>
 
+    <div class="question-box">
+        <p class="mb-3">
+            <span class="question-number">6</span>
+            Is English your native language (mother tongue)?
+        </p>
+        <div class="radio-group">
+            <label class="radio-option">
+                <input type="radio" name="english_native" value="Yes" required>
+                Yes
+            </label>
+            <label class="radio-option">
+                <input type="radio" name="english_native" value="No">
+                No
+            </label>
+        </div>
+        {{ formfield_errors 'english_native' }}
+    </div>
+
     <div class="text-center mt-4">
         {{ next_button }}
     </div>

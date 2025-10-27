@@ -84,16 +84,58 @@
 <div class="condition-container">
     {% if speculative_design == 'Speculative Design Absent' %}
         <div class="header-section">
-            <div class="video-icon">📊</div>
-            <h4>Probable Futures Analysis</h4>
+            <div class="video-icon">�</div>
+            <h4>Reflection Time</h4>
         </div>
+        <div class="notice-box">
+            <p><b>Please take a moment to reflect</b> on the information you have reviewed so far 
+            before proceeding with the risk anticipation task.</p>
+        </div>
+        
         <div class="content-box">
-            <p>
-                The <b>probable futures</b> condition relies on <b>existing data and trends</b>, 
-                such as current healthcare regulations. Participants assess ESG themes based on 
-                these established trends.
+            <p style="text-align: center; font-size: 1.1em; margin: 30px 0;">
+                <b>You may use this time to consider:</b>
+            </p>
+            <ul style="line-height: 2em;">
+                <li>The context of healthcare technology</li>
+                <li>Potential risks that may arise</li>
+                <li>How you will approach the upcoming task</li>
+            </ul>
+        </div>
+
+        <div class="timer-box" id="timer-absent">
+            <p style="margin: 0">
+                Recommended reflection time: <span class="timer-count" id="countdown-absent">60</span> seconds remaining
+            </p>
+            <p style="margin-top: 10px; font-size: 0.9em; color: #6c757d;">
+                You may proceed whenever you are ready
             </p>
         </div>
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const nextButton = document.querySelector('.otree-btn-next');
+                const timerBox = document.getElementById('timer-absent');
+                const countdownSpan = document.getElementById('countdown-absent');
+                
+                if (nextButton) {
+                    // Button is enabled from the start
+                    nextButton.disabled = false;
+                    nextButton.textContent = 'Continue';
+                    
+                    let timeLeft = 60;
+                    const timer = setInterval(function() {
+                        timeLeft--;
+                        countdownSpan.textContent = timeLeft;
+                        if (timeLeft <= 0) {
+                            clearInterval(timer);
+                            timerBox.innerHTML = '<p class="success-message">✅ You may now proceed</p>';
+                            timerBox.style.backgroundColor = '#d4edda';
+                        }
+                    }, 1000);
+                }
+            });
+        </script>
 
     {% elif speculative_design == 'Speculative Design Present' %}
         <div class="header-section">
