@@ -35,6 +35,9 @@ class Group(BaseGroup):
     returned_amount = models.CurrencyField()  # Automatically calculated
 
 class Player(BasePlayer):
+    
+    prolific_id = models.StringField(default=str(" "))
+    
     gender = models.StringField(
         label="Gender",
         choices=["Male", "Female", "Other"],
@@ -177,6 +180,11 @@ class Introduction(Page):
     def before_next_page(player: Player, timeout_happened):
         import time
         player.introduction_page_time = time.time() - player.participant._start_time
+    
+    @staticmethod
+    def before_next_page(self, timeout_happened):
+        self.prolific_id = self.participant.label
+pass
 
 class Background(Page):
     @staticmethod
@@ -326,6 +334,14 @@ class Thanks(Page):
         feedback = player.feedback
         if feedback:
             print(f"Feedback received: {feedback}")
+    
+    @staticmethod              
+    def js_vars(player):
+        return dict(
+            completionlink=
+              player.subsession.session.config['completionlink']
+        )
+    pass
 
 # Update the page sequence
 page_sequence = [

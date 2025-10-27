@@ -36,6 +36,7 @@ SESSION_CONFIGS = [
             name='spec_design',
             app_sequence=['spec_design',],
             num_demo_participants=1,
+            completionlink= "https://app.prolific.com/submissions/complete?cc=C11UPOF1"
         ),
         dict(
             name='stakeholder',
