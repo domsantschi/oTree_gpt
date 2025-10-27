@@ -9,7 +9,7 @@
 
 <div class="card mb-3">
     <div class="card-body">
-        <h5 class="mb-3">1. I am generally a person who is willing to take risks or I try to avoid taking risks.</h5>
+        <h5 class="mb-3">1. I am generally a person who is willing to take risks.</h5>
         
         <div class="form-group">            <div class="row text-center g-0">
                 <div class="col">
@@ -214,7 +214,59 @@
     </div>
 </div>
 
-
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="mb-3">5. I prefer to avoid conflicts and strive for harmony in group settings.</h5>
+        
+        <div class="form-group">
+            <div class="row text-center g-0">
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="harmony_seeking" value="1" required id="harmony_seeking_1">
+                        <label class="form-check-label small text-center" for="harmony_seeking_1">Strongly<br>disagree</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="harmony_seeking" value="2" required id="harmony_seeking_2">
+                        <label class="form-check-label small text-center" for="harmony_seeking_2">Disagree</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="harmony_seeking" value="3" required id="harmony_seeking_3">
+                        <label class="form-check-label small text-center" for="harmony_seeking_3">Somewhat<br>disagree</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="harmony_seeking" value="4" required id="harmony_seeking_4">
+                        <label class="form-check-label small text-center" for="harmony_seeking_4">Neutral</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="harmony_seeking" value="5" required id="harmony_seeking_5">
+                        <label class="form-check-label small text-center" for="harmony_seeking_5">Somewhat<br>agree</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="harmony_seeking" value="6" required id="harmony_seeking_6">
+                        <label class="form-check-label small text-center" for="harmony_seeking_6">Agree</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check d-flex flex-column align-items-center">
+                        <input class="form-check-input mb-2" type="radio" name="harmony_seeking" value="7" required id="harmony_seeking_7">
+                        <label class="form-check-label small text-center" for="harmony_seeking_7">Strongly<br>agree</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{ formfield_errors 'harmony_seeking' }}
+    </div>
+</div>
 
 <div class="card">
     <div class="card-body text-center">

@@ -34,9 +34,6 @@ class Group(BaseGroup):
     returned_amount = models.CurrencyField()  # Automatically calculated
 
 class Player(BasePlayer):
-    # Field to store whether checks come before assessment
-    checks_before_assessment = models.BooleanField(initial=None)
-    
     # Add the missing 'stakeholder_consensus' field
     stakeholder_consensus = models.StringField(
         label="Stakeholder Consensus",
@@ -77,6 +74,12 @@ class Player(BasePlayer):
     )
     esg_relevance = models.IntegerField(
         label="How strongly do you personally agree that companies should sacrifice profitability to promote ESG themes?",
+        choices=[[i, str(i)] for i in range(1, 8)],
+        widget=widgets.RadioSelectHorizontal,
+    )
+    
+    harmony_seeking = models.IntegerField(
+        label="I prefer to avoid conflicts and strive for harmony in group settings.",
         choices=[[i, str(i)] for i in range(1, 8)],
         widget=widgets.RadioSelectHorizontal,
     )
@@ -208,9 +211,6 @@ def creating_session(subsession: Subsession):
             condition, stakeholder_consensus = combined_conditions[i % len(combined_conditions)]
             p.condition = condition
             p.stakeholder_consensus = stakeholder_consensus
-            
-            # Randomly determine if checks come before or after assessment
-            p.checks_before_assessment = random.choice([True, False])
 
 
 # # Function for live experiment << random assignment
@@ -272,42 +272,6 @@ class Checks(Page):
         'stakeholder_attributes',
         'trendline',
     ]
-            
-    @staticmethod
-    def before_next_page(player: Player, timeout_happened):
-        # Process the internal stakeholders string
-        if player.internal_stakeholders_responses:
-            # Parse the string of T/F values to determine which options were selected
-            options = ["Investors", "Suppliers", "Customers", "Regulators", 
-                      "NGOs", "Community", "Media", "Other"]
-            
-            selected = []
-            for i, char in enumerate(player.internal_stakeholders_responses):
-                if char == 'T' and i < len(options):
-                    selected.append(options[i])
-            
-            # If "Other" was selected, add the text response
-            if "Other" in selected and player.internal_stakeholders_other_text:
-                selected[-1] = f"Other: {player.internal_stakeholders_other_text}"
-            
-            print(f"Internal stakeholders selected: {', '.join(selected)}")
-        
-        # Process the external stakeholders string
-        if player.external_stakeholders_responses:
-            # Parse the string of T/F values to determine which options were selected
-            options = ["Employees", "Executive Management", "Board of Directors", 
-                      "Chairman", "CEO", "Other"]
-            
-            selected = []
-            for i, char in enumerate(player.external_stakeholders_responses):
-                if char == 'T' and i < len(options):
-                    selected.append(options[i])
-            
-            # If "Other" was selected, add the text response
-            if "Other" in selected and player.external_stakeholders_other_text:
-                selected[-1] = f"Other: {player.external_stakeholders_other_text}"
-            
-            print(f"External stakeholders selected: {', '.join(selected)}")
 
 class StakeholderSelection(Page):
     form_model = 'player'
@@ -356,7 +320,8 @@ class Controls(Page):
         'risk_attitudes',
         'esg_familiarity', 
         'disclosure_credibility',
-        'esg_relevance'
+        'esg_relevance',
+        'harmony_seeking'
     ]
 
 class Demographics(Page):
@@ -452,14 +417,8 @@ page_sequence = [
     Background,
     Condition1,
     Condition2,
-    # Path 1: Checks before Assessment (only one path will be shown)
-    ChecksBefore,      # Only shown if checks_before_assessment is True
-    AssessmentAfter,   # Only shown if checks_before_assessment is True
-    # Path 2: Assessment before Checks (only one path will be shown)
-    AssessmentBefore,  # Only shown if checks_before_assessment is False
-    ChecksAfter,       # Only shown if checks_before_assessment is False
-    # Continue with normal flow
-    StakeholderSelection,
+    Assessment,
+    Checks,
     Controls,
     Demographics,
     Thanks,

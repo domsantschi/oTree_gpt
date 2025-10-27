@@ -1,14 +1,21 @@
 {{ block title }}ESG Materiality Disclosures (2 of 2){{ endblock }}
 {{ block content }}
     <p>
-        In addition to the information about the engaged stakeholder's relevance, you noted <b> the following ESG theme prioritization chart</b>.
+        In addition to the information about the engaged stakeholder's relevance, you captured the following ESG materiality assessment chart.
     </p>
     
+    <p><b>Examples of ESG themes:</b></p>
+    <ul>
+        <li>E (Environment) = Greenhouse Gas Emissions – the relevance of reducing GHG</li>
+        <li>S (Social) = Diversity & Inclusion – the relevance of supporting diversity and inclusion</li>
+        <li>G (Governance) = Regulatory & Legal Compliance – the relevance of adhering to business integrity and transparency</li>
+    </ul>
 
     {% if stakeholder_consensus == 'Low Stakeholder Consensus' %}
     <p>
         The <b>downward facing trendline</b> indicates a <b>low consensus</b> between the internal and external stakeholder priorities. 
         In other words, internal stakeholders deem ESG themes as relevant that are not deemed as relevant by external stakeholders and vice versa.
+        <b>For the examples above, the consensus between internal and external stakeholders is low.</b>
     </p>
     <img src="/static/images/Negative.png" alt="Figure1" style="max-width:100%; height:auto;">
         <p>
@@ -20,6 +27,7 @@
     <p>
         The <b>upward facing trendline</b> indicates a <b>high consensus</b> between the internal and external stakeholder priorities. 
         In other words, <b>internal stakeholders deem ESG themes as relevant that are also deemed as relevant by external stakeholders and vice versa</b>.
+        <b>For the examples above, the consensus between internal and external stakeholders is high.</b>
     </p>
     <img src="/static/images/Positive.png" alt="Figure1" style="max-width:100%; height:auto;">
         <p>
