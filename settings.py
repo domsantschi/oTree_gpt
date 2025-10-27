@@ -41,6 +41,7 @@ SESSION_CONFIGS = [
             name='stakeholder',
             app_sequence=['stakeholder',],
             num_demo_participants=1,
+            completionlink="https://app.prolific.com/submissions/complete?cc=C17EXCFB",
         ),
 ]
 # if you set a property in SESSION_CONFIG_DEFAULTS, it will be inherited by all configs

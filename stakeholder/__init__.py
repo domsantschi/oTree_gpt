@@ -34,6 +34,10 @@ class Group(BaseGroup):
     returned_amount = models.CurrencyField()  # Automatically calculated
 
 class Player(BasePlayer):
+    
+    # Prolific ID fields
+    prolific_id = models.StringField(default=str(" "))
+    
     # Add the missing 'stakeholder_consensus' field
     stakeholder_consensus = models.StringField(
         label="Stakeholder Consensus",
@@ -102,24 +106,7 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect,
     )
 
-    # Add these fields to the Player class:
-    internal_stakeholders_responses = models.StringField(
-        label="Internal stakeholders selections",
-        blank=True
-    )
-    external_stakeholders_responses = models.StringField(
-        label="External stakeholders selections", 
-        blank=True
-    )
-    internal_stakeholders_other_text = models.StringField(
-        label="If other internal stakeholder, please explain:",
-        blank=True
-    )
-    external_stakeholders_other_text = models.StringField(
-        label="If other external stakeholder, please explain:",
-        blank=True
-    )
-    
+    # Demographic fields    
     age = models.StringField(
         label="What is your age?",
         choices=[
@@ -239,6 +226,9 @@ class Welcome(Page):
     pass
 
 class Introduction(Page):
+    @staticmethod
+    def before_next_page(self, timeout_happened):
+        self.prolific_id = self.participant.label
     pass
 
 class Background(Page):
@@ -272,47 +262,6 @@ class Checks(Page):
         'stakeholder_attributes',
         'trendline',
     ]
-
-class StakeholderSelection(Page):
-    form_model = 'player'
-    form_fields = [
-        'internal_stakeholders_responses',
-        'external_stakeholders_responses',
-        'internal_stakeholders_other_text',
-        'external_stakeholders_other_text'
-    ]
-    
-    @staticmethod
-    def before_next_page(player: Player, timeout_happened):
-        # Process the internal stakeholders string
-        if player.field_maybe_none('internal_stakeholders_responses'):
-            options = ["Investors", "Suppliers", "Customers", "Regulators", 
-                      "NGOs", "Community", "Media", "Other"]
-            
-            selected = []
-            for i, char in enumerate(player.internal_stakeholders_responses):
-                if char == 'T' and i < len(options):
-                    selected.append(options[i])
-            
-            if "Other" in selected and player.field_maybe_none('internal_stakeholders_other_text'):
-                selected[-1] = f"Other: {player.internal_stakeholders_other_text}"
-            
-            print(f"Internal stakeholders selected: {', '.join(selected)}")
-        
-        # Process the external stakeholders string
-        if player.field_maybe_none('external_stakeholders_responses'):
-            options = ["Employees", "Executive Management", "Board of Directors", 
-                      "Chairman", "CEO", "Other"]
-            
-            selected = []
-            for i, char in enumerate(player.external_stakeholders_responses):
-                if char == 'T' and i < len(options):
-                    selected.append(options[i])
-            
-            if "Other" in selected and player.field_maybe_none('external_stakeholders_other_text'):
-                selected[-1] = f"Other: {player.external_stakeholders_other_text}"
-            
-            print(f"External stakeholders selected: {', '.join(selected)}")
 
 class Controls(Page):
     form_model = 'player'
