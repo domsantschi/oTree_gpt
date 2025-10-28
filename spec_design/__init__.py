@@ -343,6 +343,9 @@ class Thanks(Page):
         )
     pass
 
+class Redirect(Page):
+    pass
+
 # Update the page sequence
 page_sequence = [
     Consent,
@@ -355,4 +358,5 @@ page_sequence = [
     Checks,
     Demographics,
     Thanks,
+    Redirect
 ]

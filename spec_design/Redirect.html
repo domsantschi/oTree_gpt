@@ -1,0 +1,28 @@
+{{ block title }}Redirecting to Prolific...{{ endblock }}
+{{ block content }}
+
+<div>
+    <h2>Thank you for your participation!</h2>
+    <p>You will be redirected to Prolific in <span id="countdown">3</span> seconds...</p>
+    <p>If you are not redirected automatically, please click the button below:</p>
+    <a href="https://app.prolific.com/submissions/complete?cc=C11UPOF1">
+        Complete on Prolific
+    </a>
+</div>
+
+<script>
+    let countdown = 3;
+    let completionUrl = "https://app.prolific.com/submissions/complete?cc=C11UPOF1";
+    
+    let timer = setInterval(function() {
+        countdown--;
+        document.getElementById('countdown').textContent = countdown;
+        
+        if (countdown <= 0) {
+            clearInterval(timer);
+            window.location.href = completionUrl;
+        }
+    }, 1000);
+</script>
+
+{{ endblock }}
