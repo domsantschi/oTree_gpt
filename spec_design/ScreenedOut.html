@@ -1,0 +1,134 @@
+{{ block title }}<span style="display: none;">Thank You</span>{{ endblock }}
+
+{{ block content }}
+
+<style>
+    .screened-out-container {
+        max-width: 700px;
+        margin: 50px auto;
+        padding: 30px;
+        background: linear-gradient(to right, #ffffff, #f8f9fa);
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        animation: fadeIn 0.5s ease-in;
+    }
+    
+    .icon {
+        font-size: 64px;
+        margin-bottom: 20px;
+        color: #6c757d;
+        animation: wave 1s ease-in-out;
+    }
+    
+    .message-section {
+        margin: 30px 0;
+    }
+    
+    .message-box {
+        border-left: 4px solid #6c757d;
+        padding: 20px;
+        background-color: #f8f9fa;
+        margin: 20px 0;
+        border-radius: 0 10px 10px 0;
+        text-align: left;
+    }
+    
+    .redirect-info {
+        margin-top: 30px;
+        padding: 20px;
+        background-color: #fff3cd;
+        border-radius: 8px;
+        border: 2px solid #ffc107;
+    }
+    
+    .countdown {
+        font-size: 28px;
+        font-weight: bold;
+        color: #007bff;
+        margin: 15px 0;
+    }
+    
+    .manual-link {
+        display: inline-block;
+        margin-top: 15px;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.2s;
+    }
+    
+    .manual-link:hover {
+        background-color: #0056b3;
+        color: white;
+        text-decoration: none;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes wave {
+        0%, 100% { transform: rotate(0deg); }
+        25% { transform: rotate(-10deg); }
+        75% { transform: rotate(10deg); }
+    }
+</style>
+
+<div class="screened-out-container">
+    <div class="icon">👋</div>
+    
+    <div class="message-section">
+        <h3>Thank You for Your Interest</h3>
+        <p class="text-muted">We appreciate you taking the time to participate</p>
+    </div>
+    
+    <div class="message-box">
+        <p>
+            Unfortunately, based on your responses to the knowledge check questions, 
+            you do not meet the eligibility requirements for this particular study.
+        </p>
+        <p class="mb-0">
+            We value your time and interest. You will be redirected back to Prolific shortly 
+            to receive compensation for your time.
+        </p>
+    </div>
+    
+    <div class="redirect-info">
+        <p class="mb-2">
+            <strong>Redirecting to Prolific in</strong>
+        </p>
+        <div class="countdown" id="countdown">3</div>
+        <p class="text-muted mb-0">
+            <small>If you are not redirected automatically, please click below:</small>
+        </p>
+        <a href="https://app.prolific.com/submissions/complete?cc=C1ANUFSO" 
+           id="manual-link" 
+           class="manual-link">
+            Return to Prolific
+        </a>
+    </div>
+</div>
+
+<script>
+    let countdown = 3;
+    const rejectionUrl = js_vars.rejection_url;
+    
+    let timer = setInterval(function() {
+        countdown--;
+        document.getElementById('countdown').textContent = countdown;
+        
+        if (countdown <= 0) {
+            clearInterval(timer);
+            window.location.href = rejectionUrl;
+        }
+    }, 1000);
+    
+    // Also set the manual link
+    document.getElementById('manual-link').href = rejectionUrl;
+</script>
+
+{{ endblock }}

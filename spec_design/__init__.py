@@ -90,6 +90,44 @@ class Player(BasePlayer):
         label="Any feedback about the study?",
         blank=True
     )
+    
+    # Screening questions
+    screening_q1 = models.StringField(
+        label="In new product development, what does the 'preparation phase' typically involve?",
+        choices=[
+            "Planning, research, and initial design activities before product launch",
+            "Market launch and sales activities",
+            "Post-market surveillance and feedback collection",
+            "End-of-life product retirement",
+        ],
+        widget=widgets.RadioSelect,
+    )
+    
+    screening_q2 = models.StringField(
+        label="What is 'risk anticipation' in the context of product development?",
+        choices=[
+            "Waiting for problems to occur before addressing them",
+            "Proactively identifying potential issues before they materialize",
+            "Documenting risks after product failure",
+            "Ignoring potential problems to save time",
+        ],
+        widget=widgets.RadioSelect,
+    )
+    
+    screening_q3 = models.StringField(
+        label="In healthcare technology development, what type of risks should be considered?",
+        choices=[
+            "Only financial and regulatory risks",
+            "Only technical and operational risks",
+            "Multiple types including ethical, safety, regulatory, and social risks",
+            "Only patient safety risks",
+        ],
+        widget=widgets.RadioSelect,
+    )
+    
+    # Track screening result
+    passed_screening = models.BooleanField(initial=True)
+    
     blind_spot_detection = models.IntegerField(
         label="Risk Identification",
         min=1,
@@ -169,7 +207,50 @@ class Consent(Page):
         import time
         player.consent_page_time = time.time() - player.participant._start_time
 
+class Screening(Page):
+    form_model = 'player'
+    form_fields = ['screening_q1', 'screening_q2', 'screening_q3']
+    
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        # Correct answers
+        correct_answers = {
+            'screening_q1': 'Planning, research, and initial design activities before product launch',
+            'screening_q2': 'Proactively identifying potential issues before they materialize',
+            'screening_q3': 'Multiple types including ethical, safety, regulatory, and social risks',
+        }
+        
+        # Check if all answers are correct
+        all_correct = (
+            player.screening_q1 == correct_answers['screening_q1'] and
+            player.screening_q2 == correct_answers['screening_q2'] and
+            player.screening_q3 == correct_answers['screening_q3']
+        )
+        
+        player.passed_screening = all_correct
+        
+        # Debug print
+        print(f"Participant {player.participant.label}: Screening result = {all_correct}")
+
+class ScreenedOut(Page):
+    @staticmethod
+    def is_displayed(player: Player):
+        # Only show this page if participant failed screening
+        return not player.passed_screening
+    
+    @staticmethod
+    def js_vars(player):
+        # Return the Prolific rejection URL
+        return dict(
+            rejection_url='https://app.prolific.com/submissions/complete?cc=C1ANUFSO'
+        )
+
 class Introduction(Page):
+    @staticmethod
+    def is_displayed(player: Player):
+        # Only show this page if participant passed screening
+        return player.passed_screening
+    
     @staticmethod
     def get_timeout_seconds(player: Player):
         import time
@@ -188,6 +269,10 @@ pass
 
 class Background(Page):
     @staticmethod
+    def is_displayed(player: Player):
+        return player.passed_screening
+    
+    @staticmethod
     def get_timeout_seconds(player: Player):
         import time
         player.participant._start_time = time.time()
@@ -198,6 +283,10 @@ class Background(Page):
         player.background_page_time = time.time() - player.participant._start_time
 
 class Condition1(Page):
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.passed_screening
+    
     @staticmethod
     def get_timeout_seconds(player: Player):
         import time
@@ -224,6 +313,10 @@ class Assessment(Page):
         'risk_ethics',
         'risk_cost'
     ]
+    
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.passed_screening
 
     @staticmethod
     def get_timeout_seconds(player: Player):
@@ -244,6 +337,10 @@ class Assessment(Page):
             print("No words solved")
 
 class Condition2(Page):
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.passed_screening
+    
     @staticmethod
     def vars_for_template(player: Player):
         return dict(
@@ -267,6 +364,10 @@ class Controls(Page):
         'narrative_accessibility',
         'risk_embodiment',
     ]
+    
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.passed_screening
 
     @staticmethod
     def get_timeout_seconds(player: Player):
@@ -284,6 +385,10 @@ class Checks(Page):
         'time_horizon',
         'speculative_design',
     ]
+    
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.passed_screening
     
     @staticmethod
     def get_timeout_seconds(player: Player):
@@ -307,6 +412,10 @@ class Demographics(Page):
     ]
     
     @staticmethod
+    def is_displayed(player: Player):
+        return player.passed_screening
+    
+    @staticmethod
     def get_timeout_seconds(player: Player):
         import time
         player.participant._start_time = time.time()
@@ -319,6 +428,10 @@ class Demographics(Page):
 class Thanks(Page):
     form_model = 'player'
     form_fields = ['feedback']  # Capture feedback in the database
+    
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.passed_screening
 
     @staticmethod
     def vars_for_template(player: Player):
@@ -344,11 +457,16 @@ class Thanks(Page):
     pass
 
 class Redirect(Page):
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.passed_screening
     pass
 
 # Update the page sequence
 page_sequence = [
     Consent,
+    Screening,
+    ScreenedOut,
     Introduction,
     Background,
     Condition1,
