@@ -366,6 +366,9 @@ class AssessmentAfter(Page):
         
     def get_template_name(self):
         return 'stakeholder/Assessment.html'
+    
+class Redirect(Page):
+    pass
 
 # Define the page sequence with both possible paths explicitly included
 page_sequence = [
@@ -379,4 +382,5 @@ page_sequence = [
     Controls,
     Demographics,
     Thanks,
+    Redirect
 ]

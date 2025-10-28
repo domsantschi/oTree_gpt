@@ -1,35 +1,42 @@
 {{ block title }}Thank you!{{ endblock }}
 {{ block content }}
 
-<p style="color: green; font-weight: bold; text-align: center;">
-    Congratulations! You have successfully completed the study.
-</p>
+<div>
+    <p>
+        Congratulations! You have successfully completed the study.
+    </p>
 
-<p>
-    After taking a screenshot to save your participant ID,
-    you can close this browser tab.
-</p>
-<p style="text-align: center;">
-    <i><b>{{ participant.part_id }}</b></i>
-</p>
+    <p>
+        Your Prolific Completion Code: <strong>C17EXCFB</strong>
+    </p>
 
+    <div>
+        <p>
+            <strong>We value your feedback!</strong> Please leave any comments or suggestions about the study below (optional):
+        </p>
+        
+        {{ formfield 'feedback' label="" }}
+        
+        <p>
+            Click "Finish Study" below to submit your feedback and return to Prolific.
+        </p>
+    </div>
 
-<!-- Feedback Section -->
-<p>
-    <strong>We value your feedback!</strong> Please leave any comments or suggestions about the study below:
-</p>
-<form method="post">
-    <textarea name="feedback" rows="5" cols="50" placeholder="Enter your feedback here..." required></textarea>
-    <br>
-    <button type="submit" style="margin-top: 10px;">Submit Feedback</button>
-</form>
+    {{ next_button label="Finish Study" }}
+</div>
 
 <script>
-    let completionlink = js_vars.completionlink;
-
-    window.onload = function(){
-        window.location.href=completionlink;
-    }
+    // After form submission completes, redirect to Prolific
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function(event) {
+            // Allow the form to submit normally
+            setTimeout(function() {
+                // Redirect after a brief delay to ensure data is saved
+                window.location.href = js_vars.completionlink;
+            }, 500);
+        });
+    });
 </script>
 
 {{ endblock }}
