@@ -1,0 +1,42 @@
+{{ block title }}Thank You{{ endblock }}
+
+{{ block content }}
+
+<div>
+  
+    <h3>Thank You for Your Participation</h3>
+    
+    <div>
+        <p>
+            Unfortunately, based on your responses, you do not meet the requirements for this particular study.
+        </p>
+        <p>
+            We appreciate your time and interest. You will be redirected back to Prolific shortly.
+        </p>
+    </div>
+    
+    <div>
+        <p>You will be redirected to Prolific in <span id="countdown">3</span> seconds...</p>
+        <p>If you are not redirected automatically, please <a href="https://app.prolific.com/submissions/complete?cc=CO1QT838" id="manual-link">click here</a>.</p>
+    </div>
+</div>
+
+<script>
+    let countdown = 3;
+    const rejectionUrl = js_vars.rejection_url;
+    
+    let timer = setInterval(function() {
+        countdown--;
+        document.getElementById('countdown').textContent = countdown;
+        
+        if (countdown <= 0) {
+            clearInterval(timer);
+            window.location.href = rejectionUrl;
+        }
+    }, 1000);
+    
+    // Also set the manual link
+    document.getElementById('manual-link').href = rejectionUrl;
+</script>
+
+{{ endblock }}

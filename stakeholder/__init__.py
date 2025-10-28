@@ -171,6 +171,43 @@ class Player(BasePlayer):
         label="Participant feedback",
         blank=True,  # Optional field
     )
+    
+    # Screening questions
+    screening_q1 = models.StringField(
+        label="What is the primary purpose of an ESG materiality assessment?",
+        choices=[
+            "To maximize short-term profits",
+            "To identify and prioritize ESG issues most relevant to the business and its stakeholders",
+            "To comply with tax regulations",
+            "To reduce employee headcount",
+        ],
+        widget=widgets.RadioSelect,
+    )
+    
+    screening_q2 = models.StringField(
+        label="In risk management, what does 'stakeholder relevance' typically refer to?",
+        choices=[
+            "The number of stakeholders in a company",
+            "The geographical location of stakeholders",
+            "The degree to which stakeholders are affected by or can affect a company's decisions",
+            "The age of the stakeholders",
+        ],
+        widget=widgets.RadioSelect,
+    )
+    
+    screening_q3 = models.StringField(
+        label="Which of the following best describes 'stakeholder consensus' in ESG prioritization?",
+        choices=[
+            "When all employees agree on salary increases",
+            "The level of agreement among stakeholders on the importance of specific ESG themes",
+            "The legal framework governing corporate governance",
+            "The financial performance metrics of a company",
+        ],
+        widget=widgets.RadioSelect,
+    )
+    
+    # Track screening result
+    passed_screening = models.BooleanField(initial=True)
 
 # --- Functions ----------------------------------------------------------------
 
@@ -225,16 +262,65 @@ def creating_session(subsession: Subsession):
 class Welcome(Page):
     pass
 
+class Screening(Page):
+    form_model = 'player'
+    form_fields = ['screening_q1', 'screening_q2', 'screening_q3']
+    
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        # Correct answers
+        correct_answers = {
+            'screening_q1': 'To identify and prioritize ESG issues most relevant to the business and its stakeholders',
+            'screening_q2': 'The degree to which stakeholders are affected by or can affect a company\'s decisions',
+            'screening_q3': 'The level of agreement among stakeholders on the importance of specific ESG themes',
+        }
+        
+        # Check if all answers are correct
+        all_correct = (
+            player.screening_q1 == correct_answers['screening_q1'] and
+            player.screening_q2 == correct_answers['screening_q2'] and
+            player.screening_q3 == correct_answers['screening_q3']
+        )
+        
+        player.passed_screening = all_correct
+        
+        # Debug print
+        print(f"Participant {player.participant.label}: Screening result = {all_correct}")
+
+class ScreenedOut(Page):
+    @staticmethod
+    def is_displayed(player: Player):
+        # Only show this page if participant failed screening
+        return not player.passed_screening
+    
+    @staticmethod
+    def js_vars(player):
+        # Return the Prolific rejection URL
+        return dict(
+            rejection_url='https://app.prolific.com/submissions/complete?cc=CO1QT838'
+        )
+
 class Introduction(Page):
+    @staticmethod
+    def is_displayed(player: Player):
+        # Only show this page if participant passed screening
+        return player.passed_screening
+    
     @staticmethod
     def before_next_page(self, timeout_happened):
         self.prolific_id = self.participant.label
     pass
 
 class Background(Page):
-    pass
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.passed_screening
 
 class Condition1(Page):
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.passed_screening
+    
     @staticmethod
     def vars_for_template(player: Player):
         return dict(
@@ -242,6 +328,10 @@ class Condition1(Page):
         )
 
 class Condition2(Page):
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.passed_screening
+    
     @staticmethod
     def vars_for_template(player: Player):
         return dict(
@@ -255,6 +345,10 @@ class Assessment(Page):
         'predicted_price',
         'justifications',
     ]
+    
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.passed_screening
 
 class Checks(Page):
     form_model = 'player'
@@ -262,6 +356,10 @@ class Checks(Page):
         'stakeholder_attributes',
         'trendline',
     ]
+    
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.passed_screening
 
 class Controls(Page):
     form_model = 'player'
@@ -272,6 +370,10 @@ class Controls(Page):
         'esg_relevance',
         'harmony_seeking'
     ]
+    
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.passed_screening
 
 class Demographics(Page):
     form_model = 'player'
@@ -283,10 +385,18 @@ class Demographics(Page):
         'investment_research',
         'risk_assessments',
     ]
+    
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.passed_screening
 
 class Thanks(Page):
     form_model = 'player'
     form_fields = ['feedback']  # Capture feedback in the database
+    
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.passed_screening
 
     @staticmethod
     def vars_for_template(player: Player):
@@ -368,11 +478,15 @@ class AssessmentAfter(Page):
         return 'stakeholder/Assessment.html'
     
 class Redirect(Page):
-    pass
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.passed_screening
 
 # Define the page sequence with both possible paths explicitly included
 page_sequence = [
     Welcome,
+    Screening,
+    ScreenedOut,
     Introduction,
     Background,
     Condition1,

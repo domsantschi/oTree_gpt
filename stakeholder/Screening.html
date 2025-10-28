@@ -1,0 +1,36 @@
+{{ block title }}Introduction{{ endblock }}
+
+{{ block content }}
+
+<div class="card mb-3">
+    <div class="card-body">
+        <!-- <h4 class="card-title mb-4">Knowledge Check</h4> -->
+        <p class="card-text mb-4">
+            Before proceeding, please answer the following questions to ensure you understand the key concepts of this study. 
+            <strong>All questions must be answered correctly to continue.</strong>
+        </p>
+        
+        <div class="form-group mb-4">
+            <label class="font-weight-bold"><b>Question 1</b></label>
+            {{ formfield 'screening_q1' }}
+        </div>
+        
+        <div class="form-group mb-4">
+            <label class="font-weight-bold"><b>Question 2</b></label>
+            {{ formfield 'screening_q2' }}
+        </div>
+        
+        <div class="form-group mb-4">
+            <label class="font-weight-bold"><b>Question 3</b></label>
+            {{ formfield 'screening_q3' }}
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body text-center">
+        {{ next_button label="Submit Answers" }}
+    </div>
+</div>
+
+{{ endblock }}
