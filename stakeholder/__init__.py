@@ -208,6 +208,9 @@ class Player(BasePlayer):
     
     # Track screening result
     passed_screening = models.BooleanField(initial=True)
+    
+    # Track consent decision
+    declined_consent = models.BooleanField(initial=False)
 
 # --- Functions ----------------------------------------------------------------
 
@@ -260,7 +263,16 @@ def creating_session(subsession: Subsession):
 # --- Pages --------------------------------------------------------------------
 
 class Welcome(Page):
-    pass
+    form_model = 'player'
+    form_fields = ['declined_consent']
+    
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        # Log consent decision
+        if player.declined_consent:
+            print(f"Participant {player.participant.label}: Declined consent")
+        else:
+            print(f"Participant {player.participant.label}: Accepted consent")
 
 class Screening(Page):
     form_model = 'player'

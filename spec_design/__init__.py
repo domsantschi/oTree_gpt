@@ -128,6 +128,9 @@ class Player(BasePlayer):
     # Track screening result
     passed_screening = models.BooleanField(initial=True)
     
+    # Track consent decision
+    declined_consent = models.BooleanField(initial=False)
+    
     blind_spot_detection = models.IntegerField(
         label="Risk Identification",
         min=1,
@@ -196,6 +199,9 @@ def creating_session(subsession: Subsession):
 # --- Pages --------------------------------------------------------------------
 
 class Consent(Page):
+    form_model = 'player'
+    form_fields = ['declined_consent']
+    
     @staticmethod
     def get_timeout_seconds(player: Player):
         import time
@@ -206,6 +212,12 @@ class Consent(Page):
     def before_next_page(player: Player, timeout_happened):
         import time
         player.consent_page_time = time.time() - player.participant._start_time
+        
+        # Log consent decision
+        if player.declined_consent:
+            print(f"Participant {player.participant.label}: Declined consent")
+        else:
+            print(f"Participant {player.participant.label}: Accepted consent")
 
 class Screening(Page):
     form_model = 'player'

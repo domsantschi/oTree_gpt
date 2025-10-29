@@ -104,6 +104,13 @@
         </label>
     </div>
 
+    <div class="checkbox-container">
+        <input type="checkbox" id="decline-conditions" name="declined_consent" class="custom-checkbox" />
+        <label for="decline-conditions" class="checkbox-label">
+            I don't accept the conditions and would like to return the study.
+        </label>
+    </div>
+
     <div class="next-button-container">
         {{ next_button }}
     </div>
@@ -114,19 +121,61 @@
 {{ block scripts }}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const checkbox = document.getElementById('accept-conditions');
+        const acceptCheckbox = document.getElementById('accept-conditions');
+        const declineCheckbox = document.getElementById('decline-conditions');
         const nextButton = document.querySelector('.next-button-container button');
+        const form = document.querySelector('form');
+        const declineUrl = 'https://app.prolific.com/submissions/complete?cc=COV2FKG5';
         
         // Initially disable the next button
         nextButton.disabled = true;
         nextButton.style.opacity = '0.6';
         nextButton.style.cursor = 'not-allowed';
         
-        // Enable/disable next button based on checkbox state
-        checkbox.addEventListener('change', function() {
-            nextButton.disabled = !this.checked;
-            nextButton.style.opacity = this.checked ? '1' : '0.6';
-            nextButton.style.cursor = this.checked ? 'pointer' : 'not-allowed';
+        // Handle accept checkbox
+        acceptCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                declineCheckbox.checked = false;
+                nextButton.disabled = false;
+                nextButton.style.opacity = '1';
+                nextButton.style.cursor = 'pointer';
+            } else {
+                nextButton.disabled = true;
+                nextButton.style.opacity = '0.6';
+                nextButton.style.cursor = 'not-allowed';
+            }
+        });
+        
+        // Handle decline checkbox - enable Next button
+        declineCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                acceptCheckbox.checked = false;
+                nextButton.disabled = false;
+                nextButton.style.opacity = '1';
+                nextButton.style.cursor = 'pointer';
+            } else {
+                nextButton.disabled = true;
+                nextButton.style.opacity = '0.6';
+                nextButton.style.cursor = 'not-allowed';
+            }
+        });
+        
+        // Intercept form submission
+        form.addEventListener('submit', function(event) {
+            if (declineCheckbox.checked) {
+                event.preventDefault();
+                
+                // Set declined_consent field
+                const declinedInput = document.createElement('input');
+                declinedInput.type = 'hidden';
+                declinedInput.name = 'declined_consent';
+                declinedInput.value = 'True';
+                form.appendChild(declinedInput);
+                
+                // Redirect to Prolific
+                window.location.href = declineUrl;
+            }
+            // If accept is checked, form submits normally
         });
     });
 </script>
