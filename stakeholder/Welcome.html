@@ -24,11 +24,16 @@
                 </label>
             </div>
             <div class="form-check mt-3">
-                <input class="form-check-input" type="checkbox" id="decline-conditions" name="declined_consent">
+                <input class="form-check-input" type="checkbox" id="decline-conditions">
                 <label class="form-check-label" for="decline-conditions">
                     I don't accept the conditions and would like to return the study.
                 </label>
             </div>
+        </div>
+        
+        <!-- Hidden field for oTree form binding -->
+        <div style="display: none;">
+            {{ formfield 'declined_consent' }}
         </div>
     </div>
 </div>
@@ -50,6 +55,9 @@
         const form = document.querySelector('form');
         const declineUrl = 'https://app.prolific.com/submissions/complete?cc=CS7Q1RHY';
         
+        // Get the hidden oTree field
+        const declinedConsentField = document.querySelector('input[name="declined_consent"]');
+        
         // Initially disable the next button
         nextButton.disabled = true;
         
@@ -57,6 +65,9 @@
         acceptCheckbox.addEventListener('change', function() {
             if (this.checked) {
                 declineCheckbox.checked = false;
+                if (declinedConsentField) {
+                    declinedConsentField.checked = false;
+                }
                 nextButton.disabled = false;
             } else {
                 nextButton.disabled = true;
@@ -67,8 +78,15 @@
         declineCheckbox.addEventListener('change', function() {
             if (this.checked) {
                 acceptCheckbox.checked = false;
+                // Update the hidden oTree field
+                if (declinedConsentField) {
+                    declinedConsentField.checked = true;
+                }
                 nextButton.disabled = false;
             } else {
+                if (declinedConsentField) {
+                    declinedConsentField.checked = false;
+                }
                 nextButton.disabled = true;
             }
         });
@@ -78,12 +96,10 @@
             if (declineCheckbox.checked) {
                 event.preventDefault();
                 
-                // Set declined_consent field
-                const declinedInput = document.createElement('input');
-                declinedInput.type = 'hidden';
-                declinedInput.name = 'declined_consent';
-                declinedInput.value = 'True';
-                form.appendChild(declinedInput);
+                // Ensure the field is set
+                if (declinedConsentField) {
+                    declinedConsentField.checked = true;
+                }
                 
                 // Redirect to Prolific
                 window.location.href = declineUrl;

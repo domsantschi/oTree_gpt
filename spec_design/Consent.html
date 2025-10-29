@@ -105,10 +105,15 @@
     </div>
 
     <div class="checkbox-container">
-        <input type="checkbox" id="decline-conditions" name="declined_consent" class="custom-checkbox" />
+        <input type="checkbox" id="decline-conditions" class="custom-checkbox" />
         <label for="decline-conditions" class="checkbox-label">
             I don't accept the conditions and would like to return the study.
         </label>
+    </div>
+    
+    <!-- Hidden field for oTree form binding -->
+    <div style="display: none;">
+        {{ formfield 'declined_consent' }}
     </div>
 
     <div class="next-button-container">
@@ -127,6 +132,9 @@
         const form = document.querySelector('form');
         const declineUrl = 'https://app.prolific.com/submissions/complete?cc=COV2FKG5';
         
+        // Get the hidden oTree field
+        const declinedConsentField = document.querySelector('input[name="declined_consent"]');
+        
         // Initially disable the next button
         nextButton.disabled = true;
         nextButton.style.opacity = '0.6';
@@ -136,6 +144,9 @@
         acceptCheckbox.addEventListener('change', function() {
             if (this.checked) {
                 declineCheckbox.checked = false;
+                if (declinedConsentField) {
+                    declinedConsentField.checked = false;
+                }
                 nextButton.disabled = false;
                 nextButton.style.opacity = '1';
                 nextButton.style.cursor = 'pointer';
@@ -150,10 +161,17 @@
         declineCheckbox.addEventListener('change', function() {
             if (this.checked) {
                 acceptCheckbox.checked = false;
+                // Update the hidden oTree field
+                if (declinedConsentField) {
+                    declinedConsentField.checked = true;
+                }
                 nextButton.disabled = false;
                 nextButton.style.opacity = '1';
                 nextButton.style.cursor = 'pointer';
             } else {
+                if (declinedConsentField) {
+                    declinedConsentField.checked = false;
+                }
                 nextButton.disabled = true;
                 nextButton.style.opacity = '0.6';
                 nextButton.style.cursor = 'not-allowed';
@@ -165,12 +183,10 @@
             if (declineCheckbox.checked) {
                 event.preventDefault();
                 
-                // Set declined_consent field
-                const declinedInput = document.createElement('input');
-                declinedInput.type = 'hidden';
-                declinedInput.name = 'declined_consent';
-                declinedInput.value = 'True';
-                form.appendChild(declinedInput);
+                // Ensure the field is set
+                if (declinedConsentField) {
+                    declinedConsentField.checked = true;
+                }
                 
                 // Redirect to Prolific
                 window.location.href = declineUrl;
