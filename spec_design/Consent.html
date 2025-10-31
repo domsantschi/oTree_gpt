@@ -144,9 +144,6 @@
         acceptCheckbox.addEventListener('change', function() {
             if (this.checked) {
                 declineCheckbox.checked = false;
-                if (declinedConsentField) {
-                    declinedConsentField.checked = false;
-                }
                 nextButton.disabled = false;
                 nextButton.style.opacity = '1';
                 nextButton.style.cursor = 'pointer';
@@ -161,37 +158,35 @@
         declineCheckbox.addEventListener('change', function() {
             if (this.checked) {
                 acceptCheckbox.checked = false;
-                // Update the hidden oTree field
-                if (declinedConsentField) {
-                    declinedConsentField.checked = true;
-                }
                 nextButton.disabled = false;
                 nextButton.style.opacity = '1';
                 nextButton.style.cursor = 'pointer';
             } else {
-                if (declinedConsentField) {
-                    declinedConsentField.checked = false;
-                }
                 nextButton.disabled = true;
                 nextButton.style.opacity = '0.6';
                 nextButton.style.cursor = 'not-allowed';
             }
         });
         
-        // Intercept form submission
+        // Intercept form submission - ONLY set field value at submission time
         form.addEventListener('submit', function(event) {
+            // Set the hidden field based on which checkbox is currently checked
             if (declineCheckbox.checked) {
                 event.preventDefault();
                 
-                // Ensure the field is set
+                // Set the field to true (declined)
                 if (declinedConsentField) {
                     declinedConsentField.checked = true;
                 }
                 
                 // Redirect to Prolific
                 window.location.href = declineUrl;
+            } else if (acceptCheckbox.checked) {
+                // Set the field to false (accepted) - allow form to submit normally
+                if (declinedConsentField) {
+                    declinedConsentField.checked = false;
+                }
             }
-            // If accept is checked, form submits normally
         });
     });
 </script>
