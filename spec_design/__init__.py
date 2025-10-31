@@ -593,26 +593,16 @@ class Checks(Page):
 class PANAS(Page):
     form_model = 'player'
     form_fields = [
-        'panas_interested',
-        'panas_distressed',
-        'panas_excited',
-        'panas_upset',
-        'panas_strong',
-        'panas_guilty',
-        'panas_scared',
-        'panas_hostile',
-        'panas_enthusiastic',
-        'panas_proud',
-        'panas_irritable',
-        'panas_alert',
-        'panas_ashamed',
         'panas_inspired',
-        'panas_nervous',
+        'panas_alert',
+        'panas_excited',
+        'panas_enthusiastic',
         'panas_determined',
-        'panas_attentive',
-        'panas_jittery',
-        'panas_active',
-        'panas_afraid'
+        'panas_afraid',
+        'panas_upset',
+        'panas_nervous',
+        'panas_scared',
+        'panas_distressed'
     ]
     
     @staticmethod
