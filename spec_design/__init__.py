@@ -163,6 +163,140 @@ class Player(BasePlayer):
         max=7,
         doc="To what extent did the artifact make abstract risks feel more concrete"
     )
+    
+    # Manipulation effort questions
+    manipulation_effort = models.IntegerField(
+        label="How much effort did it take to complete the manipulation task?",
+        min=1,
+        max=7,
+        doc="Effort required to complete manipulation task: 1=Extremely effortless, 7=Extremely effortful"
+    )
+    manipulation_difficulty = models.IntegerField(
+        label="How difficult was it to complete the manipulation task?",
+        min=1,
+        max=7,
+        doc="Difficulty of manipulation task: 1=Extremely easy, 7=Extremely difficult"
+    )
+    
+    # Risk willingness questions (for Checks page)
+    risk_taking = models.IntegerField(
+        label="Willingness to undertake risky business propositions",
+        min=1,
+        max=7,
+        doc="Self-rated willingness to undertake risky business propositions compared to others"
+    )
+    risk_avoidance = models.IntegerField(
+        label="Willingness to avoid risky business propositions (reverse scaled)",
+        min=1,
+        max=7,
+        doc="Self-rated willingness to avoid risky business propositions compared to others"
+    )
+    
+    # Willingness to pay questions (immediate vs distant)
+    wtp_pizza_immediate = models.FloatField(
+        label="WTP for pizza meal (immediate)",
+        min=0,
+        doc="Willingness to pay for pizza meal at restaurant today"
+    )
+    wtp_pizza_distant = models.FloatField(
+        label="WTP for pizza meal (distant)",
+        min=0,
+        doc="Willingness to pay for pizza meal at restaurant in 6 months"
+    )
+    wtp_genai_immediate = models.FloatField(
+        label="WTP for Gen-AI subscription (immediate)",
+        min=0,
+        doc="Willingness to pay for monthly Gen-AI subscription today"
+    )
+    wtp_genai_distant = models.FloatField(
+        label="WTP for Gen-AI subscription (distant)",
+        min=0,
+        doc="Willingness to pay for monthly Gen-AI subscription in 6 months"
+    )
+    wtp_movie_immediate = models.FloatField(
+        label="WTP for movie at cinema (immediate)",
+        min=0,
+        doc="Willingness to pay for movie at cinema today"
+    )
+    wtp_movie_distant = models.FloatField(
+        label="WTP for movie at cinema (distant)",
+        min=0,
+        doc="Willingness to pay for movie at cinema in 6 months"
+    )
+    wtp_book_immediate = models.FloatField(
+        label="WTP for book at bookstore (immediate)",
+        min=0,
+        doc="Willingness to pay for book at bookstore today"
+    )
+    wtp_book_distant = models.FloatField(
+        label="WTP for book at bookstore (distant)",
+        min=0,
+        doc="Willingness to pay for book at bookstore in 6 months"
+    )
+    
+    # Expected payment for services (immediate vs distant)
+    exp_driving_immediate = models.FloatField(
+        label="Expected payment for driving (immediate)",
+        min=0,
+        doc="Expected payment for driving a stranger to a restaurant today"
+    )
+    exp_driving_distant = models.FloatField(
+        label="Expected payment for driving (distant)",
+        min=0,
+        doc="Expected payment for driving a stranger to a restaurant in 6 months"
+    )
+    exp_email_immediate = models.FloatField(
+        label="Expected payment for email review (immediate)",
+        min=0,
+        doc="Expected payment for reviewing a stranger's email today"
+    )
+    exp_email_distant = models.FloatField(
+        label="Expected payment for email review (distant)",
+        min=0,
+        doc="Expected payment for reviewing a stranger's email in 6 months"
+    )
+    exp_lending_immediate = models.FloatField(
+        label="Expected payment for lending (immediate)",
+        min=0,
+        doc="Expected payment for borrowing a stranger USD 10 today"
+    )
+    exp_lending_distant = models.FloatField(
+        label="Expected payment for lending (distant)",
+        min=0,
+        doc="Expected payment for borrowing a stranger USD 10 in 6 months"
+    )
+    exp_book_immediate = models.FloatField(
+        label="Expected payment for book suggestion (immediate)",
+        min=0,
+        doc="Expected payment for suggesting a book to a stranger today"
+    )
+    exp_book_distant = models.FloatField(
+        label="Expected payment for book suggestion (distant)",
+        min=0,
+        doc="Expected payment for suggesting a book to a stranger in 6 months"
+    )
+    
+    # PANAS Scale - 20 items measuring positive and negative affect
+    panas_interested = models.IntegerField(label="Interested", min=1, max=5)
+    panas_distressed = models.IntegerField(label="Distressed", min=1, max=5)
+    panas_excited = models.IntegerField(label="Excited", min=1, max=5)
+    panas_upset = models.IntegerField(label="Upset", min=1, max=5)
+    panas_strong = models.IntegerField(label="Strong", min=1, max=5)
+    panas_guilty = models.IntegerField(label="Guilty", min=1, max=5)
+    panas_scared = models.IntegerField(label="Scared", min=1, max=5)
+    panas_hostile = models.IntegerField(label="Hostile", min=1, max=5)
+    panas_enthusiastic = models.IntegerField(label="Enthusiastic", min=1, max=5)
+    panas_proud = models.IntegerField(label="Proud", min=1, max=5)
+    panas_irritable = models.IntegerField(label="Irritable", min=1, max=5)
+    panas_alert = models.IntegerField(label="Alert", min=1, max=5)
+    panas_ashamed = models.IntegerField(label="Ashamed", min=1, max=5)
+    panas_inspired = models.IntegerField(label="Inspired", min=1, max=5)
+    panas_nervous = models.IntegerField(label="Nervous", min=1, max=5)
+    panas_determined = models.IntegerField(label="Determined", min=1, max=5)
+    panas_attentive = models.IntegerField(label="Attentive", min=1, max=5)
+    panas_jittery = models.IntegerField(label="Jittery", min=1, max=5)
+    panas_active = models.IntegerField(label="Active", min=1, max=5)
+    panas_afraid = models.IntegerField(label="Afraid", min=1, max=5)
     # Risk identification - count and descriptions
     risk_count = models.IntegerField(
         initial=0,
@@ -180,7 +314,9 @@ class Player(BasePlayer):
     condition1_page_time = models.FloatField(doc="Time spent on condition 1 page in seconds")
     condition2_page_time = models.FloatField(doc="Time spent on condition 2 page in seconds")
     assessment_page_time = models.FloatField(doc="Time spent on assessment page in seconds")
+    bif_page_time = models.FloatField(doc="Time spent on BIF page in seconds")
     checks_page_time = models.FloatField(doc="Time spent on checks page in seconds")
+    panas_page_time = models.FloatField(doc="Time spent on PANAS page in seconds")
     controls_page_time = models.FloatField(doc="Time spent on controls page in seconds")
     demographics_page_time = models.FloatField(doc="Time spent on demographics page in seconds")
     thanks_page_time = models.FloatField(doc="Time spent on thanks page in seconds")
@@ -379,6 +515,8 @@ class Controls(Page):
         'blind_spot_detection',
         'narrative_accessibility',
         'risk_embodiment',
+        'manipulation_effort',
+        'manipulation_difficulty',
     ]
     
     @staticmethod
@@ -395,7 +533,7 @@ class Controls(Page):
     def before_next_page(player: Player, timeout_happened):
         player.controls_page_time = time.time() - player.participant._start_time
 
-class Checks(Page):
+class BIF(Page):
     form_model = 'player'
     form_fields = ['bif_score', 'bif_responses']
     
@@ -411,9 +549,85 @@ class Checks(Page):
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
-        player.checks_page_time = time.time() - player.participant._start_time
+        player.bif_page_time = time.time() - player.participant._start_time
         # Log BIF score
         print(f"Participant {player.participant.label}: BIF score = {player.bif_score}/25")
+
+class Checks(Page):
+    form_model = 'player'
+    form_fields = [
+        'risk_taking', 
+        'risk_avoidance',
+        'wtp_pizza_immediate',
+        'wtp_pizza_distant',
+        'wtp_genai_immediate',
+        'wtp_genai_distant',
+        'wtp_movie_immediate',
+        'wtp_movie_distant',
+        'wtp_book_immediate',
+        'wtp_book_distant',
+        'exp_driving_immediate',
+        'exp_driving_distant',
+        'exp_email_immediate',
+        'exp_email_distant',
+        'exp_lending_immediate',
+        'exp_lending_distant',
+        'exp_book_immediate',
+        'exp_book_distant'
+    ]
+    
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.passed_screening
+    
+    @staticmethod
+    def get_timeout_seconds(player: Player):
+        import time
+        player.participant._start_time = time.time()
+        return None
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        player.checks_page_time = time.time() - player.participant._start_time
+
+class PANAS(Page):
+    form_model = 'player'
+    form_fields = [
+        'panas_interested',
+        'panas_distressed',
+        'panas_excited',
+        'panas_upset',
+        'panas_strong',
+        'panas_guilty',
+        'panas_scared',
+        'panas_hostile',
+        'panas_enthusiastic',
+        'panas_proud',
+        'panas_irritable',
+        'panas_alert',
+        'panas_ashamed',
+        'panas_inspired',
+        'panas_nervous',
+        'panas_determined',
+        'panas_attentive',
+        'panas_jittery',
+        'panas_active',
+        'panas_afraid'
+    ]
+    
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.passed_screening
+    
+    @staticmethod
+    def get_timeout_seconds(player: Player):
+        import time
+        player.participant._start_time = time.time()
+        return None
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        player.panas_page_time = time.time() - player.participant._start_time
 
 class Demographics(Page):
     form_model = 'player'
@@ -488,7 +702,9 @@ page_sequence = [
     CLT_Condition,
     Assessment,
     Controls, 
+    BIF,
     Checks,
+    PANAS,
     Demographics,
     Thanks,
     Redirect

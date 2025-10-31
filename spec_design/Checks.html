@@ -1,418 +1,300 @@
-{% block title %}Behavior Identification Form{% endblock %}
+{% block title %}Additional Questions{% endblock %}
 
 {% block content %}
 
-<div class="container" style="max-width: 800px;">
-    <h4 class="mb-4">📋 Behavior Identification Form</h4>
+<div class="container" style="max-width: 900px;">
+    <!-- <h4 class="mb-4">📋 Additional Questions</h4> -->
     
-    <div class="alert alert-info">
-        <p>Any behavior can be described in many ways. For example, one person might describe a behavior as "writing things down" while another person might describe the same behavior as "getting organized".</p>
-        <p><strong>Below are 25 behaviors. For each behavior, please select the description (a or b) that best describes the behavior for you.</strong></p>
-    </div>
+    <p class="text-muted mb-4">Please answer the following questions about your willingness to take risks in business.</p>
     
     <form method="post">
         
-        <!-- Question 1 -->
-        <div class="card mb-3">
+        <!-- Question 1: Risk Taking -->
+        <div class="card mb-4">
             <div class="card-body">
-                <h6><strong>1. Making a list</strong></h6>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_1" value="1" id="q1a" required>
-                    <label class="form-check-label" for="q1a">a. Getting organized</label>
+                <h6 class="mb-3"><strong>How would you rate your own willingness to undertake risky business propositions compared to other individuals?</strong></h6>
+                
+                <div class="row text-center mb-2">
+                    <div class="col">
+                        <small class="text-muted">Extremely less willing</small>
+                    </div>
+                    <div class="col">
+                        <small class="text-muted">Much less willing</small>
+                    </div>
+                    <div class="col">
+                        <small class="text-muted">Less willing</small>
+                    </div>
+                    <div class="col">
+                        <small class="text-muted">About the same</small>
+                    </div>
+                    <div class="col">
+                        <small class="text-muted">More willing</small>
+                    </div>
+                    <div class="col">
+                        <small class="text-muted">Much more willing</small>
+                    </div>
+                    <div class="col">
+                        <small class="text-muted">Extremely more willing</small>
+                    </div>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_1" value="0" id="q1b">
-                    <label class="form-check-label" for="q1b">b. Writing things down</label>
+                
+                <div class="row text-center">
+                    <div class="col">
+                        <input type="radio" name="risk_taking" value="1" id="rt1" required>
+                        <label for="rt1" class="d-block">1</label>
+                    </div>
+                    <div class="col">
+                        <input type="radio" name="risk_taking" value="2" id="rt2">
+                        <label for="rt2" class="d-block">2</label>
+                    </div>
+                    <div class="col">
+                        <input type="radio" name="risk_taking" value="3" id="rt3">
+                        <label for="rt3" class="d-block">3</label>
+                    </div>
+                    <div class="col">
+                        <input type="radio" name="risk_taking" value="4" id="rt4">
+                        <label for="rt4" class="d-block">4</label>
+                    </div>
+                    <div class="col">
+                        <input type="radio" name="risk_taking" value="5" id="rt5">
+                        <label for="rt5" class="d-block">5</label>
+                    </div>
+                    <div class="col">
+                        <input type="radio" name="risk_taking" value="6" id="rt6">
+                        <label for="rt6" class="d-block">6</label>
+                    </div>
+                    <div class="col">
+                        <input type="radio" name="risk_taking" value="7" id="rt7">
+                        <label for="rt7" class="d-block">7</label>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Question 2 -->
-        <div class="card mb-3">
+        <!-- Question 2: Risk Avoidance (Reverse Scaled) -->
+        <div class="card mb-4">
             <div class="card-body">
-                <h6><strong>2. Reading</strong></h6>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_2" value="0" id="q2a" required>
-                    <label class="form-check-label" for="q2a">a. Following lines of print</label>
+                <h6 class="mb-3"><strong>How would you rate your own willingness to avoid risky business propositions compared to other individuals?</strong></h6>
+                
+                <div class="row text-center mb-2">
+                    <div class="col">
+                        <small class="text-muted">Extremely less willing</small>
+                    </div>
+                    <div class="col">
+                        <small class="text-muted">Much less willing</small>
+                    </div>
+                    <div class="col">
+                        <small class="text-muted">Less willing</small>
+                    </div>
+                    <div class="col">
+                        <small class="text-muted">About the same</small>
+                    </div>
+                    <div class="col">
+                        <small class="text-muted">More willing</small>
+                    </div>
+                    <div class="col">
+                        <small class="text-muted">Much more willing</small>
+                    </div>
+                    <div class="col">
+                        <small class="text-muted">Extremely more willing</small>
+                    </div>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_2" value="1" id="q2b">
-                    <label class="form-check-label" for="q2b">b. Gaining knowledge</label>
+                
+                <div class="row text-center">
+                    <div class="col">
+                        <input type="radio" name="risk_avoidance" value="1" id="ra1" required>
+                        <label for="ra1" class="d-block">1</label>
+                    </div>
+                    <div class="col">
+                        <input type="radio" name="risk_avoidance" value="2" id="ra2">
+                        <label for="ra2" class="d-block">2</label>
+                    </div>
+                    <div class="col">
+                        <input type="radio" name="risk_avoidance" value="3" id="ra3">
+                        <label for="ra3" class="d-block">3</label>
+                    </div>
+                    <div class="col">
+                        <input type="radio" name="risk_avoidance" value="4" id="ra4">
+                        <label for="ra4" class="d-block">4</label>
+                    </div>
+                    <div class="col">
+                        <input type="radio" name="risk_avoidance" value="5" id="ra5">
+                        <label for="ra5" class="d-block">5</label>
+                    </div>
+                    <div class="col">
+                        <input type="radio" name="risk_avoidance" value="6" id="ra6">
+                        <label for="ra6" class="d-block">6</label>
+                    </div>
+                    <div class="col">
+                        <input type="radio" name="risk_avoidance" value="7" id="ra7">
+                        <label for="ra7" class="d-block">7</label>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Question 3 -->
-        <div class="card mb-3">
+        <!-- Willingness to Pay Questions -->
+        <div class="card mb-4">
             <div class="card-body">
-                <h6><strong>3. Joining the Army</strong></h6>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_3" value="1" id="q3a" required>
-                    <label class="form-check-label" for="q3a">a. Helping the Nation's defense</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_3" value="0" id="q3b">
-                    <label class="form-check-label" for="q3b">b. Signing up</label>
-                </div>
+                <!-- <h5 class="mb-4"><strong>Willingness to Pay</strong></h5> -->
+                <p class="mb-4"><b>How much would you be willing to pay for the following products?</b></p>
+                
+                <table class="table table-bordered">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Product</th>
+                            <th class="text-center">Immediate Purchase<br><small class="text-muted">(today)</small></th>
+                            <th class="text-center">Distant Purchase<br><small class="text-muted">(in 6 months)</small></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Pizza meal at restaurant</strong></td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="wtp_pizza_immediate" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="wtp_pizza_distant" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Gen-AI subscription</strong><br><small class="text-muted">(monthly)</small></td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="wtp_genai_immediate" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="wtp_genai_distant" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Movie at cinema</strong></td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="wtp_movie_immediate" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="wtp_movie_distant" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Book at the bookstore</strong></td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="wtp_book_immediate" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="wtp_book_distant" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
-        <!-- Question 4 -->
-        <div class="card mb-3">
+        <!-- Expected Payment Questions -->
+        <div class="card mb-4">
             <div class="card-body">
-                <h6><strong>4. Washing clothes</strong></h6>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_4" value="1" id="q4a" required>
-                    <label class="form-check-label" for="q4a">a. Removing odors from clothes</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_4" value="0" id="q4b">
-                    <label class="form-check-label" for="q4b">b. Putting clothes into the machine</label>
-                </div>
+                <!-- <h5 class="mb-4"><strong>Expected Payment</strong></h5> -->
+                <p class="mb-4"><b>How much would you expect to get for providing the following services?</b></p>
+                
+                <table class="table table-bordered">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Service</th>
+                            <th class="text-center">Immediate Service<br><small class="text-muted">(today)</small></th>
+                            <th class="text-center">Distant Service<br><small class="text-muted">(in 6 months)</small></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Driving a stranger to a restaurant</strong></td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="exp_driving_immediate" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="exp_driving_distant" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Reviewing a stranger's email</strong></td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="exp_email_immediate" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="exp_email_distant" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Borrowing a stranger USD 10 for a movie ticket</strong></td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="exp_lending_immediate" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="exp_lending_distant" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Suggesting a book to a stranger</strong></td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="exp_book_immediate" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="exp_book_distant" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
-
-        <!-- Question 5 -->
-        <div class="card mb-3">
-            <div class="card-body">
-                <h6><strong>5. Picking an apple</strong></h6>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_5" value="1" id="q5a" required>
-                    <label class="form-check-label" for="q5a">a. Getting something to eat</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_5" value="0" id="q5b">
-                    <label class="form-check-label" for="q5b">b. Pulling an apple off a branch</label>
-                </div>
-            </div>
-        </div>
-
-        <!-- Question 6 -->
-        <div class="card mb-3">
-            <div class="card-body">
-                <h6><strong>6. Chopping down a tree</strong></h6>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_6" value="0" id="q6a" required>
-                    <label class="form-check-label" for="q6a">a. Wielding an axe</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_6" value="1" id="q6b">
-                    <label class="form-check-label" for="q6b">b. Getting firewood</label>
-                </div>
-            </div>
-        </div>
-
-        <!-- Question 7 -->
-        <div class="card mb-3">
-            <div class="card-body">
-                <h6><strong>7. Measuring a room for carpeting</strong></h6>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_7" value="1" id="q7a" required>
-                    <label class="form-check-label" for="q7a">a. Getting ready to remodel</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_7" value="0" id="q7b">
-                    <label class="form-check-label" for="q7b">b. Using a yardstick</label>
-                </div>
-            </div>
-        </div>
-
-        <!-- Question 8 -->
-        <div class="card mb-3">
-            <div class="card-body">
-                <h6><strong>8. Cleaning the house</strong></h6>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_8" value="1" id="q8a" required>
-                    <label class="form-check-label" for="q8a">a. Showing one's cleanliness</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_8" value="0" id="q8b">
-                    <label class="form-check-label" for="q8b">b. Vacuuming the floor</label>
-                </div>
-            </div>
-        </div>
-
-        <!-- Question 9 -->
-        <div class="card mb-3">
-            <div class="card-body">
-                <h6><strong>9. Painting a room</strong></h6>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_9" value="0" id="q9a" required>
-                    <label class="form-check-label" for="q9a">a. Applying brush strokes</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_9" value="1" id="q9b">
-                    <label class="form-check-label" for="q9b">b. Making the room look fresh</label>
-                </div>
-            </div>
-        </div>
-
-        <!-- Question 10 -->
-        <div class="card mb-3">
-            <div class="card-body">
-                <h6><strong>10. Paying the rent</strong></h6>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_10" value="1" id="q10a" required>
-                    <label class="form-check-label" for="q10a">a. Maintaining a place to live</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_10" value="0" id="q10b">
-                    <label class="form-check-label" for="q10b">b. Writing a check</label>
-                </div>
-            </div>
-        </div>
-
-        <!-- Question 11 -->
-        <div class="card mb-3">
-            <div class="card-body">
-                <h6><strong>11. Caring for houseplants</strong></h6>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_11" value="0" id="q11a" required>
-                    <label class="form-check-label" for="q11a">a. Watering plants</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_11" value="1" id="q11b">
-                    <label class="form-check-label" for="q11b">b. Making the room look nice</label>
-                </div>
-            </div>
-        </div>
-
-        <!-- Question 12 -->
-        <div class="card mb-3">
-            <div class="card-body">
-                <h6><strong>12. Locking a door</strong></h6>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_12" value="0" id="q12a" required>
-                    <label class="form-check-label" for="q12a">a. Putting a key in the lock</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_12" value="1" id="q12b">
-                    <label class="form-check-label" for="q12b">b. Securing the house</label>
-                </div>
-            </div>
-        </div>
-
-        <!-- Question 13 -->
-        <div class="card mb-3">
-            <div class="card-body">
-                <h6><strong>13. Voting</strong></h6>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_13" value="1" id="q13a" required>
-                    <label class="form-check-label" for="q13a">a. Influencing the election</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_13" value="0" id="q13b">
-                    <label class="form-check-label" for="q13b">b. Marking a ballot</label>
-                </div>
-            </div>
-        </div>
-
-        <!-- Question 14 -->
-        <div class="card mb-3">
-            <div class="card-body">
-                <h6><strong>14. Climbing a tree</strong></h6>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_14" value="1" id="q14a" required>
-                    <label class="form-check-label" for="q14a">a. Getting a good view</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_14" value="0" id="q14b">
-                    <label class="form-check-label" for="q14b">b. Holding on to branches</label>
-                </div>
-            </div>
-        </div>
-
-        <!-- Question 15 -->
-        <div class="card mb-3">
-            <div class="card-body">
-                <h6><strong>15. Filling out a personality test</strong></h6>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_15" value="0" id="q15a" required>
-                    <label class="form-check-label" for="q15a">a. Answering questions</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_15" value="1" id="q15b">
-                    <label class="form-check-label" for="q15b">b. Revealing what you're like</label>
-                </div>
-            </div>
-        </div>
-
-        <!-- Question 16 -->
-        <div class="card mb-3">
-            <div class="card-body">
-                <h6><strong>16. Toothbrushing</strong></h6>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_16" value="1" id="q16a" required>
-                    <label class="form-check-label" for="q16a">a. Preventing tooth decay</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_16" value="0" id="q16b">
-                    <label class="form-check-label" for="q16b">b. Moving a brush around in one's mouth</label>
-                </div>
-            </div>
-        </div>
-
-        <!-- Question 17 -->
-        <div class="card mb-3">
-            <div class="card-body">
-                <h6><strong>17. Taking a test</strong></h6>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_17" value="0" id="q17a" required>
-                    <label class="form-check-label" for="q17a">a. Answering questions</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_17" value="1" id="q17b">
-                    <label class="form-check-label" for="q17b">b. Showing one's knowledge</label>
-                </div>
-            </div>
-        </div>
-
-        <!-- Question 18 -->
-        <div class="card mb-3">
-            <div class="card-body">
-                <h6><strong>18. Greeting someone</strong></h6>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_18" value="0" id="q18a" required>
-                    <label class="form-check-label" for="q18a">a. Saying hello</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_18" value="1" id="q18b">
-                    <label class="form-check-label" for="q18b">b. Showing friendliness</label>
-                </div>
-            </div>
-        </div>
-
-        <!-- Question 19 -->
-        <div class="card mb-3">
-            <div class="card-body">
-                <h6><strong>19. Resisting temptation</strong></h6>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_19" value="0" id="q19a" required>
-                    <label class="form-check-label" for="q19a">a. Saying "no"</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_19" value="1" id="q19b">
-                    <label class="form-check-label" for="q19b">b. Showing moral courage</label>
-                </div>
-            </div>
-        </div>
-
-        <!-- Question 20 -->
-        <div class="card mb-3">
-            <div class="card-body">
-                <h6><strong>20. Eating</strong></h6>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_20" value="1" id="q20a" required>
-                    <label class="form-check-label" for="q20a">a. Getting nutrition</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_20" value="0" id="q20b">
-                    <label class="form-check-label" for="q20b">b. Chewing and swallowing</label>
-                </div>
-            </div>
-        </div>
-
-        <!-- Question 21 -->
-        <div class="card mb-3">
-            <div class="card-body">
-                <h6><strong>21. Growing a garden</strong></h6>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_21" value="0" id="q21a" required>
-                    <label class="form-check-label" for="q21a">a. Planting seeds</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_21" value="1" id="q21b">
-                    <label class="form-check-label" for="q21b">b. Getting fresh vegetables</label>
-                </div>
-            </div>
-        </div>
-
-        <!-- Question 22 -->
-        <div class="card mb-3">
-            <div class="card-body">
-                <h6><strong>22. Traveling by car</strong></h6>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_22" value="0" id="q22a" required>
-                    <label class="form-check-label" for="q22a">a. Following a map</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_22" value="1" id="q22b">
-                    <label class="form-check-label" for="q22b">b. Seeing countryside</label>
-                </div>
-            </div>
-        </div>
-
-        <!-- Question 23 -->
-        <div class="card mb-3">
-            <div class="card-body">
-                <h6><strong>23. Having a cavity filled</strong></h6>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_23" value="1" id="q23a" required>
-                    <label class="form-check-label" for="q23a">a. Protecting your teeth</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_23" value="0" id="q23b">
-                    <label class="form-check-label" for="q23b">b. Going to the dentist</label>
-                </div>
-            </div>
-        </div>
-
-        <!-- Question 24 -->
-        <div class="card mb-3">
-            <div class="card-body">
-                <h6><strong>24. Talking to a child</strong></h6>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_24" value="1" id="q24a" required>
-                    <label class="form-check-label" for="q24a">a. Teaching a child something</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_24" value="0" id="q24b">
-                    <label class="form-check-label" for="q24b">b. Using simple words</label>
-                </div>
-            </div>
-        </div>
-
-        <!-- Question 25 -->
-        <div class="card mb-3">
-            <div class="card-body">
-                <h6><strong>25. Pushing a doorbell</strong></h6>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_25" value="0" id="q25a" required>
-                    <label class="form-check-label" for="q25a">a. Moving a finger</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="bif_25" value="1" id="q25b">
-                    <label class="form-check-label" for="q25b">b. Seeing if someone's home</label>
-                </div>
-            </div>
-        </div>
-
-        <!-- Hidden fields to store calculated score and responses -->
-        <input type="hidden" name="bif_score" id="bif_score" value="0">
-        <input type="hidden" name="bif_responses" id="bif_responses" value="{}">
         
         {{ next_button }}
     </form>
 </div>
-
-<script>
-// Calculate BIF score before form submission
-document.querySelector('form').addEventListener('submit', function() {
-    let score = 0;
-    let responses = {};
-    
-    for (let i = 1; i <= 25; i++) {
-        const selected = document.querySelector('input[name="bif_' + i + '"]:checked');
-        if (selected) {
-            const value = parseInt(selected.value);
-            score += value;
-            responses[i] = value;
-        }
-    }
-    
-    document.getElementById('bif_score').value = score;
-    document.getElementById('bif_responses').value = JSON.stringify(responses);
-});
-</script>
 
 {% endblock %}

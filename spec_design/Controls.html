@@ -158,6 +158,54 @@
         </div>
         {{ formfield_errors 'risk_embodiment' }}    </div>
 
+    <div class="question-box">
+        <p class="mb-3">
+            <span class="question-number">4</span>
+            How much effort did it take to complete the manipulation task?
+        </p>
+        <div class="likert-scale">
+            {% for i in range(1, 8) %}
+                <div class="scale-option">
+                    <input type="radio" name="manipulation_effort" value="{{ i }}" id="q4_{{ i }}" required>
+                    <label class="radio-label" for="q4_{{ i }}">
+                        {% if i == 1 %}Extremely<br>effortless{% endif %}
+                        {% if i == 2 %}Much less<br>effort{% endif %}
+                        {% if i == 3 %}Less<br>effort{% endif %}
+                        {% if i == 4 %}About the<br>same{% endif %}
+                        {% if i == 5 %}More<br>effort{% endif %}
+                        {% if i == 6 %}Much more<br>effort{% endif %}
+                        {% if i == 7 %}Extremely<br>effortful{% endif %}
+                    </label>
+                </div>
+            {% endfor %}
+        </div>
+        {{ formfield_errors 'manipulation_effort' }}
+    </div>
+
+    <div class="question-box">
+        <p class="mb-3">
+            <span class="question-number">5</span>
+            How difficult was it to complete the manipulation task?
+        </p>
+        <div class="likert-scale">
+            {% for i in range(1, 8) %}
+                <div class="scale-option">
+                    <input type="radio" name="manipulation_difficulty" value="{{ i }}" id="q5_{{ i }}" required>
+                    <label class="radio-label" for="q5_{{ i }}">
+                        {% if i == 1 %}Extremely<br>easy{% endif %}
+                        {% if i == 2 %}Much<br>easier{% endif %}
+                        {% if i == 3 %}Somewhat<br>easier{% endif %}
+                        {% if i == 4 %}About the<br>same{% endif %}
+                        {% if i == 5 %}Somewhat<br>harder{% endif %}
+                        {% if i == 6 %}Much<br>harder{% endif %}
+                        {% if i == 7 %}Extremely<br>difficult{% endif %}
+                    </label>
+                </div>
+            {% endfor %}
+        </div>
+        {{ formfield_errors 'manipulation_difficulty' }}
+    </div>
+
     <div class="text-center mt-4">
         {{ next_button }}
     </div>

@@ -1,0 +1,418 @@
+{% block title %}Behavior Identification Form{% endblock %}
+
+{% block content %}
+
+<div class="container" style="max-width: 800px;">
+    <h4 class="mb-4">📋 Behavior Identification Form</h4>
+    
+    <div class="alert alert-info">
+        <p>Any behavior can be described in many ways. For example, one person might describe a behavior as "writing things down" while another person might describe the same behavior as "getting organized".</p>
+        <p><strong>Below are 25 behaviors. For each behavior, please select the description (a or b) that best describes the behavior for you.</strong></p>
+    </div>
+    
+    <form method="post">
+        
+        <!-- Question 1 -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6><strong>1. Making a list</strong></h6>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_1" value="1" id="q1a" required>
+                    <label class="form-check-label" for="q1a">a. Getting organized</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_1" value="0" id="q1b">
+                    <label class="form-check-label" for="q1b">b. Writing things down</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6><strong>2. Reading</strong></h6>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_2" value="0" id="q2a" required>
+                    <label class="form-check-label" for="q2a">a. Following lines of print</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_2" value="1" id="q2b">
+                    <label class="form-check-label" for="q2b">b. Gaining knowledge</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6><strong>3. Joining the Army</strong></h6>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_3" value="1" id="q3a" required>
+                    <label class="form-check-label" for="q3a">a. Helping the Nation's defense</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_3" value="0" id="q3b">
+                    <label class="form-check-label" for="q3b">b. Signing up</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6><strong>4. Washing clothes</strong></h6>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_4" value="1" id="q4a" required>
+                    <label class="form-check-label" for="q4a">a. Removing odors from clothes</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_4" value="0" id="q4b">
+                    <label class="form-check-label" for="q4b">b. Putting clothes into the machine</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6><strong>5. Picking an apple</strong></h6>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_5" value="1" id="q5a" required>
+                    <label class="form-check-label" for="q5a">a. Getting something to eat</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_5" value="0" id="q5b">
+                    <label class="form-check-label" for="q5b">b. Pulling an apple off a branch</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6><strong>6. Chopping down a tree</strong></h6>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_6" value="0" id="q6a" required>
+                    <label class="form-check-label" for="q6a">a. Wielding an axe</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_6" value="1" id="q6b">
+                    <label class="form-check-label" for="q6b">b. Getting firewood</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6><strong>7. Measuring a room for carpeting</strong></h6>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_7" value="1" id="q7a" required>
+                    <label class="form-check-label" for="q7a">a. Getting ready to remodel</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_7" value="0" id="q7b">
+                    <label class="form-check-label" for="q7b">b. Using a yardstick</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 8 -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6><strong>8. Cleaning the house</strong></h6>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_8" value="1" id="q8a" required>
+                    <label class="form-check-label" for="q8a">a. Showing one's cleanliness</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_8" value="0" id="q8b">
+                    <label class="form-check-label" for="q8b">b. Vacuuming the floor</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 9 -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6><strong>9. Painting a room</strong></h6>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_9" value="0" id="q9a" required>
+                    <label class="form-check-label" for="q9a">a. Applying brush strokes</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_9" value="1" id="q9b">
+                    <label class="form-check-label" for="q9b">b. Making the room look fresh</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 10 -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6><strong>10. Paying the rent</strong></h6>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_10" value="1" id="q10a" required>
+                    <label class="form-check-label" for="q10a">a. Maintaining a place to live</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_10" value="0" id="q10b">
+                    <label class="form-check-label" for="q10b">b. Writing a check</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 11 -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6><strong>11. Caring for houseplants</strong></h6>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_11" value="0" id="q11a" required>
+                    <label class="form-check-label" for="q11a">a. Watering plants</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_11" value="1" id="q11b">
+                    <label class="form-check-label" for="q11b">b. Making the room look nice</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 12 -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6><strong>12. Locking a door</strong></h6>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_12" value="0" id="q12a" required>
+                    <label class="form-check-label" for="q12a">a. Putting a key in the lock</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_12" value="1" id="q12b">
+                    <label class="form-check-label" for="q12b">b. Securing the house</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 13 -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6><strong>13. Voting</strong></h6>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_13" value="1" id="q13a" required>
+                    <label class="form-check-label" for="q13a">a. Influencing the election</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_13" value="0" id="q13b">
+                    <label class="form-check-label" for="q13b">b. Marking a ballot</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 14 -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6><strong>14. Climbing a tree</strong></h6>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_14" value="1" id="q14a" required>
+                    <label class="form-check-label" for="q14a">a. Getting a good view</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_14" value="0" id="q14b">
+                    <label class="form-check-label" for="q14b">b. Holding on to branches</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 15 -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6><strong>15. Filling out a personality test</strong></h6>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_15" value="0" id="q15a" required>
+                    <label class="form-check-label" for="q15a">a. Answering questions</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_15" value="1" id="q15b">
+                    <label class="form-check-label" for="q15b">b. Revealing what you're like</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 16 -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6><strong>16. Toothbrushing</strong></h6>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_16" value="1" id="q16a" required>
+                    <label class="form-check-label" for="q16a">a. Preventing tooth decay</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_16" value="0" id="q16b">
+                    <label class="form-check-label" for="q16b">b. Moving a brush around in one's mouth</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 17 -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6><strong>17. Taking a test</strong></h6>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_17" value="0" id="q17a" required>
+                    <label class="form-check-label" for="q17a">a. Answering questions</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_17" value="1" id="q17b">
+                    <label class="form-check-label" for="q17b">b. Showing one's knowledge</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 18 -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6><strong>18. Greeting someone</strong></h6>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_18" value="0" id="q18a" required>
+                    <label class="form-check-label" for="q18a">a. Saying hello</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_18" value="1" id="q18b">
+                    <label class="form-check-label" for="q18b">b. Showing friendliness</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 19 -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6><strong>19. Resisting temptation</strong></h6>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_19" value="0" id="q19a" required>
+                    <label class="form-check-label" for="q19a">a. Saying "no"</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_19" value="1" id="q19b">
+                    <label class="form-check-label" for="q19b">b. Showing moral courage</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 20 -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6><strong>20. Eating</strong></h6>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_20" value="1" id="q20a" required>
+                    <label class="form-check-label" for="q20a">a. Getting nutrition</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_20" value="0" id="q20b">
+                    <label class="form-check-label" for="q20b">b. Chewing and swallowing</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 21 -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6><strong>21. Growing a garden</strong></h6>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_21" value="0" id="q21a" required>
+                    <label class="form-check-label" for="q21a">a. Planting seeds</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_21" value="1" id="q21b">
+                    <label class="form-check-label" for="q21b">b. Getting fresh vegetables</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 22 -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6><strong>22. Traveling by car</strong></h6>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_22" value="0" id="q22a" required>
+                    <label class="form-check-label" for="q22a">a. Following a map</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_22" value="1" id="q22b">
+                    <label class="form-check-label" for="q22b">b. Seeing countryside</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 23 -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6><strong>23. Having a cavity filled</strong></h6>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_23" value="1" id="q23a" required>
+                    <label class="form-check-label" for="q23a">a. Protecting your teeth</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_23" value="0" id="q23b">
+                    <label class="form-check-label" for="q23b">b. Going to the dentist</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 24 -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6><strong>24. Talking to a child</strong></h6>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_24" value="1" id="q24a" required>
+                    <label class="form-check-label" for="q24a">a. Teaching a child something</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_24" value="0" id="q24b">
+                    <label class="form-check-label" for="q24b">b. Using simple words</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 25 -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6><strong>25. Pushing a doorbell</strong></h6>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_25" value="0" id="q25a" required>
+                    <label class="form-check-label" for="q25a">a. Moving a finger</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bif_25" value="1" id="q25b">
+                    <label class="form-check-label" for="q25b">b. Seeing if someone's home</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hidden fields to store calculated score and responses -->
+        <input type="hidden" name="bif_score" id="bif_score" value="0">
+        <input type="hidden" name="bif_responses" id="bif_responses" value="{}">
+        
+        {{ next_button }}
+    </form>
+</div>
+
+<script>
+// Calculate BIF score before form submission
+document.querySelector('form').addEventListener('submit', function() {
+    let score = 0;
+    let responses = {};
+    
+    for (let i = 1; i <= 25; i++) {
+        const selected = document.querySelector('input[name="bif_' + i + '"]:checked');
+        if (selected) {
+            const value = parseInt(selected.value);
+            score += value;
+            responses[i] = value;
+        }
+    }
+    
+    document.getElementById('bif_score').value = score;
+    document.getElementById('bif_responses').value = JSON.stringify(responses);
+});
+</script>
+
+{% endblock %}

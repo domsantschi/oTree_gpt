@@ -1,0 +1,432 @@
+{% block title %}PANAS Scale{% endblock %}
+
+{% block content %}
+
+<div class="container" style="max-width: 900px;">
+    <h4 class="mb-4">📋 Feelings and Emotions</h4>
+    
+    <div class="alert alert-info mb-4">
+        <p class="mb-2">This scale consists of a number of words that describe different feelings and emotions.</p>
+        <p class="mb-0"><strong>Please read each item and then mark the appropriate answer. Indicate to what extent you feel this way right now, that is, at the present moment.</strong></p>
+    </div>
+    
+    <form method="post">
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row text-center mb-3 bg-light py-2">
+                    <div class="col-3"><strong>Feeling/Emotion</strong></div>
+                    <div class="col">Very slightly<br>or not at all<br><small class="text-muted">1</small></div>
+                    <div class="col">A little<br><br><small class="text-muted">2</small></div>
+                    <div class="col">Moderately<br><br><small class="text-muted">3</small></div>
+                    <div class="col">Quite a bit<br><br><small class="text-muted">4</small></div>
+                    <div class="col">Extremely<br><br><small class="text-muted">5</small></div>
+                </div>
+                
+                <!-- Interested -->
+                <div class="row py-2 border-bottom align-items-center">
+                    <div class="col-3"><strong>Interested</strong></div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_interested" value="1" required>
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_interested" value="2">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_interested" value="3">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_interested" value="4">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_interested" value="5">
+                    </div>
+                </div>
+                
+                <!-- Distressed -->
+                <div class="row py-2 border-bottom align-items-center">
+                    <div class="col-3"><strong>Distressed</strong></div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_distressed" value="1" required>
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_distressed" value="2">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_distressed" value="3">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_distressed" value="4">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_distressed" value="5">
+                    </div>
+                </div>
+                
+                <!-- Excited -->
+                <div class="row py-2 border-bottom align-items-center">
+                    <div class="col-3"><strong>Excited</strong></div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_excited" value="1" required>
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_excited" value="2">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_excited" value="3">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_excited" value="4">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_excited" value="5">
+                    </div>
+                </div>
+                
+                <!-- Upset -->
+                <div class="row py-2 border-bottom align-items-center">
+                    <div class="col-3"><strong>Upset</strong></div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_upset" value="1" required>
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_upset" value="2">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_upset" value="3">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_upset" value="4">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_upset" value="5">
+                    </div>
+                </div>
+                
+                <!-- Strong -->
+                <div class="row py-2 border-bottom align-items-center">
+                    <div class="col-3"><strong>Strong</strong></div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_strong" value="1" required>
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_strong" value="2">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_strong" value="3">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_strong" value="4">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_strong" value="5">
+                    </div>
+                </div>
+                
+                <!-- Guilty -->
+                <div class="row py-2 border-bottom align-items-center">
+                    <div class="col-3"><strong>Guilty</strong></div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_guilty" value="1" required>
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_guilty" value="2">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_guilty" value="3">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_guilty" value="4">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_guilty" value="5">
+                    </div>
+                </div>
+                
+                <!-- Scared -->
+                <div class="row py-2 border-bottom align-items-center">
+                    <div class="col-3"><strong>Scared</strong></div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_scared" value="1" required>
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_scared" value="2">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_scared" value="3">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_scared" value="4">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_scared" value="5">
+                    </div>
+                </div>
+                
+                <!-- Hostile -->
+                <div class="row py-2 border-bottom align-items-center">
+                    <div class="col-3"><strong>Hostile</strong></div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_hostile" value="1" required>
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_hostile" value="2">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_hostile" value="3">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_hostile" value="4">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_hostile" value="5">
+                    </div>
+                </div>
+                
+                <!-- Enthusiastic -->
+                <div class="row py-2 border-bottom align-items-center">
+                    <div class="col-3"><strong>Enthusiastic</strong></div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_enthusiastic" value="1" required>
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_enthusiastic" value="2">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_enthusiastic" value="3">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_enthusiastic" value="4">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_enthusiastic" value="5">
+                    </div>
+                </div>
+                
+                <!-- Proud -->
+                <div class="row py-2 border-bottom align-items-center">
+                    <div class="col-3"><strong>Proud</strong></div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_proud" value="1" required>
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_proud" value="2">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_proud" value="3">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_proud" value="4">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_proud" value="5">
+                    </div>
+                </div>
+                
+                <!-- Irritable -->
+                <div class="row py-2 border-bottom align-items-center">
+                    <div class="col-3"><strong>Irritable</strong></div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_irritable" value="1" required>
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_irritable" value="2">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_irritable" value="3">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_irritable" value="4">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_irritable" value="5">
+                    </div>
+                </div>
+                
+                <!-- Alert -->
+                <div class="row py-2 border-bottom align-items-center">
+                    <div class="col-3"><strong>Alert</strong></div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_alert" value="1" required>
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_alert" value="2">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_alert" value="3">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_alert" value="4">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_alert" value="5">
+                    </div>
+                </div>
+                
+                <!-- Ashamed -->
+                <div class="row py-2 border-bottom align-items-center">
+                    <div class="col-3"><strong>Ashamed</strong></div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_ashamed" value="1" required>
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_ashamed" value="2">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_ashamed" value="3">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_ashamed" value="4">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_ashamed" value="5">
+                    </div>
+                </div>
+                
+                <!-- Inspired -->
+                <div class="row py-2 border-bottom align-items-center">
+                    <div class="col-3"><strong>Inspired</strong></div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_inspired" value="1" required>
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_inspired" value="2">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_inspired" value="3">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_inspired" value="4">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_inspired" value="5">
+                    </div>
+                </div>
+                
+                <!-- Nervous -->
+                <div class="row py-2 border-bottom align-items-center">
+                    <div class="col-3"><strong>Nervous</strong></div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_nervous" value="1" required>
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_nervous" value="2">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_nervous" value="3">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_nervous" value="4">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_nervous" value="5">
+                    </div>
+                </div>
+                
+                <!-- Determined -->
+                <div class="row py-2 border-bottom align-items-center">
+                    <div class="col-3"><strong>Determined</strong></div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_determined" value="1" required>
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_determined" value="2">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_determined" value="3">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_determined" value="4">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_determined" value="5">
+                    </div>
+                </div>
+                
+                <!-- Attentive -->
+                <div class="row py-2 border-bottom align-items-center">
+                    <div class="col-3"><strong>Attentive</strong></div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_attentive" value="1" required>
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_attentive" value="2">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_attentive" value="3">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_attentive" value="4">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_attentive" value="5">
+                    </div>
+                </div>
+                
+                <!-- Jittery -->
+                <div class="row py-2 border-bottom align-items-center">
+                    <div class="col-3"><strong>Jittery</strong></div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_jittery" value="1" required>
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_jittery" value="2">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_jittery" value="3">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_jittery" value="4">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_jittery" value="5">
+                    </div>
+                </div>
+                
+                <!-- Active -->
+                <div class="row py-2 border-bottom align-items-center">
+                    <div class="col-3"><strong>Active</strong></div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_active" value="1" required>
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_active" value="2">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_active" value="3">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_active" value="4">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_active" value="5">
+                    </div>
+                </div>
+                
+                <!-- Afraid -->
+                <div class="row py-2 align-items-center">
+                    <div class="col-3"><strong>Afraid</strong></div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_afraid" value="1" required>
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_afraid" value="2">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_afraid" value="3">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_afraid" value="4">
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" name="panas_afraid" value="5">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        {{ next_button }}
+    </form>
+</div>
+
+{% endblock %}
