@@ -1,0 +1,120 @@
+{{ block title }}<span style="display: none;">Post-Task Questions</span>{{ endblock }}
+
+{{ block content }}
+
+<style>
+    .checks-container {
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 25px;
+        background: linear-gradient(to right, #ffffff, #f8f9fa);
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .question-box {
+        border-left: 4px solid #007bff;
+        padding: 20px;
+        background-color: #f8f9fa;
+        margin: 20px 0;
+        transition: transform 0.2s;
+    }
+    
+    .question-box:hover {
+        transform: translateX(5px);
+    }
+    
+    .radio-group {
+        margin: 15px 0;
+        padding-left: 20px;
+    }
+    
+    .radio-option {
+        display: flex;
+        align-items: center;
+        margin: 10px 0;
+        padding: 10px;
+        border-radius: 5px;
+        transition: background-color 0.2s;
+    }
+    
+    .radio-option:hover {
+        background-color: rgba(0, 123, 255, 0.05);
+    }
+    
+    .radio-option input[type="radio"] {
+        margin-right: 10px;
+        transform: scale(1.2);
+    }
+    
+    .question-number {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        background-color: #007bff;
+        color: white;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 24px;
+        margin-right: 10px;
+        font-weight: bold;
+    }
+
+    .error-message {
+        color: #dc3545;
+        font-size: 0.9em;
+        margin-top: 5px;
+        padding-left: 20px;
+    }
+</style>
+
+<div class="checks-container">
+    <div class="mb-4">
+        <h4>📋 Verification Questions</h4>
+        <p class="text-muted">Please answer these quick questions about your experience during the task.</p>
+    </div>
+
+    <!-- Time Horizon Check -->
+    <div class="question-box">
+        <p class="mb-3">
+            <span class="question-number">1</span>
+            Which of the following describes the <b>time horizon</b> of the risks you assessed?
+        </p>
+        <div class="radio-group">
+            <label class="radio-option">
+                <input type="radio" name="time_horizon" value="Near future risks" required>
+                The risks focused on <b>&nbsp;near future (first few days after product launch)&nbsp;</b> ⏱️
+            </label>
+            <label class="radio-option">
+                <input type="radio" name="time_horizon" value="Distant future risks">
+                The risks focused on <b>&nbsp;distant future (sometime in the distant future)&nbsp;</b> 🔭
+            </label>
+        </div>
+        {{ formfield_errors 'time_horizon' }}
+    </div>
+
+    <!-- Video Check -->
+    <div class="question-box">
+        <p class="mb-3">
+            <span class="question-number">2</span>
+            Did you see a video demonstration of the End-of-Life Care Machine during the study?
+        </p>
+        <div class="radio-group">
+            <label class="radio-option">
+                <input type="radio" name="speculative_design" value="Speculative Design Absent" required>
+                No, I  <b>&nbsp;did not see a video&nbsp;</b> ❌
+            </label>
+            <label class="radio-option">
+                <input type="radio" name="speculative_design" value="Speculative Design Present">
+                Yes, I <b>&nbsp;saw a video&nbsp;</b> demonstration 🎥
+            </label>
+        </div>
+        {{ formfield_errors 'speculative_design' }}
+    </div>
+
+    <div class="text-center mt-4">
+        {{ next_button }}
+    </div>
+</div>
+
+{{ endblock }}

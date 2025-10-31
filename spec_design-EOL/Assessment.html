@@ -1,0 +1,142 @@
+{% load static %}
+{% block title %}<span style="display: none;">Your Task: Anticipate Risks</span>{% endblock %}
+{% block content %}
+
+<style>
+    .word-puzzle {
+        margin: 20px 0;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+    }
+    .scrambled {
+        font-weight: bold;
+        color: #dc3545;
+        font-size: 1.2em;
+    }
+    .hint {
+        color: #6c757d;
+        font-style: italic;
+        margin-top: 5px;
+    }
+    .solved {
+        color: #28a745;
+        text-decoration: line-through;
+    }
+    .earnings {
+        background-color: #28a745;
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        margin: 10px 0;
+        font-weight: bold;
+        font-size: 1.2em;
+    }
+    .instructions {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-left: 4px solid #007bff;
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="container">
+    <div class="instructions">
+        <h5>📝 Instructions:</h5>
+        <ul>
+            <li>Below are scrambled words related to potential risks for the new healthcare technology</li>
+            <li>Each word you unscramble earns you <b>USD 0.20</b></li>
+            <li>Hints are provided to help you anticipate each risk</li>
+            <li>You can continue at any time by clicking the Next button</li>
+            <li>Try to anticipate as many risks as you can to maximize your earnings!</li>
+        </ul>
+    </div>
+
+    <div class="earnings">
+        Your Current Earnings: $<span id="earnings">0.00</span>
+    </div>
+
+    <div class="word-puzzle">
+        <div id="puzzle-container">
+            <!-- Puzzles will be dynamically added here -->
+        </div>
+    </div>    <div class="alert alert-info" role="alert">
+        You can proceed at any time - your earnings will be added to your final payment.
+        <!-- Hidden fields to store individual risk identification -->
+        <input type="hidden" name="risk_safety" id="risk_safety" value="0">
+        <input type="hidden" name="risk_privacy" id="risk_privacy" value="0">
+        <input type="hidden" name="risk_trust" id="risk_trust" value="0">
+        <input type="hidden" name="risk_ethics" id="risk_ethics" value="0">
+        <input type="hidden" name="risk_cost" id="risk_cost" value="0">
+        <!-- Total score field -->
+        <input type="hidden" name="risk_score" id="risk_score" value="0">
+        {{ formfield_errors 'risk_score' }}
+    </div>
+</div>
+
+<script>
+    const riskWords = [
+        { scrambled: "YTEFAS", original: "SAFETY", hint: "Protecting users from harm" },
+        { scrambled: "YCAVIRP", original: "PRIVACY", hint: "Keeping patient information secure" },
+        { scrambled: "TSURT", original: "TRUST", hint: "Patient confidence in the system" },
+        { scrambled: "SCIHTE", original: "ETHICS", hint: "Moral principles in healthcare" },
+        { scrambled: "TSOC", original: "COST", hint: "Financial considerations" }
+    ];
+
+    let score = 0;
+    const solvedWords = new Set();
+
+    function initializePuzzles() {
+        const container = document.getElementById('puzzle-container');
+        riskWords.forEach((word, index) => {
+            const puzzleDiv = document.createElement('div');
+            puzzleDiv.innerHTML = `
+                <div class="word-challenge" id="puzzle-${index}" style="margin-bottom: 20px;">
+                    <p>Unscramble: <span class="scrambled">${word.scrambled}</span></p>
+                    <p class="hint">💡 Hint: ${word.hint}</p>
+                    <div class="input-group" style="max-width: 300px;">
+                        <input type="text" class="form-control word-input" placeholder="Type your answer" 
+                               onkeyup="checkWord(${index}, this.value)">
+                    </div>
+                    <p class="feedback" style="display: none; margin-top: 5px;"></p>
+                </div>
+            `;
+            container.appendChild(puzzleDiv);
+        });
+    }    function checkWord(index, answer) {
+        const word = riskWords[index];
+        const puzzleDiv = document.getElementById(`puzzle-${index}`);
+        const feedback = puzzleDiv.querySelector('.feedback');
+        
+        if (answer.toUpperCase() === word.original) {
+            if (!solvedWords.has(index)) {
+                score += 0.20; // 20 cents per solved word
+                solvedWords.add(index);
+                document.getElementById('earnings').textContent = score.toFixed(2);
+                
+                // Record individual risk scores
+                const riskField = `risk_${word.original.toLowerCase()}`;
+                document.getElementById(riskField).value = '1';
+                
+                // Update total score
+                document.getElementById('risk_score').value = Math.round(score * 100);
+                
+                puzzleDiv.querySelector('.scrambled').classList.add('solved');
+                feedback.style.display = 'block';
+                feedback.style.color = 'green';
+                feedback.textContent = 'Correct! +$0.20 earned';
+                
+                // Disable the input field after correct answer
+                puzzleDiv.querySelector('input').disabled = true;
+            }
+        }
+    }
+
+    // Initialize on page load
+    initializePuzzles();
+</script>
+
+<div class="d-flex align-items-center">
+    <button class="otree-btn-next btn btn-primary">Continue</button>
+</div>
+{% endblock %}

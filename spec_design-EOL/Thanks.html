@@ -1,0 +1,107 @@
+{{ block title }}<span style="display: none;">Thank you!</span>{{ endblock }}
+
+{{ block content }}
+
+<style>
+    .thanks-container {
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 25px;
+        background: linear-gradient(to right, #ffffff, #f8f9fa);
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .success-message {
+        text-align: center;
+        margin-bottom: 30px;
+        animation: fadeIn 1s ease-in;
+    }
+    
+    .success-icon {
+        font-size: 48px;
+        color: #28a745;
+        margin-bottom: 15px;
+    }
+    
+    .completion-code-box {
+        background-color: #e9ecef;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 20px 0;
+        text-align: center;
+        border: 2px dashed #6c757d;
+    }
+    
+    .completion-code {
+        font-family: monospace;
+        font-size: 24px;
+        color: #007bff;
+        letter-spacing: 2px;
+        margin: 10px 0;
+        font-weight: bold;
+    }
+    
+    .feedback-section {
+        border-left: 4px solid #007bff;
+        padding: 20px;
+        background-color: #f8f9fa;
+        margin: 20px 0;
+        border-radius: 0 10px 10px 0;
+        transition: transform 0.2s;
+    }
+    
+    .feedback-section:hover {
+        transform: translateX(5px);
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+<div class="thanks-container">
+    <div class="success-message">
+        <div class="success-icon">✅</div>
+        <h3>Congratulations!</h3>
+        <p class="lead">You have successfully completed the study.</p>
+    </div>
+
+    <div class="completion-code-box">
+        <h5>Your Prolific Completion Code</h5>
+        <div class="completion-code">C11UPOF1</div>
+        <p class="text-muted mt-2"><small>You will be redirected to Prolific automatically</small></p>
+    </div>
+
+    <div class="feedback-section">
+        <h5>📝 We Value Your Feedback!</h5>
+        <p class="text-muted">Please share any comments or suggestions about the study (optional):</p>
+        
+        {{ formfield 'feedback' label="" }}
+        
+        <p class="text-muted mt-3">
+            Click "Next" below to submit your feedback and return to Prolific.
+        </p>
+    </div>
+
+    <div class="text-center mt-4">
+        {{ next_button label="Finish Study" }}
+    </div>
+</div>
+
+<script>
+    // After form submission completes, redirect to Prolific
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function(event) {
+            // Allow the form to submit normally
+            setTimeout(function() {
+                // Redirect after a brief delay to ensure data is saved
+                window.location.href = js_vars.completionlink;
+            }, 500);
+        });
+    });
+</script>
+
+{{ endblock }}

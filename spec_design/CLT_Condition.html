@@ -1,0 +1,96 @@
+{{ block title }}<span style="display: none;">Construal Level Task</span>{{ endblock }}
+{{ block content }}
+
+<style>
+    .construal-container {
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 25px;
+        background: linear-gradient(to right, #ffffff, #f8f9fa);
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .construal-icon {
+        font-size: 2.5em;
+        margin-bottom: 20px;
+        color: #007bff;
+    }
+    
+    .instruction-box {
+        border-left: 4px solid #007bff;
+        padding: 20px;
+        background-color: #f8f9fa;
+        margin: 20px 0;
+    }
+    
+    .question-prompt {
+        font-size: 1.2em;
+        color: #28a745;
+        font-weight: bold;
+        padding: 15px;
+        background-color: rgba(40, 167, 69, 0.1);
+        border-radius: 5px;
+        margin: 20px 0;
+    }
+    
+    .response-area {
+        margin: 20px 0;
+    }
+    
+    .response-area textarea {
+        width: 100%;
+        min-height: 150px;
+        padding: 15px;
+        border: 2px solid #ddd;
+        border-radius: 5px;
+        font-size: 1em;
+        resize: vertical;
+    }
+    
+    .response-area textarea:focus {
+        outline: none;
+        border-color: #007bff;
+    }
+</style>
+
+<div class="construal-container">
+    <div class="text-center">
+        {% if construal_level == 'Concrete Construal' %}
+            <div class="construal-icon">🔧</div>
+        {% else %}
+            <div class="construal-icon">�</div>
+        {% endif %}
+    </div>
+
+    <div class="instruction-box">
+        <h4 class="mb-3">Reflection Task</h4>
+        <p class="lead">Before you begin the risk assessment, please take a moment to reflect on the project.</p>
+        
+        {% if construal_level == 'Concrete Construal' %}
+            <div class="question-prompt">
+                Please think of and describe <b>how</b> the project team is developing the new food technology 🔧
+            </div>
+            <p class="mt-3">
+                <em>Consider the specific steps, processes, and methods involved in bringing this technology to life.</em>
+            </p>
+
+        {% elif construal_level == 'Abstract Construal' %}
+            <div class="question-prompt">
+                Please think of and describe <b>why</b> the project team is developing the new food technology 💡
+            </div>
+            <p class="mt-3">
+                <em>Consider the broader goals, purposes, and motivations behind this technological development.</em>
+            </p>
+        {% endif %}
+    </div>
+
+    <div class="response-area">
+        {{ formfield 'construal_response' }}
+    </div>
+
+    <div class="text-center mt-4">
+        {{ next_button }}
+    </div>
+</div>
+{{ endblock }}

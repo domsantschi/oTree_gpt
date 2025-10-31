@@ -1,142 +1,232 @@
 {% load static %}
-{% block title %}<span style="display: none;">Your Task: Anticipate Risks</span>{% endblock %}
+{% block title %}<span style="display: none;">Risk Identification Task</span>{% endblock %}
 {% block content %}
 
 <style>
-    .word-puzzle {
-        margin: 20px 0;
-        padding: 15px;
-        background-color: #f8f9fa;
-        border-radius: 5px;
+    .assessment-container {
+        max-width: 900px;
+        margin: 30px auto;
+        padding: 25px;
+        background: linear-gradient(to right, #ffffff, #f8f9fa);
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
-    .scrambled {
-        font-weight: bold;
-        color: #dc3545;
-        font-size: 1.2em;
-    }
-    .hint {
-        color: #6c757d;
-        font-style: italic;
-        margin-top: 5px;
-    }
-    .solved {
-        color: #28a745;
-        text-decoration: line-through;
-    }
-    .earnings {
-        background-color: #28a745;
-        color: white;
-        padding: 10px;
-        border-radius: 5px;
-        margin: 10px 0;
-        font-weight: bold;
-        font-size: 1.2em;
-    }
+    
     .instructions {
         background-color: #f8f9fa;
-        padding: 15px;
+        padding: 20px;
         border-left: 4px solid #007bff;
-        margin-bottom: 20px;
+        margin-bottom: 25px;
+        border-radius: 5px;
+    }
+    
+    .risk-item {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 15px;
+        padding: 10px;
+        background-color: white;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        transition: box-shadow 0.2s;
+    }
+    
+    .risk-item:hover {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .risk-number {
+        display: inline-block;
+        min-width: 30px;
+        height: 30px;
+        background-color: #007bff;
+        color: white;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 30px;
+        margin-right: 15px;
+        font-weight: bold;
+        flex-shrink: 0;
+    }
+    
+    .risk-input {
+        flex-grow: 1;
+    }
+    
+    .risk-input textarea {
+        width: 100%;
+        min-height: 60px;
+        padding: 10px;
+        border: 2px solid #ddd;
+        border-radius: 5px;
+        font-size: 0.95em;
+        resize: vertical;
+        transition: border-color 0.2s;
+    }
+    
+    .risk-input textarea:focus {
+        outline: none;
+        border-color: #007bff;
+    }
+    
+    .add-more-btn {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        margin: 15px 0;
+        transition: background-color 0.2s;
+    }
+    
+    .add-more-btn:hover {
+        background-color: #218838;
+    }
+    
+    .risk-counter {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 5px;
+        margin: 15px 0;
+        font-weight: bold;
+    }
+    
+    .remove-btn {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 3px;
+        cursor: pointer;
+        margin-left: 10px;
+        font-size: 0.85em;
+    }
+    
+    .remove-btn:hover {
+        background-color: #c82333;
     }
 </style>
 
-<div class="container">
+<div class="assessment-container">
     <div class="instructions">
-        <h5>📝 Instructions:</h5>
-        <ul>
-            <li>Below are scrambled words related to potential risks for the new healthcare technology</li>
-            <li>Each word you unscramble earns you <b>USD 0.20</b></li>
-            <li>Hints are provided to help you anticipate each risk</li>
-            <li>You can continue at any time by clicking the Next button</li>
-            <li>Try to anticipate as many risks as you can to maximize your earnings!</li>
+        <h5>� Risk Identification Task</h5>
+        <p class="mb-2"><strong>Please identify the risks that you perceive with the NutriGen Foods Neo_Fruits project and write them below using a numbered list.</strong></p>
+        <ul class="mb-0">
+            <li>Think about potential risks across different domains (safety, ethical, social, regulatory, financial, etc.)</li>
+            <li>Describe each risk clearly and specifically</li>
+            <li>Start with 10 fields - you can add more by clicking "Add Another Risk" if needed</li>
+            <li>You can leave fields blank if you don't identify that many risks</li>
         </ul>
     </div>
-
-    <div class="earnings">
-        Your Current Earnings: $<span id="earnings">0.00</span>
+    
+    <div class="risk-counter">
+        Risks identified: <span id="risk-count-display">0</span>
     </div>
-
-    <div class="word-puzzle">
-        <div id="puzzle-container">
-            <!-- Puzzles will be dynamically added here -->
-        </div>
-    </div>    <div class="alert alert-info" role="alert">
-        You can proceed at any time - your earnings will be added to your final payment.
-        <!-- Hidden fields to store individual risk identification -->
-        <input type="hidden" name="risk_safety" id="risk_safety" value="0">
-        <input type="hidden" name="risk_privacy" id="risk_privacy" value="0">
-        <input type="hidden" name="risk_trust" id="risk_trust" value="0">
-        <input type="hidden" name="risk_ethics" id="risk_ethics" value="0">
-        <input type="hidden" name="risk_cost" id="risk_cost" value="0">
-        <!-- Total score field -->
-        <input type="hidden" name="risk_score" id="risk_score" value="0">
-        {{ formfield_errors 'risk_score' }}
+    
+    <div id="risks-container">
+        <!-- Risk items will be added here dynamically -->
+    </div>
+    
+    <button type="button" class="add-more-btn" onclick="addRiskField()">
+        ➕ Add Another Risk
+    </button>
+    
+    <!-- Hidden fields to store data -->
+    <input type="hidden" name="risk_count" id="risk_count" value="0">
+    <input type="hidden" name="risk_descriptions" id="risk_descriptions" value="[]">
+    {{ formfield_errors 'risk_count' }}
+    {{ formfield_errors 'risk_descriptions' }}
+    
+    <div class="text-center mt-4">
+        {{ next_button }}
     </div>
 </div>
 
 <script>
-    const riskWords = [
-        { scrambled: "YTEFAS", original: "SAFETY", hint: "Protecting users from harm" },
-        { scrambled: "YCAVIRP", original: "PRIVACY", hint: "Keeping patient information secure" },
-        { scrambled: "TSURT", original: "TRUST", hint: "Patient confidence in the system" },
-        { scrambled: "SCIHTE", original: "ETHICS", hint: "Moral principles in healthcare" },
-        { scrambled: "TSOC", original: "COST", hint: "Financial considerations" }
-    ];
-
-    let score = 0;
-    const solvedWords = new Set();
-
-    function initializePuzzles() {
-        const container = document.getElementById('puzzle-container');
-        riskWords.forEach((word, index) => {
-            const puzzleDiv = document.createElement('div');
-            puzzleDiv.innerHTML = `
-                <div class="word-challenge" id="puzzle-${index}" style="margin-bottom: 20px;">
-                    <p>Unscramble: <span class="scrambled">${word.scrambled}</span></p>
-                    <p class="hint">💡 Hint: ${word.hint}</p>
-                    <div class="input-group" style="max-width: 300px;">
-                        <input type="text" class="form-control word-input" placeholder="Type your answer" 
-                               onkeyup="checkWord(${index}, this.value)">
-                    </div>
-                    <p class="feedback" style="display: none; margin-top: 5px;"></p>
-                </div>
-            `;
-            container.appendChild(puzzleDiv);
-        });
-    }    function checkWord(index, answer) {
-        const word = riskWords[index];
-        const puzzleDiv = document.getElementById(`puzzle-${index}`);
-        const feedback = puzzleDiv.querySelector('.feedback');
-        
-        if (answer.toUpperCase() === word.original) {
-            if (!solvedWords.has(index)) {
-                score += 0.20; // 20 cents per solved word
-                solvedWords.add(index);
-                document.getElementById('earnings').textContent = score.toFixed(2);
-                
-                // Record individual risk scores
-                const riskField = `risk_${word.original.toLowerCase()}`;
-                document.getElementById(riskField).value = '1';
-                
-                // Update total score
-                document.getElementById('risk_score').value = Math.round(score * 100);
-                
-                puzzleDiv.querySelector('.scrambled').classList.add('solved');
-                feedback.style.display = 'block';
-                feedback.style.color = 'green';
-                feedback.textContent = 'Correct! +$0.20 earned';
-                
-                // Disable the input field after correct answer
-                puzzleDiv.querySelector('input').disabled = true;
-            }
+    let riskCounter = 0;
+    
+    // Initialize with 10 fields
+    function initializeRiskFields() {
+        for (let i = 0; i < 10; i++) {
+            addRiskField();
         }
     }
-
+    
+    function addRiskField() {
+        riskCounter++;
+        const container = document.getElementById('risks-container');
+        
+        const riskDiv = document.createElement('div');
+        riskDiv.className = 'risk-item';
+        riskDiv.id = `risk-item-${riskCounter}`;
+        riskDiv.innerHTML = `
+            <div class="risk-number">${riskCounter}</div>
+            <div class="risk-input">
+                <textarea 
+                    class="risk-textarea" 
+                    placeholder="Describe this risk..."
+                    oninput="updateRiskData()"
+                    data-risk-id="${riskCounter}"></textarea>
+            </div>
+            ${riskCounter > 10 ? `<button type="button" class="remove-btn" onclick="removeRiskField(${riskCounter})">✕</button>` : ''}
+        `;
+        
+        container.appendChild(riskDiv);
+    }
+    
+    function removeRiskField(id) {
+        const element = document.getElementById(`risk-item-${id}`);
+        if (element) {
+            element.remove();
+            renumberRisks();
+            updateRiskData();
+        }
+    }
+    
+    function renumberRisks() {
+        const riskItems = document.querySelectorAll('.risk-item');
+        riskItems.forEach((item, index) => {
+            const numberElement = item.querySelector('.risk-number');
+            if (numberElement) {
+                numberElement.textContent = index + 1;
+            }
+        });
+    }
+    
+    function updateRiskData() {
+        const textareas = document.querySelectorAll('.risk-textarea');
+        const risks = [];
+        let nonEmptyCount = 0;
+        
+        textareas.forEach((textarea, index) => {
+            const text = textarea.value.trim();
+            if (text) {
+                risks.push({
+                    number: index + 1,
+                    description: text
+                });
+                nonEmptyCount++;
+            }
+        });
+        
+        // Update hidden fields
+        document.getElementById('risk_count').value = nonEmptyCount;
+        document.getElementById('risk_descriptions').value = JSON.stringify(risks);
+        document.getElementById('risk-count-display').textContent = nonEmptyCount;
+    }
+    
     // Initialize on page load
-    initializePuzzles();
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeRiskFields();
+    });
+    
+    // Update data before form submission
+    document.querySelector('form').addEventListener('submit', function(e) {
+        updateRiskData();
+    });
 </script>
 
-<div class="d-flex align-items-center">
-    <button class="otree-btn-next btn btn-primary">Continue</button>
-</div>
 {% endblock %}

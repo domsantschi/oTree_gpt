@@ -74,31 +74,17 @@ class Player(BasePlayer):
         label="Is English your native language?",
         choices=["Yes", "No"],
     )
-    
-    # Experimental conditions
-    construal_level = models.StringField(
-        label="Construal Level",
-        choices=["Concrete Construal", "Abstract Construal"],
+    time_horizon = models.StringField(
+        label="Time Horizon",
+        choices=["Near future risks", "Distant future risks"],
     )
     speculative_design = models.StringField(
         label="Speculative Design",
         choices=["Speculative Design Absent", "Speculative Design Present"],
     )
-    
-    # Behavior Identification Form (BIF) - Vallacher & Wegner (1989)
-    bif_score = models.IntegerField(
-        initial=0,
-        doc="Total BIF score (0-25): number of abstract responses chosen"
-    )
-    bif_responses = models.LongStringField(
-        blank=True,
-        doc="JSON string containing individual BIF responses (0=concrete, 1=abstract)"
-    )
-    
-    # Text responses for construal level manipulation
-    construal_response = models.LongStringField(
-        label="Your response",
-        blank=False,
+    condition = models.StringField(
+        label="Time Horizon",
+        choices=["Near future risks", "Distant future risks"],
     )
     feedback = models.LongStringField(
         label="Any feedback about the study?",
@@ -129,7 +115,7 @@ class Player(BasePlayer):
     )
     
     screening_q3 = models.StringField(
-        label="When developing a food innovation, what type of risks should be considered?",
+        label="In healthcare technology development, what type of risks should be considered?",
         choices=[
             "Only financial and regulatory risks",
             "Only technical and operational risks",
@@ -163,15 +149,17 @@ class Player(BasePlayer):
         max=7,
         doc="To what extent did the artifact make abstract risks feel more concrete"
     )
-    # Risk identification - count and descriptions
-    risk_count = models.IntegerField(
+    # Risk anticipation game score
+    risk_score = models.IntegerField(
         initial=0,
-        doc="Total number of risks identified by participant"
+        doc="Score from the risk anticipation word puzzle game"
     )
-    risk_descriptions = models.LongStringField(
-        blank=True,
-        doc="JSON string containing all risk descriptions"
-    )
+      # Risk fields matching word puzzle
+    risk_safety = models.IntegerField(initial=0, min=0, doc="Safety risks identified")
+    risk_privacy = models.IntegerField(initial=0, min=0, doc="Privacy risks identified")
+    risk_trust = models.IntegerField(initial=0, min=0, doc="Trust risks identified")
+    risk_ethics = models.IntegerField(initial=0, min=0, doc="Ethics risks identified")
+    risk_cost = models.IntegerField(initial=0, min=0, doc="Cost risks identified")
 
     # Page timing fields
     consent_page_time = models.FloatField(doc="Time spent on consent page in seconds")
@@ -191,22 +179,22 @@ class Player(BasePlayer):
 
 def creating_session(subsession: Subsession):
     if subsession.round_number == 1:
-        construal_conditions = ['Concrete Construal', 'Abstract Construal']
+        conditions = ['Near future risks', 'Distant future risks']
         speculative_design_conditions = ['Speculative Design Absent', 'Speculative Design Present']
         
         # Ensure each condition is assigned once across four sessions
         combined_conditions = [
-            (c, sc) for c in construal_conditions for sc in speculative_design_conditions
+            (c, sc) for c in conditions for sc in speculative_design_conditions
         ]
         random.shuffle(combined_conditions)
 
         for i, p in enumerate(subsession.get_players()):
             p.participant.wealth = cu(0)
             p.participant.part_id = create_id()
-            construal_level, speculative_design = combined_conditions[i % len(combined_conditions)]
-            p.construal_level = construal_level
+            condition, speculative_design = combined_conditions[i % len(combined_conditions)]
+            p.condition = condition
             p.speculative_design = speculative_design
-            print(f"Player {i+1} assigned: Construal Level = {construal_level}, Speculative Design = {speculative_design}")
+            print(f"Player {i+1} assigned: Time Horizon = {condition}, Speculative Design = {speculative_design}")
 
 # --- Pages --------------------------------------------------------------------
 
@@ -306,10 +294,7 @@ class Background(Page):
     def before_next_page(player: Player, timeout_happened):
         player.background_page_time = time.time() - player.participant._start_time
 
-class CLT_Condition(Page):
-    form_model = 'player'
-    form_fields = ['construal_response']
-    
+class Condition1(Page):
     @staticmethod
     def is_displayed(player: Player):
         return player.passed_screening
@@ -323,18 +308,23 @@ class CLT_Condition(Page):
     @staticmethod
     def vars_for_template(player: Player):
         return dict(
-            construal_level=player.construal_level
+            condition=player.condition
         )
     
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
         player.condition1_page_time = time.time() - player.participant._start_time
-        # Log the construal response
-        print(f"Participant {player.participant.label}: Construal response = {player.construal_response}")
 
 class Assessment(Page):
     form_model = 'player'
-    form_fields = ['risk_count', 'risk_descriptions']
+    form_fields = [
+        'risk_score',
+        'risk_safety',
+        'risk_privacy',
+        'risk_trust',
+        'risk_ethics',
+        'risk_cost'
+    ]
     
     @staticmethod
     def is_displayed(player: Player):
@@ -350,10 +340,15 @@ class Assessment(Page):
     def before_next_page(player: Player, timeout_happened):
         # Save timing
         player.assessment_page_time = time.time() - player.participant._start_time
-        # Log the number of risks identified
-        print(f"Participant {player.participant.label}: Identified {player.risk_count} risks")
+        # The risk_score is stored in cents, convert to dollars for display
+        if player.risk_score:
+            dollars = player.risk_score / 100
+            print(f"Risk identification earnings: ${dollars:.2f}")
+        else:
+            player.risk_score = 0
+            print("No words solved")
 
-class Spec_Condition(Page):
+class Condition2(Page):
     @staticmethod
     def is_displayed(player: Player):
         return player.passed_screening
@@ -361,6 +356,7 @@ class Spec_Condition(Page):
     @staticmethod
     def vars_for_template(player: Player):
         return dict(
+            condition=player.condition,
             speculative_design=player.speculative_design,
         )
     @staticmethod
@@ -397,7 +393,10 @@ class Controls(Page):
 
 class Checks(Page):
     form_model = 'player'
-    form_fields = ['bif_score', 'bif_responses']
+    form_fields = [
+        'time_horizon',
+        'speculative_design',
+    ]
     
     @staticmethod
     def is_displayed(player: Player):
@@ -412,8 +411,6 @@ class Checks(Page):
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
         player.checks_page_time = time.time() - player.participant._start_time
-        # Log BIF score
-        print(f"Participant {player.participant.label}: BIF score = {player.bif_score}/25")
 
 class Demographics(Page):
     form_model = 'player'
@@ -484,8 +481,8 @@ page_sequence = [
     ScreenedOut,
     Introduction,
     Background,
-    Spec_Condition,
-    CLT_Condition,
+    Condition1,
+    Condition2,
     Assessment,
     Controls, 
     Checks,
