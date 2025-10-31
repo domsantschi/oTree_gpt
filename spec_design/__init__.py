@@ -551,7 +551,7 @@ class BIF(Page):
     def before_next_page(player: Player, timeout_happened):
         player.bif_page_time = time.time() - player.participant._start_time
         # Log BIF score
-        print(f"Participant {player.participant.label}: BIF score = {player.bif_score}/25")
+        print(f"Participant {player.participant.label}: BIF score = {player.bif_score}/10")
 
 class Checks(Page):
     form_model = 'player'

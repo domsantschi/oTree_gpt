@@ -12,61 +12,48 @@
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
     
-    .instructions {
-        background-color: #f8f9fa;
-        padding: 20px;
-        border-left: 4px solid #007bff;
-        margin-bottom: 25px;
-        border-radius: 5px;
-    }
-    
     .risk-item {
-        display: flex;
-        align-items: flex-start;
-        margin-bottom: 15px;
-        padding: 10px;
-        background-color: white;
+        border-left: 4px solid #007bff;
+        padding: 20px;
+        background-color: #f8f9fa;
+        margin: 20px 0;
+        transition: transform 0.2s;
         border-radius: 5px;
-        border: 1px solid #ddd;
-        transition: box-shadow 0.2s;
     }
     
     .risk-item:hover {
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transform: translateX(5px);
     }
     
     .risk-number {
         display: inline-block;
-        min-width: 30px;
-        height: 30px;
+        width: 24px;
+        height: 24px;
         background-color: #007bff;
         color: white;
         border-radius: 50%;
         text-align: center;
-        line-height: 30px;
-        margin-right: 15px;
+        line-height: 24px;
+        margin-right: 10px;
         font-weight: bold;
-        flex-shrink: 0;
-    }
-    
-    .risk-input {
-        flex-grow: 1;
     }
     
     .risk-input textarea {
         width: 100%;
-        min-height: 60px;
-        padding: 10px;
-        border: 2px solid #ddd;
+        min-height: 80px;
+        padding: 12px;
+        border: 1px solid #ced4da;
         border-radius: 5px;
         font-size: 0.95em;
         resize: vertical;
         transition: border-color 0.2s;
+        margin-top: 10px;
     }
     
     .risk-input textarea:focus {
         outline: none;
         border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
     }
     
     .add-more-btn {
@@ -98,11 +85,12 @@
         background-color: #dc3545;
         color: white;
         border: none;
-        padding: 5px 10px;
+        padding: 5px 15px;
         border-radius: 3px;
         cursor: pointer;
-        margin-left: 10px;
+        margin-top: 10px;
         font-size: 0.85em;
+        transition: background-color 0.2s;
     }
     
     .remove-btn:hover {
@@ -111,11 +99,11 @@
 </style>
 
 <div class="assessment-container">
-    <div class="instructions">
-        <h5>� Risk Identification Task</h5>
-        <p class="mb-2"><strong>Please identify the risks that you perceive with the NutriGen Foods Neo_Fruits project and write them below using a numbered list.</strong></p>
-        <ul class="mb-0">
-            <li>Think about potential risks across different domains (safety, ethical, social, regulatory, financial, etc.)</li>
+    <div class="mb-4">
+        <h4>📋 Risk Identification Task</h4>
+        <p class="text-muted">Please identify the risks that you perceive with the NutriGen Foods Neo_Fruits project and write them below using a numbered list.</p>
+        <ul class="text-muted" style="font-size: 0.9em;">
+            <li>Think about potential risks across different domains</li>
             <li>Describe each risk clearly and specifically</li>
             <li>Start with 10 fields - you can add more by clicking "Add Another Risk" if needed</li>
             <li>You can leave fields blank if you don't identify that many risks</li>
@@ -163,7 +151,10 @@
         riskDiv.className = 'risk-item';
         riskDiv.id = `risk-item-${riskCounter}`;
         riskDiv.innerHTML = `
-            <div class="risk-number">${riskCounter}</div>
+            <p class="mb-2">
+                <span class="risk-number">${riskCounter}</span>
+                <strong>Risk ${riskCounter}</strong>
+            </p>
             <div class="risk-input">
                 <textarea 
                     class="risk-textarea" 
@@ -171,7 +162,7 @@
                     oninput="updateRiskData()"
                     data-risk-id="${riskCounter}"></textarea>
             </div>
-            ${riskCounter > 10 ? `<button type="button" class="remove-btn" onclick="removeRiskField(${riskCounter})">✕</button>` : ''}
+            ${riskCounter > 10 ? `<button type="button" class="remove-btn" onclick="removeRiskField(${riskCounter})">Remove</button>` : ''}
         `;
         
         container.appendChild(riskDiv);
