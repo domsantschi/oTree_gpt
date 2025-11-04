@@ -1,6 +1,5 @@
-{% block title %}<span style="display: none;">Video Feedback Questions</span>{% endblock %}
-
-{% block content %}
+{{ block title }}<span style="display: none;">Controls</span>{{ endblock }}
+{{ block content }}
 
 <style>
     .controls-container {
@@ -12,12 +11,26 @@
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
     
+    .section-box {
+        border-left: 4px solid #007bff;
+        padding: 20px;
+        background-color: #f8f9fa;
+        margin: 20px 0;
+        transition: transform 0.2s;
+        border-radius: 5px;
+    }
+    
+    .section-box:hover {
+        transform: translateX(5px);
+    }
+
     .question-box {
         border-left: 4px solid #007bff;
         padding: 20px;
         background-color: #f8f9fa;
         margin: 20px 0;
         transition: transform 0.2s;
+        border-radius: 5px;
     }
     
     .question-box:hover {
@@ -74,141 +87,148 @@
         color: #007bff;
         font-weight: bold;
     }
-
-    .error-message {
-        color: #dc3545;
-        font-size: 0.9em;
-        margin-top: 5px;
-    }
 </style>
 
-<div class="controls-container">    <div class="mb-4">
-        <h4>📋 Information Feedback</h4>
-        <p class="text-muted">Please indicate your level of agreement with the following statements.</p>
+<div class="controls-container">
+    <div class="mb-4">
+        <h4>📋 Controls</h4>
+        <p class="text-muted">Please answer the following questions.</p>
     </div>
-
-    <div class="question-box">
-        <p class="mb-3">
-            <span class="question-number">1</span>
-            The information helped me identify risks that I might have otherwise overlooked.
-        </p>
-        <div class="likert-scale">
-            {% for i in range(1, 8) %}
+    
+    <form method="post">
+        
+        <!-- Question 1: Risk Taking -->
+        <div class="question-box">
+            <p class="mb-3">
+                <span class="question-number">1</span>
+                How would you rate your own willingness to undertake risky business propositions compared to other individuals?
+            </p>
+            <div class="likert-scale">
                 <div class="scale-option">
-                    <input type="radio" name="blind_spot_detection" value="{{ i }}" id="q1_{{ i }}" required>
-                    <label class="radio-label" for="q1_{{ i }}">
-                        {% if i == 1 %}Strongly<br>disagree{% endif %}
-                        {% if i == 2 %}Disagree{% endif %}
-                        {% if i == 3 %}Somewhat<br>disagree{% endif %}
-                        {% if i == 4 %}Neutral{% endif %}
-                        {% if i == 5 %}Somewhat<br>agree{% endif %}
-                        {% if i == 6 %}Agree{% endif %}
-                        {% if i == 7 %}Strongly<br>agree{% endif %}
-                    </label>
+                    <input type="radio" name="risk_taking" value="1" id="rt1" required>
+                    <label class="radio-label" for="rt1">Extremely<br>less willing</label>
                 </div>
-            {% endfor %}
-        </div>
-        {{ formfield_errors 'blind_spot_detection' }}
-    </div>
-
-    <div class="question-box">
-        <p class="mb-3">
-            <span class="question-number">2</span>
-            The narrative structure of the information made the risks of the new food technology more accessible.
-        </p>
-        <div class="likert-scale">
-            {% for i in range(1, 8) %}
                 <div class="scale-option">
-                    <input type="radio" name="narrative_accessibility" value="{{ i }}" id="q2_{{ i }}" required>
-                    <label class="radio-label" for="q2_{{ i }}">
-                        {% if i == 1 %}Strongly<br>disagree{% endif %}
-                        {% if i == 2 %}Disagree{% endif %}
-                        {% if i == 3 %}Somewhat<br>disagree{% endif %}
-                        {% if i == 4 %}Neutral{% endif %}
-                        {% if i == 5 %}Somewhat<br>agree{% endif %}
-                        {% if i == 6 %}Agree{% endif %}
-                        {% if i == 7 %}Strongly<br>agree{% endif %}
-                    </label>
+                    <input type="radio" name="risk_taking" value="2" id="rt2">
+                    <label class="radio-label" for="rt2">Much less<br>willing</label>
                 </div>
-            {% endfor %}
-        </div>
-        {{ formfield_errors 'narrative_accessibility' }}
-    </div>
-
-    <div class="question-box">
-        <p class="mb-3">
-            <span class="question-number">3</span>
-            The information made the risks of the new food technology more concrete and tangible.
-        </p>
-        <div class="likert-scale">
-            {% for i in range(1, 8) %}
                 <div class="scale-option">
-                    <input type="radio" name="risk_embodiment" value="{{ i }}" id="q3_{{ i }}" required>
-                    <label class="radio-label" for="q3_{{ i }}">
-                        {% if i == 1 %}Strongly<br>disagree{% endif %}
-                        {% if i == 2 %}Disagree{% endif %}
-                        {% if i == 3 %}Somewhat<br>disagree{% endif %}
-                        {% if i == 4 %}Neutral{% endif %}
-                        {% if i == 5 %}Somewhat<br>agree{% endif %}
-                        {% if i == 6 %}Agree{% endif %}
-                        {% if i == 7 %}Strongly<br>agree{% endif %}
-                    </label>
+                    <input type="radio" name="risk_taking" value="3" id="rt3">
+                    <label class="radio-label" for="rt3">Less<br>willing</label>
                 </div>
-            {% endfor %}
-        </div>
-        {{ formfield_errors 'risk_embodiment' }}    </div>
-
-    <div class="question-box">
-        <p class="mb-3">
-            <span class="question-number">4</span>
-            How much effort did it take to complete the manipulation task?
-        </p>
-        <div class="likert-scale">
-            {% for i in range(1, 8) %}
                 <div class="scale-option">
-                    <input type="radio" name="manipulation_effort" value="{{ i }}" id="q4_{{ i }}" required>
-                    <label class="radio-label" for="q4_{{ i }}">
-                        {% if i == 1 %}Extremely<br>low effort{% endif %}
-                        {% if i == 2 %}Low<br>effort{% endif %}
-                        {% if i == 3 %}Rather low<br>effort{% endif %}
-                        {% if i == 4 %}Neutral<br>effort{% endif %}
-                        {% if i == 5 %}Rather high<br>effort{% endif %}
-                        {% if i == 6 %}High<br>effort{% endif %}
-                        {% if i == 7 %}Extremely<br>high effort{% endif %}
-                    </label>
+                    <input type="radio" name="risk_taking" value="4" id="rt4">
+                    <label class="radio-label" for="rt4">About the<br>same</label>
                 </div>
-            {% endfor %}
-        </div>
-        {{ formfield_errors 'manipulation_effort' }}
-    </div>
-
-    <div class="question-box">
-        <p class="mb-3">
-            <span class="question-number">5</span>
-            How difficult was it to complete the manipulation task?
-        </p>
-        <div class="likert-scale">
-            {% for i in range(1, 8) %}
                 <div class="scale-option">
-                    <input type="radio" name="manipulation_difficulty" value="{{ i }}" id="q5_{{ i }}" required>
-                    <label class="radio-label" for="q5_{{ i }}">
-                        {% if i == 1 %}Extremely<br>easy{% endif %}
-                        {% if i == 2 %}Easy<br>{% endif %}
-                        {% if i == 3 %}Rather<br>easy{% endif %}
-                        {% if i == 4 %}Neutral<br>{% endif %}
-                        {% if i == 5 %}Rather<br>difficult{% endif %}
-                        {% if i == 6 %}Difficult<br>{% endif %}
-                        {% if i == 7 %}Extremely<br>difficult{% endif %}
-                    </label>
+                    <input type="radio" name="risk_taking" value="5" id="rt5">
+                    <label class="radio-label" for="rt5">More<br>willing</label>
                 </div>
-            {% endfor %}
+                <div class="scale-option">
+                    <input type="radio" name="risk_taking" value="6" id="rt6">
+                    <label class="radio-label" for="rt6">Much more<br>willing</label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="risk_taking" value="7" id="rt7">
+                    <label class="radio-label" for="rt7">Extremely<br>more willing</label>
+                </div>
+            </div>
+            {{ formfield_errors 'risk_taking' }}
         </div>
-        {{ formfield_errors 'manipulation_difficulty' }}
-    </div>
 
-    <div class="text-center mt-4">
-        {{ next_button }}
-    </div>
+        <!-- Question 2: Risk Avoidance (Reverse Scaled) -->
+        <div class="question-box">
+            <p class="mb-3">
+                <span class="question-number">2</span>
+                How would you rate your own willingness to avoid risky business propositions compared to other individuals?
+            </p>
+            <div class="likert-scale">
+                <div class="scale-option">
+                    <input type="radio" name="risk_avoidance" value="1" id="ra1" required>
+                    <label class="radio-label" for="ra1">Extremely<br>less willing</label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="risk_avoidance" value="2" id="ra2">
+                    <label class="radio-label" for="ra2">Much less<br>willing</label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="risk_avoidance" value="3" id="ra3">
+                    <label class="radio-label" for="ra3">Less<br>willing</label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="risk_avoidance" value="4" id="ra4">
+                    <label class="radio-label" for="ra4">About the<br>same</label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="risk_avoidance" value="5" id="ra5">
+                    <label class="radio-label" for="ra5">More<br>willing</label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="risk_avoidance" value="6" id="ra6">
+                    <label class="radio-label" for="ra6">Much more<br>willing</label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="risk_avoidance" value="7" id="ra7">
+                    <label class="radio-label" for="ra7">Extremely<br>more willing</label>
+                </div>
+            </div>
+            {{ formfield_errors 'risk_avoidance' }}
+        </div>
+
+        <!-- Question 3: Manipulation Effort -->
+        <div class="question-box">
+            <p class="mb-3">
+                <span class="question-number">3</span>
+                How much effort did it take to complete the manipulation task?
+            </p>
+            <div class="likert-scale">
+                {% for i in range(1, 8) %}
+                    <div class="scale-option">
+                        <input type="radio" name="manipulation_effort" value="{{ i }}" id="q3_{{ i }}" required>
+                        <label class="radio-label" for="q3_{{ i }}">
+                            {% if i == 1 %}Extremely<br>low effort{% endif %}
+                            {% if i == 2 %}Low<br>effort{% endif %}
+                            {% if i == 3 %}Rather low<br>effort{% endif %}
+                            {% if i == 4 %}Neutral<br>effort{% endif %}
+                            {% if i == 5 %}Rather high<br>effort{% endif %}
+                            {% if i == 6 %}High<br>effort{% endif %}
+                            {% if i == 7 %}Extremely<br>high effort{% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ formfield_errors 'manipulation_effort' }}
+        </div>
+
+        <!-- Question 4: Manipulation Difficulty -->
+        <div class="question-box">
+            <p class="mb-3">
+                <span class="question-number">4</span>
+                How difficult was it to complete the manipulation task?
+            </p>
+            <div class="likert-scale">
+                {% for i in range(1, 8) %}
+                    <div class="scale-option">
+                        <input type="radio" name="manipulation_difficulty" value="{{ i }}" id="q4_{{ i }}" required>
+                        <label class="radio-label" for="q4_{{ i }}">
+                            {% if i == 1 %}Extremely<br>easy{% endif %}
+                            {% if i == 2 %}Easy<br>{% endif %}
+                            {% if i == 3 %}Rather<br>easy{% endif %}
+                            {% if i == 4 %}Neutral<br>{% endif %}
+                            {% if i == 5 %}Rather<br>difficult{% endif %}
+                            {% if i == 6 %}Difficult<br>{% endif %}
+                            {% if i == 7 %}Extremely<br>difficult{% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ formfield_errors 'manipulation_difficulty' }}
+        </div>
+        
+        <div class="text-center mt-4">
+            {{ next_button }}
+        </div>
+    </form>
 </div>
 
-{{ endblock }}
+{% endblock %}

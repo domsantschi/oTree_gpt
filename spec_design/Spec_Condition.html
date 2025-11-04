@@ -82,108 +82,69 @@
 </style>
 
 <div class="condition-container">
-    {% if speculative_design == 'Speculative Design Absent' %}
-        <div class="header-section">
-            <div class="video-icon">💭</div>
-            <h4>Reflection Time</h4>
-        </div>
-        <div class="notice-box">
-            <p><b>Please take a moment to reflect</b> on the information you have reviewed so far 
-            before proceeding with this study.</p>
-        </div>
-        
-        <div class="content-box">
-            <p style="text-align: center; font-size: 1.1em; margin: 30px 0;">
-                <b>You may use this time to consider:</b>
-            </p>
-            <ul style="line-height: 2em;">
-                <li>The context of NutriGen Foods' Neo Fruits technology</li>
-                <li>Potential risks that may arise during product development</li>
-                <li>How you will approach the upcoming risk anticipation task</li>
-            </ul>
-        </div>
-
-        <div class="timer-box" id="timer-absent">
-            <p style="margin: 0">
-                Recommended reflection time: <span class="timer-count" id="countdown-absent">60</span> seconds remaining
-            </p>
-            <p style="margin-top: 10px; font-size: 0.9em; color: #6c757d;">
-                You may proceed whenever you are ready
-            </p>
-        </div>
-        
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const nextButton = document.querySelector('.otree-btn-next');
-                const timerBox = document.getElementById('timer-absent');
-                const countdownSpan = document.getElementById('countdown-absent');
-                
-                if (nextButton) {
-                    // Button is enabled from the start
-                    nextButton.disabled = false;
-                    nextButton.textContent = 'Continue';
-                    
-                    let timeLeft = 60;
-                    const timer = setInterval(function() {
-                        timeLeft--;
-                        countdownSpan.textContent = timeLeft;
-                        if (timeLeft <= 0) {
-                            clearInterval(timer);
-                            timerBox.innerHTML = '<p class="success-message">✅ You may now proceed</p>';
-                            timerBox.style.backgroundColor = '#d4edda';
-                        }
-                    }, 1000);
-                }
-            });
-        </script>
-
-    {% elif speculative_design == 'Speculative Design Present' %}
-        <div class="header-section">
-            <div class="video-icon">🎥</div>
-            <h4>Neo Fruits Commercial Video</h4>
-        </div>
-          <div class="notice-box">
-            <p>Please watch the video carefully as it provides an example of <b>how the team envisions consumers to interact with 
-            Neo Fruits</b>. You will be asked questions about it later.</p>
-        </div>        <div class="video-container">
+    <div class="header-section">
+        <div class="video-icon">💭</div>
+        <h4>Reflection Time</h4>
+    </div>
+    
+    <div class="notice-box">
+        <p><b>Please take a moment to reflect</b> on the information you have reviewed so far 
+        before proceeding with this study.</p>
+    </div>
+    
+    {% if speculative_design == 'Speculative Design Present' %}
+        <div class="video-container">
             <iframe src="https://www.youtube.com/embed/NeydwfUmyoY?autoplay=1&mute=0&cc_load_policy=1&cc_lang_pref=en" 
                     title="YouTube video player" 
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                     allowfullscreen></iframe>
         </div>
-
-        <div class="timer-box" id="timer">
-            <p style="margin: 0">
-                Please wait... <span class="timer-count" id="countdown">60</span> seconds remaining
-            </p>
-        </div>        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const nextButton = document.querySelector('.otree-btn-next');
-                const timerBox = document.getElementById('timer');
-                const countdownSpan = document.getElementById('countdown');
-                
-                if (nextButton) {
-                    // Initially disable the button
-                    nextButton.disabled = true;
-                    nextButton.style.display = 'none'; // Hide button initially
-                    
-                    let timeLeft = 60;
-                    const timer = setInterval(function() {
-                        timeLeft--;
-                        countdownSpan.textContent = timeLeft;
-                        if (timeLeft <= 0) {
-                            clearInterval(timer);
-                            timerBox.innerHTML = '<p class="success-message">✅ You may now proceed</p>';
-                            timerBox.style.backgroundColor = '#d4edda';
-                            nextButton.style.display = 'block'; // Show button
-                            nextButton.disabled = false;
-                            nextButton.textContent = 'Continue';
-                        }
-                    }, 1000);
-                }
-            });
-        </script>
     {% endif %}
+    
+    <div class="content-box">
+        <p style="text-align: center; font-size: 1.1em; margin: 30px 0;">
+            <b>You may use this time to consider:</b>
+        </p>
+        <ul style="line-height: 2em;">
+            <li>The context of NutriGen Foods' Neo Fruits technology</li>
+            <li>Potential risks that may arise during product development</li>
+            <li>How you will approach the upcoming risk identification task</li>
+        </ul>
+    </div>
+
+    <div class="timer-box" id="timer-box">
+        <p style="margin: 0">
+            Recommended reflection time: <span class="timer-count" id="countdown">60</span> seconds remaining
+        </p>
+        <p style="margin-top: 10px; font-size: 0.9em; color: #6c757d;">
+            You may proceed whenever you are ready
+        </p>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const nextButton = document.querySelector('.otree-btn-next');
+            const timerBox = document.getElementById('timer-box');
+            const countdownSpan = document.getElementById('countdown');
+            
+            if (nextButton) {
+                // Button is enabled from the start
+                nextButton.disabled = false;
+                nextButton.textContent = 'Continue';
+                
+                let timeLeft = 60;
+                const timer = setInterval(function() {
+                    timeLeft--;
+                    countdownSpan.textContent = timeLeft;
+                    if (timeLeft <= 0) {
+                        clearInterval(timer);
+                        timerBox.innerHTML = '<p class="success-message">✅ You may now proceed</p>';
+                        timerBox.style.backgroundColor = '#d4edda';
+                    }
+                }, 1000);
+            }
+        });
+    </script>
 
     <div class="text-center mt-4">
         {{ next_button }}

@@ -1,0 +1,346 @@
+{% block title %}<span style="display: none;">Mediators</span>{% endblock %}
+
+{% block content %}
+
+<style>
+    .controls-container {
+        max-width: 900px;
+        margin: 30px auto;
+        padding: 25px;
+        background: linear-gradient(to right, #ffffff, #f8f9fa);
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .section-box {
+        border-left: 4px solid #007bff;
+        padding: 20px;
+        background-color: #f8f9fa;
+        margin: 25px 0;
+        transition: transform 0.2s;
+        border-radius: 5px;
+    }
+    
+    .section-box:hover {
+        transform: translateX(5px);
+    }
+    
+    .section-title {
+        font-size: 1.1em;
+        font-weight: bold;
+        color: #007bff;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #007bff;
+    }
+    
+    .question-box {
+        padding: 15px;
+        background-color: white;
+        margin: 15px 0;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    
+    .question-number {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        background-color: #007bff;
+        color: white;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 24px;
+        margin-right: 10px;
+        font-weight: bold;
+        font-size: 0.9em;
+    }
+
+    .likert-scale {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 10px;
+        margin: 20px 0;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+    }
+
+    .scale-option {
+        text-align: center;
+        padding: 10px 5px;
+        transition: all 0.2s;
+        border-radius: 5px;
+    }
+
+    .scale-option:hover {
+        background-color: rgba(0, 123, 255, 0.05);
+    }
+
+    .radio-label {
+        font-size: 0.85em;
+        margin-top: 8px;
+        display: block;
+        color: #495057;
+    }
+
+    input[type="radio"] {
+        transform: scale(1.2);
+        margin-bottom: 8px;
+    }
+
+    input[type="radio"]:checked + .radio-label {
+        color: #007bff;
+        font-weight: bold;
+    }
+
+    .error-message {
+        color: #dc3545;
+        font-size: 0.9em;
+        margin-top: 5px;
+    }
+</style>
+
+<div class="controls-container">
+    <div class="mb-4">
+        <h4>📋 Understanding Your Experience</h4>
+        <p class="text-muted">Please indicate your level of agreement with the following statements about the information of the case.</p>
+    </div>
+
+    <!-- Section 1: Horizon Expansion -->
+    <div class="section-box">
+        <div class="section-title">📋 Information Perspective</div>
+        
+        <div class="question-box">
+            <p class="mb-3">
+                <span class="question-number">1</span>
+                The information helped me think more creatively about potential risks of the food technology.
+            </p>
+            <div class="likert-scale">
+                {% for i in range(1, 8) %}
+                    <div class="scale-option">
+                        <input type="radio" name="horizon_temporal" value="{{ i }}" id="horizon_temporal_{{ i }}" required>
+                        <label class="radio-label" for="horizon_temporal_{{ i }}">
+                            {% if i == 1 %}Strongly<br>disagree{% endif %}
+                            {% if i == 2 %}Disagree{% endif %}
+                            {% if i == 3 %}Somewhat<br>disagree{% endif %}
+                            {% if i == 4 %}Neutral{% endif %}
+                            {% if i == 5 %}Somewhat<br>agree{% endif %}
+                            {% if i == 6 %}Agree{% endif %}
+                            {% if i == 7 %}Strongly<br>agree{% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ formfield_errors 'horizon_temporal' }}
+        </div>
+
+        <div class="question-box">
+            <p class="mb-3">
+                <span class="question-number">2</span>
+                The information encouraged me to imagine possibilities that I wouldn't have thought of otherwise.
+            </p>
+            <div class="likert-scale">
+                {% for i in range(1, 8) %}
+                    <div class="scale-option">
+                        <input type="radio" name="horizon_future" value="{{ i }}" id="horizon_future_{{ i }}" required>
+                        <label class="radio-label" for="horizon_future_{{ i }}">
+                            {% if i == 1 %}Strongly<br>disagree{% endif %}
+                            {% if i == 2 %}Disagree{% endif %}
+                            {% if i == 3 %}Somewhat<br>disagree{% endif %}
+                            {% if i == 4 %}Neutral{% endif %}
+                            {% if i == 5 %}Somewhat<br>agree{% endif %}
+                            {% if i == 6 %}Agree{% endif %}
+                            {% if i == 7 %}Strongly<br>agree{% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ formfield_errors 'horizon_future' }}
+        </div>
+
+        <div class="question-box">
+            <p class="mb-3">
+                <span class="question-number">3</span>
+                The information helped me consider broader implications beyond immediate effects.
+            </p>
+            <div class="likert-scale">
+                {% for i in range(1, 8) %}
+                    <div class="scale-option">
+                        <input type="radio" name="horizon_systemic" value="{{ i }}" id="horizon_systemic_{{ i }}" required>
+                        <label class="radio-label" for="horizon_systemic_{{ i }}">
+                            {% if i == 1 %}Strongly<br>disagree{% endif %}
+                            {% if i == 2 %}Disagree{% endif %}
+                            {% if i == 3 %}Somewhat<br>disagree{% endif %}
+                            {% if i == 4 %}Neutral{% endif %}
+                            {% if i == 5 %}Somewhat<br>agree{% endif %}
+                            {% if i == 6 %}Agree{% endif %}
+                            {% if i == 7 %}Strongly<br>agree{% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ formfield_errors 'horizon_systemic' }}
+        </div>
+    </div>
+
+    <!-- Section 2: Narrative Accessibility -->
+    <div class="section-box">
+        <div class="section-title">📋 Information Format</div>
+        
+        <div class="question-box">
+            <p class="mb-3">
+                <span class="question-number">4</span>
+                The story-like format of the information made the risks easier to identify.
+            </p>
+            <div class="likert-scale">
+                {% for i in range(1, 8) %}
+                    <div class="scale-option">
+                        <input type="radio" name="narrative_comprehension" value="{{ i }}" id="narrative_comprehension_{{ i }}" required>
+                        <label class="radio-label" for="narrative_comprehension_{{ i }}">
+                            {% if i == 1 %}Strongly<br>disagree{% endif %}
+                            {% if i == 2 %}Disagree{% endif %}
+                            {% if i == 3 %}Somewhat<br>disagree{% endif %}
+                            {% if i == 4 %}Neutral{% endif %}
+                            {% if i == 5 %}Somewhat<br>agree{% endif %}
+                            {% if i == 6 %}Agree{% endif %}
+                            {% if i == 7 %}Strongly<br>agree{% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ formfield_errors 'narrative_comprehension' }}
+        </div>
+
+        <div class="question-box">
+            <p class="mb-3">
+                <span class="question-number">5</span>
+                The narrative made the risks more relatable to real-world situations.
+            </p>
+            <div class="likert-scale">
+                {% for i in range(1, 8) %}
+                    <div class="scale-option">
+                        <input type="radio" name="narrative_relatable" value="{{ i }}" id="narrative_relatable_{{ i }}" required>
+                        <label class="radio-label" for="narrative_relatable_{{ i }}">
+                            {% if i == 1 %}Strongly<br>disagree{% endif %}
+                            {% if i == 2 %}Disagree{% endif %}
+                            {% if i == 3 %}Somewhat<br>disagree{% endif %}
+                            {% if i == 4 %}Neutral{% endif %}
+                            {% if i == 5 %}Somewhat<br>agree{% endif %}
+                            {% if i == 6 %}Agree{% endif %}
+                            {% if i == 7 %}Strongly<br>agree{% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ formfield_errors 'narrative_relatable' }}
+        </div>
+
+        <div class="question-box">
+            <p class="mb-3">
+                <span class="question-number">6</span>
+                The scenario helped me process information related to potential risks more effectively.
+            </p>
+            <div class="likert-scale">
+                {% for i in range(1, 8) %}
+                    <div class="scale-option">
+                        <input type="radio" name="narrative_processing" value="{{ i }}" id="narrative_processing_{{ i }}" required>
+                        <label class="radio-label" for="narrative_processing_{{ i }}">
+                            {% if i == 1 %}Strongly<br>disagree{% endif %}
+                            {% if i == 2 %}Disagree{% endif %}
+                            {% if i == 3 %}Somewhat<br>disagree{% endif %}
+                            {% if i == 4 %}Neutral{% endif %}
+                            {% if i == 5 %}Somewhat<br>agree{% endif %}
+                            {% if i == 6 %}Agree{% endif %}
+                            {% if i == 7 %}Strongly<br>agree{% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ formfield_errors 'narrative_processing' }}
+        </div>
+    </div>
+
+    <!-- Section 3: Risk Embodiment -->
+    <div class="section-box">
+        <div class="section-title">📋 Information Impact</div>
+        
+        <div class="question-box">
+            <p class="mb-3">
+                <span class="question-number">7</span>
+                The information made abstract risks feel more concrete and tangible.
+            </p>
+            <div class="likert-scale">
+                {% for i in range(1, 8) %}
+                    <div class="scale-option">
+                        <input type="radio" name="embodiment_tangible" value="{{ i }}" id="embodiment_tangible_{{ i }}" required>
+                        <label class="radio-label" for="embodiment_tangible_{{ i }}">
+                            {% if i == 1 %}Strongly<br>disagree{% endif %}
+                            {% if i == 2 %}Disagree{% endif %}
+                            {% if i == 3 %}Somewhat<br>disagree{% endif %}
+                            {% if i == 4 %}Neutral{% endif %}
+                            {% if i == 5 %}Somewhat<br>agree{% endif %}
+                            {% if i == 6 %}Agree{% endif %}
+                            {% if i == 7 %}Strongly<br>agree{% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ formfield_errors 'embodiment_tangible' }}
+        </div>
+
+        <div class="question-box">
+            <p class="mb-3">
+                <span class="question-number">8</span>
+                The information helped me feel the potential impact of the risks.
+            </p>
+            <div class="likert-scale">
+                {% for i in range(1, 8) %}
+                    <div class="scale-option">
+                        <input type="radio" name="embodiment_visceral" value="{{ i }}" id="embodiment_visceral_{{ i }}" required>
+                        <label class="radio-label" for="embodiment_visceral_{{ i }}">
+                            {% if i == 1 %}Strongly<br>disagree{% endif %}
+                            {% if i == 2 %}Disagree{% endif %}
+                            {% if i == 3 %}Somewhat<br>disagree{% endif %}
+                            {% if i == 4 %}Neutral{% endif %}
+                            {% if i == 5 %}Somewhat<br>agree{% endif %}
+                            {% if i == 6 %}Agree{% endif %}
+                            {% if i == 7 %}Strongly<br>agree{% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ formfield_errors 'embodiment_visceral' }}
+        </div>
+
+        <div class="question-box">
+            <p class="mb-3">
+                <span class="question-number">9</span>
+                The information allowed me to mentally experience what the risks might be like.
+            </p>
+            <div class="likert-scale">
+                {% for i in range(1, 8) %}
+                    <div class="scale-option">
+                        <input type="radio" name="embodiment_experiential" value="{{ i }}" id="embodiment_experiential_{{ i }}" required>
+                        <label class="radio-label" for="embodiment_experiential_{{ i }}">
+                            {% if i == 1 %}Strongly<br>disagree{% endif %}
+                            {% if i == 2 %}Disagree{% endif %}
+                            {% if i == 3 %}Somewhat<br>disagree{% endif %}
+                            {% if i == 4 %}Neutral{% endif %}
+                            {% if i == 5 %}Somewhat<br>agree{% endif %}
+                            {% if i == 6 %}Agree{% endif %}
+                            {% if i == 7 %}Strongly<br>agree{% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ formfield_errors 'embodiment_experiential' }}
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        {{ next_button }}
+    </div>
+</div>
+
+{{ endblock }}

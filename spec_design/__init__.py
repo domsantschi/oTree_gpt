@@ -70,6 +70,11 @@ class Player(BasePlayer):
         label="Years of Risk Management Experience",
         min=0,
     )
+    industry_experience = models.IntegerField(
+        label="Years of experience in food innovation, food science, or biotechnology",
+        min=0,
+        doc="Years of full-time work experience in food innovation, food science, or biotechnology industry"
+    )
     english_native = models.StringField(
         label="Is English your native language?",
         choices=["Yes", "No"],
@@ -85,14 +90,16 @@ class Player(BasePlayer):
         choices=["Speculative Design Absent", "Speculative Design Present"],
     )
     
-    # Behavior Identification Form (BIF) - Vallacher & Wegner (1989)
-    bif_score = models.IntegerField(
-        initial=0,
-        doc="Total BIF score (0-25): number of abstract responses chosen"
+    # Manipulation checks
+    video_check = models.StringField(
+        label="Did you see a video during the study?",
+        choices=["Speculative Design Absent", "Speculative Design Present"],
+        doc="Manipulation check for speculative design condition"
     )
-    bif_responses = models.LongStringField(
-        blank=True,
-        doc="JSON string containing individual BIF responses (0=concrete, 1=abstract)"
+    construal_check = models.StringField(
+        label="Which task did you pursue?",
+        choices=["Concrete Construal", "Abstract Construal"],
+        doc="Manipulation check for construal level condition"
     )
     
     # Text responses for construal level manipulation
@@ -118,7 +125,7 @@ class Player(BasePlayer):
     )
     
     screening_q2 = models.StringField(
-        label="What is 'risk anticipation' in the context of product development?",
+        label="What is 'risk identification' in the context of product development?",
         choices=[
             "Waiting for problems to occur before addressing them",
             "Proactively identifying potential issues before they materialize",
@@ -145,23 +152,64 @@ class Player(BasePlayer):
     # Track consent decision
     declined_consent = models.BooleanField(initial=False)
     
-    blind_spot_detection = models.IntegerField(
-        label="Risk Identification",
+    # Mediator 1: Horizon Expansion (3 subconstructs)
+    horizon_temporal = models.IntegerField(
+        label="Temporal perspective expansion",
         min=1,
         max=7,
-        doc="To what extent did the speculative design artifact help identify risks"
+        doc="The information helped me think about longer-term consequences"
     )
-    narrative_accessibility = models.IntegerField(
-        label="Narrative Accessibility",
+    horizon_future = models.IntegerField(
+        label="Future implications awareness",
         min=1,
         max=7,
-        doc="To what extent did the artifact make the risk scenario easier to understand"
+        doc="The information made me more aware of how the technology could evolve over time"
     )
-    risk_embodiment = models.IntegerField(
-        label="Risk Embodiment",
+    horizon_systemic = models.IntegerField(
+        label="Systemic thinking",
         min=1,
         max=7,
-        doc="To what extent did the artifact make abstract risks feel more concrete"
+        doc="The information helped me consider broader implications beyond immediate effects"
+    )
+    
+    # Mediator 2: Narrative Accessibility (3 subconstructs)
+    narrative_comprehension = models.IntegerField(
+        label="Narrative comprehension",
+        min=1,
+        max=7,
+        doc="The story-like format made the risks easier to understand"
+    )
+    narrative_relatable = models.IntegerField(
+        label="Narrative relatability",
+        min=1,
+        max=7,
+        doc="The narrative made the risks more relatable to real-world situations"
+    )
+    narrative_processing = models.IntegerField(
+        label="Narrative processing ease",
+        min=1,
+        max=7,
+        doc="The qualitative scenarios helped me process risk information more effectively"
+    )
+    
+    # Mediator 3: Risk Embodiment (3 subconstructs)
+    embodiment_tangible = models.IntegerField(
+        label="Risk tangibility",
+        min=1,
+        max=7,
+        doc="The information made abstract risks feel more concrete and tangible"
+    )
+    embodiment_visceral = models.IntegerField(
+        label="Visceral response",
+        min=1,
+        max=7,
+        doc="The information helped me feel the potential impact of the risks"
+    )
+    embodiment_experiential = models.IntegerField(
+        label="Experiential understanding",
+        min=1,
+        max=7,
+        doc="The information allowed me to mentally experience what the risks might be like"
     )
     
     # Manipulation effort questions
@@ -192,111 +240,6 @@ class Player(BasePlayer):
         doc="Self-rated willingness to avoid risky business propositions compared to others"
     )
     
-    # Willingness to pay questions (immediate vs distant)
-    wtp_pizza_immediate = models.FloatField(
-        label="WTP for pizza meal (immediate)",
-        min=0,
-        doc="Willingness to pay for pizza meal at restaurant today"
-    )
-    wtp_pizza_distant = models.FloatField(
-        label="WTP for pizza meal (distant)",
-        min=0,
-        doc="Willingness to pay for pizza meal at restaurant in 6 months"
-    )
-    wtp_genai_immediate = models.FloatField(
-        label="WTP for Gen-AI subscription (immediate)",
-        min=0,
-        doc="Willingness to pay for monthly Gen-AI subscription today"
-    )
-    wtp_genai_distant = models.FloatField(
-        label="WTP for Gen-AI subscription (distant)",
-        min=0,
-        doc="Willingness to pay for monthly Gen-AI subscription in 6 months"
-    )
-    wtp_movie_immediate = models.FloatField(
-        label="WTP for movie at cinema (immediate)",
-        min=0,
-        doc="Willingness to pay for movie at cinema today"
-    )
-    wtp_movie_distant = models.FloatField(
-        label="WTP for movie at cinema (distant)",
-        min=0,
-        doc="Willingness to pay for movie at cinema in 6 months"
-    )
-    wtp_book_immediate = models.FloatField(
-        label="WTP for book at bookstore (immediate)",
-        min=0,
-        doc="Willingness to pay for book at bookstore today"
-    )
-    wtp_book_distant = models.FloatField(
-        label="WTP for book at bookstore (distant)",
-        min=0,
-        doc="Willingness to pay for book at bookstore in 6 months"
-    )
-    
-    # Expected payment for services (immediate vs distant)
-    exp_driving_immediate = models.FloatField(
-        label="Expected payment for driving (immediate)",
-        min=0,
-        doc="Expected payment for driving a stranger to a restaurant today"
-    )
-    exp_driving_distant = models.FloatField(
-        label="Expected payment for driving (distant)",
-        min=0,
-        doc="Expected payment for driving a stranger to a restaurant in 6 months"
-    )
-    exp_email_immediate = models.FloatField(
-        label="Expected payment for email review (immediate)",
-        min=0,
-        doc="Expected payment for reviewing a stranger's email today"
-    )
-    exp_email_distant = models.FloatField(
-        label="Expected payment for email review (distant)",
-        min=0,
-        doc="Expected payment for reviewing a stranger's email in 6 months"
-    )
-    exp_lending_immediate = models.FloatField(
-        label="Expected payment for lending (immediate)",
-        min=0,
-        doc="Expected payment for borrowing a stranger USD 10 today"
-    )
-    exp_lending_distant = models.FloatField(
-        label="Expected payment for lending (distant)",
-        min=0,
-        doc="Expected payment for borrowing a stranger USD 10 in 6 months"
-    )
-    exp_book_immediate = models.FloatField(
-        label="Expected payment for book suggestion (immediate)",
-        min=0,
-        doc="Expected payment for suggesting a book to a stranger today"
-    )
-    exp_book_distant = models.FloatField(
-        label="Expected payment for book suggestion (distant)",
-        min=0,
-        doc="Expected payment for suggesting a book to a stranger in 6 months"
-    )
-    
-    # PANAS Scale - 20 items measuring positive and negative affect
-    panas_interested = models.IntegerField(label="Interested", min=1, max=5)
-    panas_distressed = models.IntegerField(label="Distressed", min=1, max=5)
-    panas_excited = models.IntegerField(label="Excited", min=1, max=5)
-    panas_upset = models.IntegerField(label="Upset", min=1, max=5)
-    panas_strong = models.IntegerField(label="Strong", min=1, max=5)
-    panas_guilty = models.IntegerField(label="Guilty", min=1, max=5)
-    panas_scared = models.IntegerField(label="Scared", min=1, max=5)
-    panas_hostile = models.IntegerField(label="Hostile", min=1, max=5)
-    panas_enthusiastic = models.IntegerField(label="Enthusiastic", min=1, max=5)
-    panas_proud = models.IntegerField(label="Proud", min=1, max=5)
-    panas_irritable = models.IntegerField(label="Irritable", min=1, max=5)
-    panas_alert = models.IntegerField(label="Alert", min=1, max=5)
-    panas_ashamed = models.IntegerField(label="Ashamed", min=1, max=5)
-    panas_inspired = models.IntegerField(label="Inspired", min=1, max=5)
-    panas_nervous = models.IntegerField(label="Nervous", min=1, max=5)
-    panas_determined = models.IntegerField(label="Determined", min=1, max=5)
-    panas_attentive = models.IntegerField(label="Attentive", min=1, max=5)
-    panas_jittery = models.IntegerField(label="Jittery", min=1, max=5)
-    panas_active = models.IntegerField(label="Active", min=1, max=5)
-    panas_afraid = models.IntegerField(label="Afraid", min=1, max=5)
     # Risk identification - count and descriptions
     risk_count = models.IntegerField(
         initial=0,
@@ -314,9 +257,7 @@ class Player(BasePlayer):
     condition1_page_time = models.FloatField(doc="Time spent on condition 1 page in seconds")
     condition2_page_time = models.FloatField(doc="Time spent on condition 2 page in seconds")
     assessment_page_time = models.FloatField(doc="Time spent on assessment page in seconds")
-    bif_page_time = models.FloatField(doc="Time spent on BIF page in seconds")
-    checks_page_time = models.FloatField(doc="Time spent on checks page in seconds")
-    panas_page_time = models.FloatField(doc="Time spent on PANAS page in seconds")
+    manip_check_page_time = models.FloatField(doc="Time spent on manipulation check page in seconds")
     controls_page_time = models.FloatField(doc="Time spent on controls page in seconds")
     demographics_page_time = models.FloatField(doc="Time spent on demographics page in seconds")
     thanks_page_time = models.FloatField(doc="Time spent on thanks page in seconds")
@@ -509,14 +450,18 @@ class Spec_Condition(Page):
     def before_next_page(player: Player, timeout_happened):
         player.condition2_page_time = time.time() - player.participant._start_time
 
-class Controls(Page):
+class Mediators(Page):
     form_model = 'player'
     form_fields = [
-        'blind_spot_detection',
-        'narrative_accessibility',
-        'risk_embodiment',
-        'manipulation_effort',
-        'manipulation_difficulty',
+        'horizon_temporal',
+        'horizon_future',
+        'horizon_systemic',
+        'narrative_comprehension',
+        'narrative_relatable',
+        'narrative_processing',
+        'embodiment_tangible',
+        'embodiment_visceral',
+        'embodiment_experiential',
     ]
     
     @staticmethod
@@ -533,9 +478,9 @@ class Controls(Page):
     def before_next_page(player: Player, timeout_happened):
         player.controls_page_time = time.time() - player.participant._start_time
 
-class BIF(Page):
+class Manip_Check(Page):
     form_model = 'player'
-    form_fields = ['bif_score', 'bif_responses']
+    form_fields = ['video_check', 'construal_check']
     
     @staticmethod
     def is_displayed(player: Player):
@@ -549,31 +494,17 @@ class BIF(Page):
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
-        player.bif_page_time = time.time() - player.participant._start_time
-        # Log BIF score
-        print(f"Participant {player.participant.label}: BIF score = {player.bif_score}/10")
+        player.manip_check_page_time = time.time() - player.participant._start_time
+        # Log manipulation check responses
+        print(f"Participant {player.participant.label}: Video check = {player.video_check}, Construal check = {player.construal_check}")
 
-class Checks(Page):
+class Controls(Page):
     form_model = 'player'
     form_fields = [
         'risk_taking', 
         'risk_avoidance',
-        'wtp_pizza_immediate',
-        'wtp_pizza_distant',
-        'wtp_genai_immediate',
-        'wtp_genai_distant',
-        'wtp_movie_immediate',
-        'wtp_movie_distant',
-        'wtp_book_immediate',
-        'wtp_book_distant',
-        'exp_driving_immediate',
-        'exp_driving_distant',
-        'exp_email_immediate',
-        'exp_email_distant',
-        'exp_lending_immediate',
-        'exp_lending_distant',
-        'exp_book_immediate',
-        'exp_book_distant'
+        'manipulation_effort',
+        'manipulation_difficulty',
     ]
     
     @staticmethod
@@ -588,36 +519,7 @@ class Checks(Page):
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
-        player.checks_page_time = time.time() - player.participant._start_time
-
-class PANAS(Page):
-    form_model = 'player'
-    form_fields = [
-        'panas_inspired',
-        'panas_alert',
-        'panas_excited',
-        'panas_enthusiastic',
-        'panas_determined',
-        'panas_afraid',
-        'panas_upset',
-        'panas_nervous',
-        'panas_scared',
-        'panas_distressed'
-    ]
-    
-    @staticmethod
-    def is_displayed(player: Player):
-        return player.passed_screening
-    
-    @staticmethod
-    def get_timeout_seconds(player: Player):
-        import time
-        player.participant._start_time = time.time()
-        return None
-
-    @staticmethod
-    def before_next_page(player: Player, timeout_happened):
-        player.panas_page_time = time.time() - player.participant._start_time
+        player.controls_page_time = time.time() - player.participant._start_time
 
 class Demographics(Page):
     form_model = 'player'
@@ -627,6 +529,7 @@ class Demographics(Page):
         'qualification',
         'work_experience',
         'rm_experience',
+        'industry_experience',
         'english_native',
     ]
     
@@ -691,10 +594,9 @@ page_sequence = [
     Spec_Condition,
     CLT_Condition,
     Assessment,
-    Controls, 
-    BIF,
-    Checks,
-    PANAS,
+    Mediators, 
+    Manip_Check,
+    Controls,
     Demographics,
     Thanks,
     Redirect
