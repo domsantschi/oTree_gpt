@@ -1,0 +1,344 @@
+{{ block title }}<span style="display: none;">Additional Questions</span>{{ endblock }}
+{{ block content }}
+
+<style>
+    .checks-container {
+        max-width: 900px;
+        margin: 30px auto;
+        padding: 25px;
+        background: linear-gradient(to right, #ffffff, #f8f9fa);
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .section-box {
+        border-left: 4px solid #007bff;
+        padding: 20px;
+        background-color: #f8f9fa;
+        margin: 20px 0;
+        transition: transform 0.2s;
+        border-radius: 5px;
+    }
+    
+    .section-box:hover {
+        transform: translateX(5px);
+    }
+
+    .likert-scale {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 10px;
+        margin: 20px 0;
+        padding: 15px;
+        background-color: white;
+        border-radius: 5px;
+    }
+
+    .scale-option {
+        text-align: center;
+        padding: 10px 5px;
+        transition: all 0.2s;
+        border-radius: 5px;
+    }
+
+    .scale-option:hover {
+        background-color: rgba(0, 123, 255, 0.05);
+    }
+
+    .radio-label {
+        font-size: 0.85em;
+        margin-top: 8px;
+        display: block;
+        color: #495057;
+    }
+
+    input[type="radio"] {
+        transform: scale(1.2);
+        margin-bottom: 8px;
+    }
+
+    input[type="radio"]:checked + .radio-label {
+        color: #007bff;
+        font-weight: bold;
+    }
+
+    .table-container {
+        background-color: white;
+        padding: 15px;
+        border-radius: 5px;
+        margin-top: 15px;
+    }
+
+    .table {
+        margin-bottom: 0;
+    }
+
+    .table th {
+        background-color: #f8f9fa;
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .input-group-sm .form-control {
+        border-radius: 0.25rem;
+    }
+
+    .section-title {
+        color: #007bff;
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+</style>
+
+<div class="checks-container">
+    <div class="mb-4">
+        <h4>📋 Additional Questions</h4>
+        <p class="text-muted">Please answer the following questions about risk willingness and economic decisions.</p>
+    </div>
+    
+    <form method="post">
+        
+        <!-- Section 1: Risk Willingness Questions -->
+        <div class="section-box">
+            <h5 class="section-title">Risk Willingness</h5>
+            
+            <!-- Question 1: Risk Taking -->
+            <div class="mb-4">
+                <p class="mb-3"><strong>How would you rate your own willingness to undertake risky business propositions compared to other individuals?</strong></p>
+                
+                <div class="likert-scale">
+                    <div class="scale-option">
+                        <input type="radio" name="risk_taking" value="1" id="rt1" required>
+                        <label class="radio-label" for="rt1">Extremely<br>less willing</label>
+                    </div>
+                    <div class="scale-option">
+                        <input type="radio" name="risk_taking" value="2" id="rt2">
+                        <label class="radio-label" for="rt2">Much less<br>willing</label>
+                    </div>
+                    <div class="scale-option">
+                        <input type="radio" name="risk_taking" value="3" id="rt3">
+                        <label class="radio-label" for="rt3">Less<br>willing</label>
+                    </div>
+                    <div class="scale-option">
+                        <input type="radio" name="risk_taking" value="4" id="rt4">
+                        <label class="radio-label" for="rt4">About the<br>same</label>
+                    </div>
+                    <div class="scale-option">
+                        <input type="radio" name="risk_taking" value="5" id="rt5">
+                        <label class="radio-label" for="rt5">More<br>willing</label>
+                    </div>
+                    <div class="scale-option">
+                        <input type="radio" name="risk_taking" value="6" id="rt6">
+                        <label class="radio-label" for="rt6">Much more<br>willing</label>
+                    </div>
+                    <div class="scale-option">
+                        <input type="radio" name="risk_taking" value="7" id="rt7">
+                        <label class="radio-label" for="rt7">Extremely<br>more willing</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 2: Risk Avoidance (Reverse Scaled) -->
+            <div class="mb-3">
+                <p class="mb-3"><strong>How would you rate your own willingness to avoid risky business propositions compared to other individuals?</strong></p>
+                
+                <div class="likert-scale">
+                    <div class="scale-option">
+                        <input type="radio" name="risk_avoidance" value="1" id="ra1" required>
+                        <label class="radio-label" for="ra1">Extremely<br>less willing</label>
+                    </div>
+                    <div class="scale-option">
+                        <input type="radio" name="risk_avoidance" value="2" id="ra2">
+                        <label class="radio-label" for="ra2">Much less<br>willing</label>
+                    </div>
+                    <div class="scale-option">
+                        <input type="radio" name="risk_avoidance" value="3" id="ra3">
+                        <label class="radio-label" for="ra3">Less<br>willing</label>
+                    </div>
+                    <div class="scale-option">
+                        <input type="radio" name="risk_avoidance" value="4" id="ra4">
+                        <label class="radio-label" for="ra4">About the<br>same</label>
+                    </div>
+                    <div class="scale-option">
+                        <input type="radio" name="risk_avoidance" value="5" id="ra5">
+                        <label class="radio-label" for="ra5">More<br>willing</label>
+                    </div>
+                    <div class="scale-option">
+                        <input type="radio" name="risk_avoidance" value="6" id="ra6">
+                        <label class="radio-label" for="ra6">Much more<br>willing</label>
+                    </div>
+                    <div class="scale-option">
+                        <input type="radio" name="risk_avoidance" value="7" id="ra7">
+                        <label class="radio-label" for="ra7">Extremely<br>more willing</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Willingness to Pay Questions -->
+        <div class="section-box">
+            <h5 class="section-title">Willingness to Pay</h5>
+            <p class="mb-3"><strong>How much would you be willing to pay for the following products?</strong></p>
+            
+            <div class="table-container">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th class="text-center">Immediate Purchase<br><small class="text-muted">(today)</small></th>
+                            <th class="text-center">Distant Purchase<br><small class="text-muted">(in 6 months)</small></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Pizza meal at restaurant</strong></td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="wtp_pizza_immediate" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="wtp_pizza_distant" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Gen-AI subscription</strong><br><small class="text-muted">(monthly)</small></td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="wtp_genai_immediate" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="wtp_genai_distant" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Movie at cinema</strong></td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="wtp_movie_immediate" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="wtp_movie_distant" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Book at the bookstore</strong></td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="wtp_book_immediate" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="wtp_book_distant" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section 3: Expected Payment Questions -->
+        <div class="section-box">
+            <h5 class="section-title">Expected Payment</h5>
+            <p class="mb-3"><strong>How much would you expect to get for providing the following services?</strong></p>
+            
+            <div class="table-container">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th class="text-center">Immediate Service<br><small class="text-muted">(today)</small></th>
+                            <th class="text-center">Distant Service<br><small class="text-muted">(in 6 months)</small></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Driving a stranger to a restaurant</strong></td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="exp_driving_immediate" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="exp_driving_distant" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Reviewing a stranger's email</strong></td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="exp_email_immediate" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="exp_email_distant" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Borrowing a stranger USD 10 for a movie ticket</strong></td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="exp_lending_immediate" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="exp_lending_distant" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Suggesting a book to a stranger</strong></td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="exp_book_immediate" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm" style="max-width: 150px; margin: 0 auto;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="exp_book_distant" min="0" step="0.01" required>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="text-center mt-4">
+            {{ next_button }}
+        </div>
+    </form>
+</div>
+
+{% endblock %}

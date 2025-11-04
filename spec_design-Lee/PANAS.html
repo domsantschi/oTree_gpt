@@ -1,0 +1,327 @@
+{{ block title }}<span style="display: none;">How do you feel?</span>{{ endblock }}
+{{ block content }}
+
+<style>
+    .panas-container {
+        max-width: 900px;
+        margin: 30px auto;
+        padding: 25px;
+        background: linear-gradient(to right, #ffffff, #f8f9fa);
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .emotion-box {
+        border-left: 4px solid #007bff;
+        padding: 20px;
+        background-color: #f8f9fa;
+        margin: 20px 0;
+        transition: transform 0.2s;
+        border-radius: 5px;
+    }
+    
+    .emotion-box:hover {
+        transform: translateX(5px);
+    }
+
+    .scale-header {
+        background-color: white;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .emotion-row {
+        display: grid;
+        grid-template-columns: 2fr repeat(5, 1fr);
+        gap: 10px;
+        padding: 15px;
+        background-color: white;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        align-items: center;
+    }
+
+    .emotion-label {
+        font-weight: 600;
+        color: #212529;
+    }
+
+    .scale-option {
+        text-align: center;
+    }
+
+    .scale-option input[type="radio"] {
+        transform: scale(1.3);
+        cursor: pointer;
+    }
+
+    .scale-option label {
+        display: block;
+        font-size: 0.85em;
+        color: #6c757d;
+        margin-top: 5px;
+    }
+
+    .progress-counter {
+        background-color: #00ff559f;
+        color: rgb(0, 0, 0);
+        padding: 10px 15px;
+        border-radius: 5px;
+        margin: 15px 0;
+        font-weight: bold;
+        text-align: center;
+    }
+</style>
+
+<div class="panas-container">
+    <div class="mb-4">
+        <h4>📋 How do you feel?</h4>
+        <p class="text-muted">This scale consists of a number of words that describe different feelings and emotions.</p>
+        <p class="text-muted"><strong>Please read each item and then mark the appropriate answer. Indicate to what extent you feel this way right now, that is, at the present moment.</strong></p>
+    </div>
+
+    <div class="progress-counter">
+        <span id="progress-counter">0 of 10 items completed</span>
+    </div>
+    
+    <form method="post">
+        
+        <div class="emotion-box">
+            <!-- Scale Header -->
+            <div class="scale-header" style="display: grid; grid-template-columns: 2fr repeat(5, 1fr); gap: 10px; text-align: center;">
+                <div style="text-align: left;">Feeling/Emotion</div>
+                <div><small>Very slightly<br>or not at all</small></div>
+                <div><small>A little</small></div>
+                <div><small>Moderately</small></div>
+                <div><small>Quite a bit</small></div>
+                <div><small>Extremely</small></div>
+            </div>
+            </div>
+            
+            <!-- 1. Inspired -->
+            <div class="emotion-row">
+                <div class="emotion-label">Inspired</div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_inspired" value="1" id="inspired_1" required onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_inspired" value="2" id="inspired_2" onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_inspired" value="3" id="inspired_3" onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_inspired" value="4" id="inspired_4" onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_inspired" value="5" id="inspired_5" onclick="updateProgress()">
+                </div>
+            </div>
+
+            <!-- 2. Alert -->
+            <div class="emotion-row">
+                <div class="emotion-label">Alert</div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_alert" value="1" id="alert_1" required onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_alert" value="2" id="alert_2" onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_alert" value="3" id="alert_3" onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_alert" value="4" id="alert_4" onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_alert" value="5" id="alert_5" onclick="updateProgress()">
+                </div>
+            </div>
+
+            <!-- 3. Excited -->
+            <div class="emotion-row">
+                <div class="emotion-label">Excited</div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_excited" value="1" id="excited_1" required onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_excited" value="2" id="excited_2" onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_excited" value="3" id="excited_3" onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_excited" value="4" id="excited_4" onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_excited" value="5" id="excited_5" onclick="updateProgress()">
+                </div>
+            </div>
+
+            <!-- 4. Enthusiastic -->
+            <div class="emotion-row">
+                <div class="emotion-label">Enthusiastic</div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_enthusiastic" value="1" id="enthusiastic_1" required onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_enthusiastic" value="2" id="enthusiastic_2" onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_enthusiastic" value="3" id="enthusiastic_3" onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_enthusiastic" value="4" id="enthusiastic_4" onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_enthusiastic" value="5" id="enthusiastic_5" onclick="updateProgress()">
+                </div>
+            </div>
+
+            <!-- 5. Determined -->
+            <div class="emotion-row">
+                <div class="emotion-label">Determined</div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_determined" value="1" id="determined_1" required onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_determined" value="2" id="determined_2" onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_determined" value="3" id="determined_3" onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_determined" value="4" id="determined_4" onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_determined" value="5" id="determined_5" onclick="updateProgress()">
+                </div>
+            </div>
+
+            <!-- 6. Afraid -->
+            <div class="emotion-row">
+                <div class="emotion-label">Afraid</div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_afraid" value="1" id="afraid_1" required onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_afraid" value="2" id="afraid_2" onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_afraid" value="3" id="afraid_3" onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_afraid" value="4" id="afraid_4" onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_afraid" value="5" id="afraid_5" onclick="updateProgress()">
+                </div>
+            </div>
+
+            <!-- 7. Upset -->
+            <div class="emotion-row">
+                <div class="emotion-label">Upset</div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_upset" value="1" id="upset_1" required onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_upset" value="2" id="upset_2" onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_upset" value="3" id="upset_3" onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_upset" value="4" id="upset_4" onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_upset" value="5" id="upset_5" onclick="updateProgress()">
+                </div>
+            </div>
+
+            <!-- 8. Nervous -->
+            <div class="emotion-row">
+                <div class="emotion-label">Nervous</div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_nervous" value="1" id="nervous_1" required onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_nervous" value="2" id="nervous_2" onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_nervous" value="3" id="nervous_3" onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_nervous" value="4" id="nervous_4" onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_nervous" value="5" id="nervous_5" onclick="updateProgress()">
+                </div>
+            </div>
+
+            <!-- 9. Scared -->
+            <div class="emotion-row">
+                <div class="emotion-label">Scared</div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_scared" value="1" id="scared_1" required onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_scared" value="2" id="scared_2" onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_scared" value="3" id="scared_3" onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_scared" value="4" id="scared_4" onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_scared" value="5" id="scared_5" onclick="updateProgress()">
+                </div>
+            </div>
+
+            <!-- 10. Distressed -->
+            <div class="emotion-row">
+                <div class="emotion-label">Distressed</div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_distressed" value="1" id="distressed_1" required onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_distressed" value="2" id="distressed_2" onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_distressed" value="3" id="distressed_3" onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_distressed" value="4" id="distressed_4" onclick="updateProgress()">
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="panas_distressed" value="5" id="distressed_5" onclick="updateProgress()">
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-4">
+            {{ next_button }}
+        </div>
+    </form>
+</div>
+
+<script>
+function updateProgress() {
+    const emotions = ['inspired', 'alert', 'excited', 'enthusiastic', 'determined', 'afraid', 'upset', 'nervous', 'scared', 'distressed'];
+    let completed = 0;
+    
+    emotions.forEach(emotion => {
+        const selected = document.querySelector(`input[name="panas_${emotion}"]:checked`);
+        if (selected) {
+            completed++;
+        }
+    });
+    
+    document.getElementById('progress-counter').textContent = completed + ' of 10 items completed';
+}
+</script>
+
+{% endblock %}
