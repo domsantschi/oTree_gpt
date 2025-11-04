@@ -106,6 +106,47 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect,
     )
 
+    # Mediator: Legitimacy Conflict Perception (3 subconstructs)
+    # Mediators
+    conflict = models.IntegerField(
+        label="Stakeholder conflict perception",
+        min=1,
+        max=7,
+        doc="Perceived conflict between internal and external stakeholders in ESG disclosures"
+    )
+    stakeholder_agreement = models.IntegerField(
+        label="Stakeholder agreement on ESG priorities",
+        min=1,
+        max=7,
+        doc="Perceived agreement between internal and external stakeholders on ESG theme prioritization"
+    )
+    goal_alignment = models.IntegerField(
+        label="Corporate-societal goal alignment",
+        min=1,
+        max=7,
+        doc="Perceived alignment between corporate and societal goals in ESG disclosures"
+    )
+    
+    stakeholder_selection = models.IntegerField(
+        label="Appropriateness of stakeholder consultation",
+        min=1,
+        max=7,
+        doc="Perceived appropriateness of stakeholders consulted for ESG materiality assessment"
+    )
+    trustworthiness = models.IntegerField(
+        label="Disclosure trustworthiness",
+        min=1,
+        max=7,
+        doc="Perceived trustworthiness of Acme's ESG disclosures"
+    )
+    unbiased_process = models.IntegerField(
+        label="Unbiased assessment process",
+        min=1,
+        max=7,
+        doc="Perceived lack of bias in ESG materiality assessment process"
+    )
+
+
     # Demographic fields    
     age = models.StringField(
         label="What is your age?",
@@ -373,12 +414,26 @@ class Checks(Page):
     def is_displayed(player: Player):
         return player.passed_screening
 
+class Mediators(Page):
+    form_model = 'player'
+    form_fields = [
+        'conflict',
+        'stakeholder_agreement',
+        'goal_alignment',
+        'stakeholder_selection',
+        'trustworthiness',
+        'unbiased_process',
+    ]
+    
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.passed_screening
+
 class Controls(Page):
     form_model = 'player'
     form_fields = [
         'risk_attitudes',
         'esg_familiarity', 
-        'disclosure_credibility',
         'esg_relevance',
         'harmony_seeking'
     ]
@@ -505,6 +560,7 @@ page_sequence = [
     Condition2,
     Assessment,
     Checks,
+    Mediators,
     Controls,
     Demographics,
     Thanks,

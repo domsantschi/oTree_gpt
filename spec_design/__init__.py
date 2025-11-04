@@ -152,61 +152,61 @@ class Player(BasePlayer):
     # Track consent decision
     declined_consent = models.BooleanField(initial=False)
     
-    # Mediator 1: Horizon Expansion (3 subconstructs)
-    horizon_temporal = models.IntegerField(
-        label="Temporal perspective expansion",
+    # Mediators - Information Perspective
+    creative_thinking = models.IntegerField(
+        label="Creative thinking about risks",
         min=1,
         max=7,
-        doc="The information helped me think about longer-term consequences"
+        doc="The information helped me think more creatively about potential risks"
     )
-    horizon_future = models.IntegerField(
-        label="Future implications awareness",
+    imagination = models.IntegerField(
+        label="Imagination of possibilities",
         min=1,
         max=7,
-        doc="The information made me more aware of how the technology could evolve over time"
+        doc="The information encouraged me to imagine possibilities I wouldn't have thought of otherwise"
     )
-    horizon_systemic = models.IntegerField(
-        label="Systemic thinking",
+    broader_implications = models.IntegerField(
+        label="Broader implications consideration",
         min=1,
         max=7,
         doc="The information helped me consider broader implications beyond immediate effects"
     )
     
-    # Mediator 2: Narrative Accessibility (3 subconstructs)
-    narrative_comprehension = models.IntegerField(
-        label="Narrative comprehension",
+    # Mediators - Information Format
+    story_format = models.IntegerField(
+        label="Story format effectiveness",
         min=1,
         max=7,
-        doc="The story-like format made the risks easier to understand"
+        doc="The story-like format made the risks easier to identify"
     )
-    narrative_relatable = models.IntegerField(
-        label="Narrative relatability",
+    real_world_relatable = models.IntegerField(
+        label="Real-world relatability",
         min=1,
         max=7,
         doc="The narrative made the risks more relatable to real-world situations"
     )
-    narrative_processing = models.IntegerField(
-        label="Narrative processing ease",
+    processing_effectiveness = models.IntegerField(
+        label="Information processing effectiveness",
         min=1,
         max=7,
-        doc="The qualitative scenarios helped me process risk information more effectively"
+        doc="The scenario helped me process information related to potential risks more effectively"
     )
     
-    # Mediator 3: Risk Embodiment (3 subconstructs)
-    embodiment_tangible = models.IntegerField(
-        label="Risk tangibility",
+    # Mediators - Information Impact
+    abstract_to_concrete = models.IntegerField(
+        label="Abstract to concrete transformation",
         min=1,
         max=7,
         doc="The information made abstract risks feel more concrete and tangible"
     )
-    embodiment_visceral = models.IntegerField(
-        label="Visceral response",
+    impact_feeling = models.IntegerField(
+        label="Impact feeling",
         min=1,
         max=7,
         doc="The information helped me feel the potential impact of the risks"
     )
-    embodiment_experiential = models.IntegerField(
-        label="Experiential understanding",
+    mental_experience = models.IntegerField(
+        label="Mental experience of risks",
         min=1,
         max=7,
         doc="The information allowed me to mentally experience what the risks might be like"
@@ -453,15 +453,15 @@ class Spec_Condition(Page):
 class Mediators(Page):
     form_model = 'player'
     form_fields = [
-        'horizon_temporal',
-        'horizon_future',
-        'horizon_systemic',
-        'narrative_comprehension',
-        'narrative_relatable',
-        'narrative_processing',
-        'embodiment_tangible',
-        'embodiment_visceral',
-        'embodiment_experiential',
+        'creative_thinking',
+        'imagination',
+        'broader_implications',
+        'story_format',
+        'real_world_relatable',
+        'processing_effectiveness',
+        'abstract_to_concrete',
+        'impact_feeling',
+        'mental_experience',
     ]
     
     @staticmethod
