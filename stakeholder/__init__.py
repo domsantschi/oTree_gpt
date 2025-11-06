@@ -126,26 +126,6 @@ class Player(BasePlayer):
         max=7,
         doc="Perceived alignment between corporate and societal goals in ESG disclosures"
     )
-    
-    stakeholder_selection = models.IntegerField(
-        label="Appropriateness of stakeholder consultation",
-        min=1,
-        max=7,
-        doc="Perceived appropriateness of stakeholders consulted for ESG materiality assessment"
-    )
-    trustworthiness = models.IntegerField(
-        label="Disclosure trustworthiness",
-        min=1,
-        max=7,
-        doc="Perceived trustworthiness of Acme's ESG disclosures"
-    )
-    unbiased_process = models.IntegerField(
-        label="Unbiased assessment process",
-        min=1,
-        max=7,
-        doc="Perceived lack of bias in ESG materiality assessment process"
-    )
-
 
     # Demographic fields    
     age = models.StringField(
@@ -420,9 +400,6 @@ class Mediators(Page):
         'conflict',
         'stakeholder_agreement',
         'goal_alignment',
-        'stakeholder_selection',
-        'trustworthiness',
-        'unbiased_process',
     ]
     
     @staticmethod
