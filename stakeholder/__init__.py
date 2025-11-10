@@ -157,24 +157,17 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect,
     )
     finance_experience = models.IntegerField(
-        label="How many years of full-time working experience in a financial analyst role do you have?",
+        label="How many years of work experience in a financial analyst role do you have?",
         min=0,
     )
-    investment_research = models.StringField(
-        label="How involved are you with investment research?",
-        choices=[
-            "Not at all",
-            "Very little",
-            "Not much",
-            "Neutral",
-            "Somewhat",
-            "Quite a bit",
-            "A lot",
-        ],
-        widget=widgets.RadioSelectHorizontal,  # Use horizontal layout for Likert scale
+    
+    professional_background = models.LongStringField(
+        label="Please explain your professional background in one sentence.",
+        blank=False,
     )
-    risk_assessments = models.StringField(
-        label="How involved are you with risk assessments?",
+    
+    investment_research = models.StringField(
+        label="How involved are you on a personal level with investment research?",
         choices=[
             "Not at all",
             "Very little",
@@ -426,8 +419,8 @@ class Demographics(Page):
         'gender',
         'qualification',
         'finance_experience',
+        'professional_background',
         'investment_research',
-        'risk_assessments',
     ]
     
     @staticmethod

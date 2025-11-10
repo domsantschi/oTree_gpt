@@ -1,4 +1,4 @@
-{{ block title }}Participant Information{{ endblock }}
+{{ block title }}Demographics{{ endblock }}
 {{ block content }}
 
 <div class="card mb-3">
@@ -47,18 +47,20 @@
 
 <div class="card mb-3">
     <div class="card-body">
-        <h5>5. Current Investment Activities</h5>
+        <h5>5. Professional Background</h5>
+        <div class="form-group">
+            {{ formfield 'professional_background' }}
+            {{ formfield_errors 'professional_background' }}
+        </div>
+    </div>
+</div>
 
-        <!-- Investment Research -->
-        <div class="form-group mb-4">
+<div class="card mb-3">
+    <div class="card-body">
+        <h5>6. Personal Investment Activity</h5>
+        <div class="form-group">
             {{ formfield 'investment_research' }}
             {{ formfield_errors 'investment_research' }}
-        </div>
-
-        <!-- Risk Assessments -->
-        <div class="form-group">
-            {{ formfield 'risk_assessments' }}
-            {{ formfield_errors 'risk_assessments' }}
         </div>
     </div>
 </div>
