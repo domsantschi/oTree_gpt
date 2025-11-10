@@ -175,10 +175,49 @@
             {{ formfield_errors 'risk_avoidance' }}
         </div>
 
-        <!-- Question 3: Manipulation Effort -->
+        <!-- Question 3: Creativity -->
         <div class="question-box">
             <p class="mb-3">
                 <span class="question-number">3</span>
+                How would you rate your <b>level of creativity</b> compared to others?
+            </p>
+            <div class="likert-scale">
+                <div class="scale-option">
+                    <input type="radio" name="creativity" value="1" id="cr1" required>
+                    <label class="radio-label" for="cr1">Extremely<br>low</label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="creativity" value="2" id="cr2">
+                    <label class="radio-label" for="cr2">Low<br></label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="creativity" value="3" id="cr3">
+                    <label class="radio-label" for="cr3">Rather<br>low</label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="creativity" value="4" id="cr4">
+                    <label class="radio-label" for="cr4">About the<br>same</label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="creativity" value="5" id="cr5">
+                    <label class="radio-label" for="cr5">Rather<br>high</label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="creativity" value="6" id="cr6">
+                    <label class="radio-label" for="cr6">High<br></label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="creativity" value="7" id="cr7">
+                    <label class="radio-label" for="cr7">Extremely<br>high</label>
+                </div>
+            </div>
+            {{ formfield_errors 'creativity' }}
+        </div>
+
+        <!-- Question 4: Manipulation Effort -->
+        <div class="question-box">
+            <p class="mb-3">
+                <span class="question-number">4</span>
                 <b>How much effort</b> did it take to complete the risk identification task?
             </p>
             <div class="likert-scale">
@@ -200,10 +239,10 @@
             {{ formfield_errors 'manipulation_effort' }}
         </div>
 
-        <!-- Question 4: Manipulation Difficulty -->
+        <!-- Question 5: Manipulation Difficulty -->
         <div class="question-box">
             <p class="mb-3">
-                <span class="question-number">4</span>
+                <span class="question-number">5</span>
                 <b>How difficult</b> was it to complete the risk identification task?
             </p>
             <div class="likert-scale">

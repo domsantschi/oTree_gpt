@@ -40,7 +40,7 @@ class Player(BasePlayer):
     
     gender = models.StringField(
         label="Gender",
-        choices=["Male", "Female", "Other"],
+        choices=["Male", "Female", "Other", "Prefer not to say"],
     )
     age = models.StringField(
         label="Age",
@@ -63,21 +63,24 @@ class Player(BasePlayer):
         ],
     )
     work_experience = models.IntegerField(
-        label="Years of Full-Time Work Experience",
+        label="Years of Full-Time Work Experience (Total)",
         min=0,
+        doc="Total years of full-time work experience"
     )
     rm_experience = models.IntegerField(
         label="Years of Risk Management Experience",
         min=0,
+        doc="Years of work experience specifically in risk management"
     )
     industry_experience = models.IntegerField(
         label="Years of experience in food innovation, food science, or biotechnology",
         min=0,
         doc="Years of full-time work experience in food innovation, food science, or biotechnology industry"
     )
-    english_native = models.StringField(
-        label="Is English your native language?",
-        choices=["Yes", "No"],
+    professional_background = models.LongStringField(
+        label="Professional Background",
+        blank=False,
+        doc="One-sentence explanation of professional background"
     )
     
     # Experimental conditions
@@ -238,6 +241,13 @@ class Player(BasePlayer):
         min=1,
         max=7,
         doc="Self-rated willingness to avoid risky business propositions compared to others"
+    )
+    
+    creativity = models.IntegerField(
+        label="Self-rated creativity level",
+        min=1,
+        max=7,
+        doc="Self-rated level of creativity compared to others"
     )
     
     # Risk identification - count and descriptions
@@ -503,6 +513,7 @@ class Controls(Page):
     form_fields = [
         'risk_taking', 
         'risk_avoidance',
+        'creativity',
         'manipulation_effort',
         'manipulation_difficulty',
     ]
@@ -530,7 +541,7 @@ class Demographics(Page):
         'work_experience',
         'rm_experience',
         'industry_experience',
-        'english_native',
+        'professional_background',
     ]
     
     @staticmethod

@@ -31,11 +31,12 @@
     
     .radio-option {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         margin: 10px 0;
         padding: 10px;
         border-radius: 5px;
         transition: background-color 0.2s;
+        cursor: pointer;
     }
     
     .radio-option:hover {
@@ -44,7 +45,14 @@
     
     .radio-option input[type="radio"] {
         margin-right: 10px;
+        margin-top: 3px;
         transform: scale(1.2);
+        flex-shrink: 0;
+    }
+    
+    .radio-option span {
+        flex: 1;
+        line-height: 1.5;
     }
     
     .question-number {
@@ -97,16 +105,16 @@
     <div class="question-box">
         <p class="mb-3">
             <span class="question-number">2</span>
-            Which of the following describes the <b>task you pursued</b> to describe the new food technology development process the team takes?
+           Before you identified the risks, which of the following describes your task to reflect on the NutriGen Foods' technology development process?
         </p>
         <div class="radio-group">
             <label class="radio-option">
                 <input type="radio" name="construal_check" value="Concrete Construal" required>
-                I described <b>&nbsp;how&nbsp;</b> the team develops the product (the specific steps and procedures) 🔧
+                <span>I described<b>&nbsp;how&nbsp;</b>the NutriGen team is developing the product (the specific steps and procedures) 🔧</span>
             </label>
             <label class="radio-option">
                 <input type="radio" name="construal_check" value="Abstract Construal">
-                I described <b>&nbsp;why&nbsp;</b> the team develops the product (the goals and purposes) 🎯
+                <span>I described<b>&nbsp;why&nbsp;</b>the NutriGen team is developing the product (the goals and purposes) 🎯</span>
             </label>
         </div>
         {{ formfield_errors 'construal_check' }}

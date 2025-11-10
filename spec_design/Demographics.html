@@ -85,6 +85,69 @@
         margin-top: 5px;
         padding-left: 20px;
     }
+
+    .experience-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+
+    .experience-table th,
+    .experience-table td {
+        padding: 12px;
+        text-align: left;
+        border: 1px solid #dee2e6;
+    }
+
+    .experience-table th {
+        background-color: #007bff;
+        color: white;
+        font-weight: 600;
+    }
+
+    .experience-table tbody tr:nth-child(odd) {
+        background-color: #f8f9fa;
+    }
+
+    .experience-table tbody tr:hover {
+        background-color: rgba(0, 123, 255, 0.1);
+    }
+
+    .experience-table input[type="number"] {
+        width: 100px;
+        padding: 8px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        transition: border-color 0.2s;
+    }
+
+    .experience-table input[type="number"]:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    .text-input {
+        margin: 15px 0;
+        padding-left: 20px;
+    }
+
+    .text-input input[type="text"],
+    .text-input textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        font-size: 1em;
+        transition: border-color 0.2s;
+    }
+
+    .text-input input[type="text"]:focus,
+    .text-input textarea:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
 </style>
 
 <div class="demographics-container">
@@ -110,6 +173,10 @@
             <label class="radio-option">
                 <input type="radio" name="gender" value="Other">
                 Other
+            </label>
+            <label class="radio-option">
+                <input type="radio" name="gender" value="Prefer not to say">
+                Prefer not to say
             </label>
         </div>
         {{ formfield_errors 'gender' }}
@@ -178,55 +245,50 @@
     <div class="question-box">
         <p class="mb-3">
             <span class="question-number">4</span>
-            How many years of full-time work experience do you have?
+            Please indicate your years of work experience in the following areas:
         </p>
-        <div class="number-input">
-            <input type="number" id="work_experience" name="work_experience" min="0" step="1" required>
-            <label for="work_experience">years</label>
-        </div>
+        <table class="experience-table">
+            <thead>
+                <tr>
+                    <th>Area of Experience</th>
+                    <th>Years</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Total work experience (in any field)</td>
+                    <td>
+                        <input type="number" id="work_experience" name="work_experience" min="0" step="1" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Risk management</td>
+                    <td>
+                        <input type="number" id="rm_experience" name="rm_experience" min="0" step="1" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Food innovation, food science, or biotechnology</td>
+                    <td>
+                        <input type="number" id="industry_experience" name="industry_experience" min="0" step="1" required>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
         {{ formfield_errors 'work_experience' }}
-    </div>
-
-    <div class="question-box">
-        <p class="mb-3">
-            <span class="question-number">5</span>
-            How many years of risk management experience do you have?
-        </p>
-        <div class="number-input">
-            <input type="number" id="rm_experience" name="rm_experience" min="0" step="1" required>
-            <label for="rm_experience">years</label>
-        </div>
         {{ formfield_errors 'rm_experience' }}
-    </div>
-
-    <div class="question-box">
-        <p class="mb-3">
-            <span class="question-number">6</span>
-            How many years of full-time work experience in food innovation, food science, or biotechnology do you have?
-        </p>
-        <div class="number-input">
-            <input type="number" id="industry_experience" name="industry_experience" min="0" step="1" required>
-            <label for="industry_experience">years</label>
-        </div>
         {{ formfield_errors 'industry_experience' }}
     </div>
 
     <div class="question-box">
         <p class="mb-3">
-            <span class="question-number">7</span>
-            Is English your native language (mother tongue)?
+            <span class="question-number">5</span>
+            Please explain your professional background in one sentence:
         </p>
-        <div class="radio-group">
-            <label class="radio-option">
-                <input type="radio" name="english_native" value="Yes" required>
-                Yes
-            </label>
-            <label class="radio-option">
-                <input type="radio" name="english_native" value="No">
-                No
-            </label>
+        <div class="text-input">
+            <input type="text" id="professional_background" name="professional_background" required>
         </div>
-        {{ formfield_errors 'english_native' }}
+        {{ formfield_errors 'professional_background' }}
     </div>
 
     <div class="text-center mt-4">
