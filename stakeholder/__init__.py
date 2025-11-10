@@ -167,15 +167,15 @@ class Player(BasePlayer):
     )
     
     investment_research = models.StringField(
-        label="How involved are you on a personal level with investment research?",
+        label="How often do you personally engage in investment research or make investment decisions?",
         choices=[
-            "Not at all",
-            "Very little",
-            "Not much",
+            "Never",
+            "Rarely",
+            "Rather rarely",
             "Neutral",
-            "Somewhat",
-            "Quite a bit",
-            "A lot",
+            "Rather frequently",
+            "Frequently",
+            "Very frequently",
         ],
         widget=widgets.RadioSelectHorizontal,  # Use horizontal layout for Likert scale
     )
