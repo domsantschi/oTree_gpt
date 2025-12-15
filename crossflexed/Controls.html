@@ -15,8 +15,8 @@
         min-height: 100vh;
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        padding: 20px;
+        justify-content: flex-start;
+        padding: 40px 20px 20px 20px;
         background: white;
     }
     
@@ -52,23 +52,43 @@
         line-height: 1.3;
     }
     
-    .dropdown-wrapper {
+    .option-group {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
         margin-bottom: 40px;
     }
     
-    .dropdown-wrapper select {
-        width: 100%;
-        padding: 16px 20px;
-        font-size: 1.1em;
-        border: 2px solid #e0e0e0;
-        border-radius: 8px;
-        background: #f5f5f5;
-        cursor: pointer;
-        transition: all 0.2s ease;
+    .option {
+        position: relative;
     }
     
-    .dropdown-wrapper select:focus {
-        outline: none;
+    .option input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+    
+    .option-label {
+        display: block;
+        padding: 18px 24px;
+        background: #f5f5f5;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 1.1em;
+        color: #333;
+        font-weight: 500;
+    }
+    
+    .option input[type="radio"]:checked + .option-label {
+        background: rgba(145, 255, 60, 0.2);
+        border-color: rgb(145, 255, 60);
+        color: rgb(50, 95, 80);
+    }
+    
+    .option-label:hover {
         border-color: rgb(145, 255, 60);
         background: rgba(145, 255, 60, 0.1);
     }
@@ -172,17 +192,31 @@
         <div class="question-number">FEEDBACK | QUESTION 13 OF 17</div>
         <div class="question-text">If CrossFit Bern offered such a post-workout recovery solution, how likely are you to use it?</div>
         
-        
-        <div class="dropdown-wrapper">
-            <select id="stretching_solution_likelihood_display" data-field="stretching_solution_likelihood">
-                <option value="">Select an option...</option>
-                <option value="Never">Never</option>
-                <option value="Rarely">Rarely</option>
-                <option value="Sometimes">Sometimes</option>
-                <option value="Often">Often</option>
-                <option value="After every workout">After every workout</option>
-                <option value="Not sure">Not sure</option>
-            </select>
+        <div class="option-group">
+            <div class="option">
+                <input type="radio" name="stretching_solution_likelihood_display" value="Never" id="q1_1" data-field="stretching_solution_likelihood">
+                <label for="q1_1" class="option-label">Never</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="stretching_solution_likelihood_display" value="Rarely" id="q1_2" data-field="stretching_solution_likelihood">
+                <label for="q1_2" class="option-label">Rarely</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="stretching_solution_likelihood_display" value="Sometimes" id="q1_3" data-field="stretching_solution_likelihood">
+                <label for="q1_3" class="option-label">Sometimes</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="stretching_solution_likelihood_display" value="Often" id="q1_4" data-field="stretching_solution_likelihood">
+                <label for="q1_4" class="option-label">Often</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="stretching_solution_likelihood_display" value="After every workout" id="q1_5" data-field="stretching_solution_likelihood">
+                <label for="q1_5" class="option-label">After every workout</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="stretching_solution_likelihood_display" value="Not sure" id="q1_6" data-field="stretching_solution_likelihood">
+                <label for="q1_6" class="option-label">Not sure</label>
+            </div>
         </div>
         
         <div class="navigation-buttons">
@@ -195,17 +229,31 @@
         <div class="question-number">FEEDBACK | QUESTION 14 OF 17</div>
         <div class="question-text">To what extent would you assess the CrossFit-Bern offer to be improved thanks to this?</div>
         
-       
-        <div class="dropdown-wrapper">
-            <select id="offer_improvement_assessment_display" data-field="offer_improvement_assessment">
-                <option value="">Select an option...</option>
-                <option value="Not at all">Not at all</option>
-                <option value="Rather not">Rather not</option>
-                <option value="Neutral">Neutral</option>
-                <option value="A bit">A bit</option>
-                <option value="A lot">A lot</option>
-                <option value="Prefer not to say">Prefer not to say</option>
-            </select>
+        <div class="option-group">
+            <div class="option">
+                <input type="radio" name="offer_improvement_assessment_display" value="Not at all" id="q2_1" data-field="offer_improvement_assessment">
+                <label for="q2_1" class="option-label">Not at all</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="offer_improvement_assessment_display" value="Rather not" id="q2_2" data-field="offer_improvement_assessment">
+                <label for="q2_2" class="option-label">Rather not</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="offer_improvement_assessment_display" value="Neutral" id="q2_3" data-field="offer_improvement_assessment">
+                <label for="q2_3" class="option-label">Neutral</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="offer_improvement_assessment_display" value="A bit" id="q2_4" data-field="offer_improvement_assessment">
+                <label for="q2_4" class="option-label">A bit</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="offer_improvement_assessment_display" value="A lot" id="q2_5" data-field="offer_improvement_assessment">
+                <label for="q2_5" class="option-label">A lot</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="offer_improvement_assessment_display" value="Prefer not to say" id="q2_6" data-field="offer_improvement_assessment">
+                <label for="q2_6" class="option-label">Prefer not to say</label>
+            </div>
         </div>
         
         <div class="navigation-buttons">
@@ -252,25 +300,12 @@
     }
     
     // Enable/disable next button and update hidden fields
-    document.querySelectorAll('select[data-field]').forEach(select => {
-        select.addEventListener('change', function() {
+    document.querySelectorAll('input[type="radio"][data-field]').forEach(radio => {
+        radio.addEventListener('change', function() {
             const fieldName = this.getAttribute('data-field');
             const value = this.value;
             
-            // Update the hidden oTree field - try multiple selectors
-            let hiddenField = document.querySelector(`select[name="${fieldName}"]`);
-            if (!hiddenField) {
-                hiddenField = document.querySelector(`input[name="${fieldName}"]`);
-            }
-            if (!hiddenField) {
-                hiddenField = document.getElementById(`id_${fieldName}`);
-            }
-            
-            if (hiddenField) {
-                hiddenField.value = value;
-                const event = new Event('change', { bubbles: true });
-                hiddenField.dispatchEvent(event);
-            }
+            updateHiddenField(fieldName, value);
             
             // Enable next button
             const screen = this.closest('.question-screen');
@@ -281,9 +316,43 @@
         });
     });
     
+    function updateHiddenField(fieldName, value) {
+        // Try multiple selectors to find the hidden field
+        let hiddenField = document.querySelector(`select[name="${fieldName}"]`);
+        if (!hiddenField) {
+            hiddenField = document.querySelector(`input[name="${fieldName}"]`);
+        }
+        if (!hiddenField) {
+            hiddenField = document.getElementById(`id_${fieldName}`);
+        }
+        
+        if (hiddenField) {
+            hiddenField.value = value;
+            // Remove any validation errors
+            if (hiddenField.classList) {
+                hiddenField.classList.remove('is-invalid');
+            }
+            const event = new Event('change', { bubbles: true });
+            hiddenField.dispatchEvent(event);
+            console.log(`Updated ${fieldName} to:`, value);
+        } else {
+            console.error('Hidden field not found for:', fieldName);
+        }
+    }
+    
     // Handle submit button
-    document.getElementById('submitBtn').addEventListener('click', function() {
-        document.querySelector('form').submit();
+    document.getElementById('submitBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Make sure all visible fields are synced to hidden fields before submit
+        document.querySelectorAll('input[type="radio"][data-field]:checked').forEach(radio => {
+            updateHiddenField(radio.getAttribute('data-field'), radio.value);
+        });
+        
+        // Small delay to ensure all changes are processed
+        setTimeout(() => {
+            document.querySelector('form').submit();
+        }, 100);
     });
     
     // Initialize progress

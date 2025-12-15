@@ -15,8 +15,8 @@
         min-height: 100vh;
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        padding: 20px;
+        justify-content: flex-start;
+        padding: 40px 20px 20px 20px;
         background: white;
     }
     
@@ -52,22 +52,62 @@
         line-height: 1.3;
     }
     
-    .dropdown-wrapper {
+    .option-group {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
         margin-bottom: 40px;
     }
     
-    .dropdown-wrapper select {
+    .option {
+        position: relative;
+    }
+    
+    .option input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+    
+    .option-label {
+        display: block;
+        padding: 18px 24px;
+        background: #f5f5f5;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 1.1em;
+        color: #333;
+        font-weight: 500;
+    }
+    
+    .option input[type="radio"]:checked + .option-label {
+        background: rgba(145, 255, 60, 0.2);
+        border-color: rgb(145, 255, 60);
+        color: rgb(50, 95, 80);
+    }
+    
+    .option-label:hover {
+        border-color: rgb(145, 255, 60);
+        background: rgba(145, 255, 60, 0.1);
+    }
+    
+    .text-input-wrapper {
+        margin-bottom: 40px;
+    }
+    
+    .text-input-wrapper input[type="text"] {
         width: 100%;
         padding: 16px 20px;
         font-size: 1.1em;
         border: 2px solid #e0e0e0;
         border-radius: 8px;
         background: #f5f5f5;
-        cursor: pointer;
         transition: all 0.2s ease;
     }
     
-    .dropdown-wrapper select:focus {
+    .text-input-wrapper input[type="text"]:focus {
         outline: none;
         border-color: rgb(145, 255, 60);
         background: rgba(145, 255, 60, 0.1);
@@ -162,16 +202,31 @@
         <div class="question-number">CONTEXT | QUESTION 1 OF 17</div>
         <div class="question-text">On average, how many CrossFit sessions do you do per week?</div>
         
-        <div class="dropdown-wrapper">
-            <select id="crossfit_frequency_display" data-field="crossfit_frequency">
-                <option value="">Select an option...</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5+">5+</option>
-                <option value="Prefer not to say">Prefer not to say</option>
-            </select>
+        <div class="option-group">
+            <div class="option">
+                <input type="radio" name="crossfit_frequency_display" value="1" id="q1_1" data-field="crossfit_frequency">
+                <label for="q1_1" class="option-label">1</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="crossfit_frequency_display" value="2" id="q1_2" data-field="crossfit_frequency">
+                <label for="q1_2" class="option-label">2</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="crossfit_frequency_display" value="3" id="q1_3" data-field="crossfit_frequency">
+                <label for="q1_3" class="option-label">3</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="crossfit_frequency_display" value="4" id="q1_4" data-field="crossfit_frequency">
+                <label for="q1_4" class="option-label">4</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="crossfit_frequency_display" value="5 or more" id="q1_5" data-field="crossfit_frequency">
+                <label for="q1_5" class="option-label">5 or more</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="crossfit_frequency_display" value="Prefer not to say" id="q1_6" data-field="crossfit_frequency">
+                <label for="q1_6" class="option-label">Prefer not to say</label>
+            </div>
         </div>
         
         <div class="navigation-buttons">
@@ -184,16 +239,31 @@
         <div class="question-number">CONTEXT | QUESTION 2 OF 17</div>
         <div class="question-text">How easy is it for you to recover from a CrossFit session?</div>
         
-        <div class="dropdown-wrapper">
-            <select id="mobility_quality_display" data-field="mobility_quality">
-                <option value="">Select an option...</option>
-                <option value="Very difficult">Very difficult</option>
-                <option value="Difficult">Difficult</option>
-                <option value="Moderate">Moderate</option>
-                <option value="Easy">Easy</option>
-                <option value="Very easy">Very easy</option>
-                <option value="Prefer not to say">Prefer not to say</option>
-            </select>
+        <div class="option-group">
+            <div class="option">
+                <input type="radio" name="mobility_quality_display" value="Very difficult" id="q2_1" data-field="mobility_quality">
+                <label for="q2_1" class="option-label">Very difficult</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="mobility_quality_display" value="Difficult" id="q2_2" data-field="mobility_quality">
+                <label for="q2_2" class="option-label">Difficult</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="mobility_quality_display" value="Moderate" id="q2_3" data-field="mobility_quality">
+                <label for="q2_3" class="option-label">Moderate</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="mobility_quality_display" value="Easy" id="q2_4" data-field="mobility_quality">
+                <label for="q2_4" class="option-label">Easy</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="mobility_quality_display" value="Very easy" id="q2_5" data-field="mobility_quality">
+                <label for="q2_5" class="option-label">Very easy</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="mobility_quality_display" value="Prefer not to say" id="q2_6" data-field="mobility_quality">
+                <label for="q2_6" class="option-label">Prefer not to say</label>
+            </div>
         </div>
         
         <div class="navigation-buttons">
@@ -207,16 +277,31 @@
         <div class="question-number">CONTEXT | QUESTION 3 OF 17</div>
         <div class="question-text">How often do you cool down or stretch after a workout?</div>
         
-        <div class="dropdown-wrapper">
-            <select id="cooldown_frequency_display" data-field="cooldown_frequency">
-                <option value="">Select an option...</option>
-                <option value="Never">Never</option>
-                <option value="Rarely">Rarely</option>
-                <option value="Sometimes">Sometimes</option>
-                <option value="Often">Often</option>
-                <option value="Always">Always</option>
-                <option value="Prefer not to say">Prefer not to say</option>
-            </select>
+        <div class="option-group">
+            <div class="option">
+                <input type="radio" name="cooldown_frequency_display" value="Never" id="q3_1" data-field="cooldown_frequency">
+                <label for="q3_1" class="option-label">Never</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="cooldown_frequency_display" value="Rarely" id="q3_2" data-field="cooldown_frequency">
+                <label for="q3_2" class="option-label">Rarely</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="cooldown_frequency_display" value="Sometimes" id="q3_3" data-field="cooldown_frequency">
+                <label for="q3_3" class="option-label">Sometimes</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="cooldown_frequency_display" value="Often" id="q3_4" data-field="cooldown_frequency">
+                <label for="q3_4" class="option-label">Often</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="cooldown_frequency_display" value="Always" id="q3_5" data-field="cooldown_frequency">
+                <label for="q3_5" class="option-label">Always</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="cooldown_frequency_display" value="Prefer not to say" id="q3_6" data-field="cooldown_frequency">
+                <label for="q3_6" class="option-label">Prefer not to say</label>
+            </div>
         </div>
         
         <div class="navigation-buttons">
@@ -230,19 +315,25 @@
         <div class="question-number">CONTEXT | QUESTION 4 OF 17</div>
         <div class="question-text">Where do you usually cool down or stretch?</div>
         
-        <div class="dropdown-wrapper">
-            <select id="cooldown_location_display" data-field="cooldown_location">
-                <option value="">Select an option...</option>
-                <option value="At home">At home</option>
-                <option value="At the gym">At the gym</option>
-                <option value="Other">Other</option>
-            </select>
+        <div class="option-group">
+            <div class="option">
+                <input type="radio" name="cooldown_location_display" value="At home" id="q4_1" data-field="cooldown_location">
+                <label for="q4_1" class="option-label">At home</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="cooldown_location_display" value="At the gym" id="q4_2" data-field="cooldown_location">
+                <label for="q4_2" class="option-label">At the gym</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="cooldown_location_display" value="Other" id="q4_3" data-field="cooldown_location">
+                <label for="q4_3" class="option-label">Other</label>
+            </div>
         </div>
         
         <!-- Conditional text input for "Other" -->
         <div class="text-input-wrapper" id="other-location-wrapper" style="display: none;">
             <label for="cooldown_location_other_display" style="display: block; margin-bottom: 10px; font-size: 1em; color: #555;">Please explain where:</label>
-            <input type="text" id="cooldown_location_other_display" data-field="cooldown_location_other" placeholder="Type your answer here..." style="width: 100%; padding: 16px 20px; font-size: 1.1em; border: 2px solid #e0e0e0; border-radius: 8px; background: #f5f5f5;">
+            <input type="text" id="cooldown_location_other_display" data-field="cooldown_location_other" placeholder="Type your answer here...">
         </div>
         
         <div class="navigation-buttons">
@@ -292,7 +383,7 @@
     }
     
     function handleCooldownNext() {
-        const cooldownValue = document.getElementById('cooldown_frequency_display').value;
+        const cooldownValue = document.querySelector('input[name="cooldown_frequency_display"]:checked').value;
         if (cooldownValue === 'Never') {
             // Skip location question, set empty values and submit
             updateHiddenField('cooldown_location', '');
@@ -304,8 +395,8 @@
     }
     
     // Enable/disable next button and update hidden fields
-    document.querySelectorAll('select[data-field]').forEach(select => {
-        select.addEventListener('change', function() {
+    document.querySelectorAll('input[type="radio"][data-field]').forEach(radio => {
+        radio.addEventListener('change', function() {
             const fieldName = this.getAttribute('data-field');
             const value = this.value;
             
@@ -328,7 +419,7 @@
             
             updateHiddenField(fieldName, value);
             
-            // Enable next button or submit button
+            // Enable next button
             const screen = this.closest('.question-screen');
             const nextBtn = screen.querySelector('.btn-next');
             if (nextBtn && value !== '') {
@@ -375,17 +466,18 @@
     }
     
     function updateSubmitButton() {
-        const locationSelect = document.getElementById('cooldown_location_display');
+        const locationRadios = document.querySelectorAll('input[name="cooldown_location_display"]');
         const otherInput = document.getElementById('cooldown_location_other_display');
         const submitBtn = document.getElementById('submitBtn');
         
         // Check if location is selected
-        if (!locationSelect.value) {
+        const selectedLocation = Array.from(locationRadios).find(r => r.checked);
+        if (!selectedLocation) {
             submitBtn.disabled = true;
             return;
         }
         
-        if (locationSelect.value === 'Other') {
+        if (selectedLocation.value === 'Other') {
             // Enable submit only if "Other" text is filled
             submitBtn.disabled = otherInput.value.trim() === '';
         } else {
@@ -398,10 +490,8 @@
         e.preventDefault();
         
         // Make sure all visible fields are synced to hidden fields before submit
-        document.querySelectorAll('select[data-field]').forEach(select => {
-            if (select.value) {
-                updateHiddenField(select.getAttribute('data-field'), select.value);
-            }
+        document.querySelectorAll('input[type="radio"][data-field]:checked').forEach(radio => {
+            updateHiddenField(radio.getAttribute('data-field'), radio.value);
         });
         
         document.querySelectorAll('input[type="text"][data-field]').forEach(input => {

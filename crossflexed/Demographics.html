@@ -15,8 +15,8 @@
         min-height: 100vh;
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        padding: 20px;
+        justify-content: flex-start;
+        padding: 40px 20px 20px 20px;
         background: white;
     }
     
@@ -52,23 +52,43 @@
         line-height: 1.3;
     }
     
-    .dropdown-wrapper {
+    .option-group {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
         margin-bottom: 40px;
     }
     
-    .dropdown-wrapper select {
-        width: 100%;
-        padding: 16px 20px;
-        font-size: 1.1em;
-        border: 2px solid #e0e0e0;
-        border-radius: 8px;
-        background: #f5f5f5;
-        cursor: pointer;
-        transition: all 0.2s ease;
+    .option {
+        position: relative;
     }
     
-    .dropdown-wrapper select:focus {
-        outline: none;
+    .option input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+    
+    .option-label {
+        display: block;
+        padding: 18px 24px;
+        background: #f5f5f5;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 1.1em;
+        color: #333;
+        font-weight: 500;
+    }
+    
+    .option input[type="radio"]:checked + .option-label {
+        background: rgba(145, 255, 60, 0.2);
+        border-color: rgb(145, 255, 60);
+        color: rgb(50, 95, 80);
+    }
+    
+    .option-label:hover {
         border-color: rgb(145, 255, 60);
         background: rgba(145, 255, 60, 0.1);
     }
@@ -162,14 +182,23 @@
         <div class="question-number">DEMOGRAPHICS | QUESTION 15 OF 17</div>
         <div class="question-text">What is your gender?</div>
         
-        <div class="dropdown-wrapper">
-            <select id="gender_display" data-field="gender">
-                <option value="">Select an option...</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-                <option value="Prefer not to say">Prefer not to say</option>
-            </select>
+        <div class="option-group">
+            <div class="option">
+                <input type="radio" name="gender_display" value="Male" id="q1_1" data-field="gender">
+                <label for="q1_1" class="option-label">Male</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="gender_display" value="Female" id="q1_2" data-field="gender">
+                <label for="q1_2" class="option-label">Female</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="gender_display" value="Other" id="q1_3" data-field="gender">
+                <label for="q1_3" class="option-label">Other</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="gender_display" value="Prefer not to say" id="q1_4" data-field="gender">
+                <label for="q1_4" class="option-label">Prefer not to say</label>
+            </div>
         </div>
         
         <div class="navigation-buttons">
@@ -182,16 +211,31 @@
         <div class="question-number">DEMOGRAPHICS | QUESTION 16 OF 17</div>
         <div class="question-text">What is your age?</div>
         
-        <div class="dropdown-wrapper">
-            <select id="age_display" data-field="age">
-                <option value="">Select an option...</option>
-                <option value="Less than 18 years">Less than 18 years</option>
-                <option value="18-24 years">18-24 years</option>
-                <option value="25-34 years">25-34 years</option>
-                <option value="35-50 years">35-50 years</option>
-                <option value="51-65 years">51-65 years</option>
-                <option value="Over 65 years">Over 65 years</option>
-            </select>
+        <div class="option-group">
+            <div class="option">
+                <input type="radio" name="age_display" value="Less than 18 years" id="q2_1" data-field="age">
+                <label for="q2_1" class="option-label">Less than 18 years</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="age_display" value="18-24 years" id="q2_2" data-field="age">
+                <label for="q2_2" class="option-label">18-24 years</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="age_display" value="25-34 years" id="q2_3" data-field="age">
+                <label for="q2_3" class="option-label">25-34 years</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="age_display" value="35-50 years" id="q2_4" data-field="age">
+                <label for="q2_4" class="option-label">35-50 years</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="age_display" value="51-65 years" id="q2_5" data-field="age">
+                <label for="q2_5" class="option-label">51-65 years</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="age_display" value="Over 65 years" id="q2_6" data-field="age">
+                <label for="q2_6" class="option-label">Over 65 years</label>
+            </div>
         </div>
         
         <div class="navigation-buttons">
@@ -205,14 +249,23 @@
         <div class="question-number">DEMOGRAPHICS | QUESTION 17 OF 17</div>
         <div class="question-text">For how long have you been doing CrossFit?</div>
         
-        <div class="dropdown-wrapper">
-            <select id="crossfit_experience_display" data-field="crossfit_experience">
-                <option value="">Select an option...</option>
-                <option value="Less than 1 year">Less than 1 year</option>
-                <option value="1-3 years">1-3 years</option>
-                <option value="4-10 years">4-10 years</option>
-                <option value="More than 10 years">More than 10 years</option>
-            </select>
+        <div class="option-group">
+            <div class="option">
+                <input type="radio" name="crossfit_experience_display" value="Less than 1 year" id="q3_1" data-field="crossfit_experience">
+                <label for="q3_1" class="option-label">Less than 1 year</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="crossfit_experience_display" value="1-3 years" id="q3_2" data-field="crossfit_experience">
+                <label for="q3_2" class="option-label">1-3 years</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="crossfit_experience_display" value="4-10 years" id="q3_3" data-field="crossfit_experience">
+                <label for="q3_3" class="option-label">4-10 years</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="crossfit_experience_display" value="More than 10 years" id="q3_4" data-field="crossfit_experience">
+                <label for="q3_4" class="option-label">More than 10 years</label>
+            </div>
         </div>
         
         <div class="navigation-buttons">
@@ -260,25 +313,12 @@
     }
     
     // Enable/disable next button and update hidden fields
-    document.querySelectorAll('select[data-field]').forEach(select => {
-        select.addEventListener('change', function() {
+    document.querySelectorAll('input[type="radio"][data-field]').forEach(radio => {
+        radio.addEventListener('change', function() {
             const fieldName = this.getAttribute('data-field');
             const value = this.value;
             
-            // Update the hidden oTree field - try multiple selectors
-            let hiddenField = document.querySelector(`select[name="${fieldName}"]`);
-            if (!hiddenField) {
-                hiddenField = document.querySelector(`input[name="${fieldName}"]`);
-            }
-            if (!hiddenField) {
-                hiddenField = document.getElementById(`id_${fieldName}`);
-            }
-            
-            if (hiddenField) {
-                hiddenField.value = value;
-                const event = new Event('change', { bubbles: true });
-                hiddenField.dispatchEvent(event);
-            }
+            updateHiddenField(fieldName, value);
             
             // Enable next button
             const screen = this.closest('.question-screen');
@@ -289,9 +329,43 @@
         });
     });
     
+    function updateHiddenField(fieldName, value) {
+        // Try multiple selectors to find the hidden field
+        let hiddenField = document.querySelector(`select[name="${fieldName}"]`);
+        if (!hiddenField) {
+            hiddenField = document.querySelector(`input[name="${fieldName}"]`);
+        }
+        if (!hiddenField) {
+            hiddenField = document.getElementById(`id_${fieldName}`);
+        }
+        
+        if (hiddenField) {
+            hiddenField.value = value;
+            // Remove any validation errors
+            if (hiddenField.classList) {
+                hiddenField.classList.remove('is-invalid');
+            }
+            const event = new Event('change', { bubbles: true });
+            hiddenField.dispatchEvent(event);
+            console.log(`Updated ${fieldName} to:`, value);
+        } else {
+            console.error('Hidden field not found for:', fieldName);
+        }
+    }
+    
     // Handle submit button
-    document.getElementById('submitBtn').addEventListener('click', function() {
-        document.querySelector('form').submit();
+    document.getElementById('submitBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Make sure all visible fields are synced to hidden fields before submit
+        document.querySelectorAll('input[type="radio"][data-field]:checked').forEach(radio => {
+            updateHiddenField(radio.getAttribute('data-field'), radio.value);
+        });
+        
+        // Small delay to ensure all changes are processed
+        setTimeout(() => {
+            document.querySelector('form').submit();
+        }, 100);
     });
     
     // Initialize progress

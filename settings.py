@@ -31,6 +31,7 @@ SESSION_CONFIGS = [
          name='crossflexed',
          app_sequence=['crossflexed',],
          num_demo_participants=1,
+         completionlink="https://crossfitbern.ch/",
      ),
         dict(
             name='spec_design',

@@ -50,7 +50,7 @@ class Player(BasePlayer):
     # Context questions
     crossfit_frequency = models.StringField(
         label="On average, how many times per week do you go to CrossFit?",
-        choices=["1", "2", "3", "4", "5+", "Prefer not to say"],
+        choices=["1", "2", "3", "4", "5 or more", "Prefer not to say"],
     )
     mobility_quality = models.StringField(
         label="How easy is it for you to recover from a CrossFit session?",
@@ -188,6 +188,12 @@ class Player(BasePlayer):
         choices=["Not at all", "Rather not", "Neutral", "A bit", "A lot", "Prefer not to say"],
     )
     
+    # Additional feedback
+    additional_feedback = models.LongStringField(
+        label="Any other thoughts or considerations that should be considered in the app development phase?",
+        blank=True,
+    )
+    
     # Page timing fields
     introduction_page_time = models.FloatField(default=0)
     background_page_time = models.FloatField(default=0)
@@ -322,6 +328,15 @@ class Demographics(Page):
 
 
 class Thanks(Page):
+    form_model = 'player'
+    form_fields = ['additional_feedback']
+    
+    @staticmethod
+    def js_vars(player: Player):
+        return {
+            'completionlink': player.session.config.get('completionlink', 'https://crossfitbern.ch/')
+        }
+    
     @staticmethod
     def get_timeout_seconds(player: Player):
         player.participant._start_time = time.time()
