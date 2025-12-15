@@ -1,0 +1,125 @@
+{% block title %}<span style="display: none;">Welcome</span>{% endblock %}
+
+{% block content %}
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+    
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    
+    .typeform-container {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 20px;
+        background: white;
+    }
+    
+    .content-wrapper {
+        max-width: 650px;
+        width: 100%;
+        margin: 0 auto;
+    }
+    
+    .welcome-icon {
+        font-size: 64px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    
+    .welcome-title {
+        font-size: 2.5em;
+        font-weight: 700;
+        color: rgb(50, 95, 80);
+        margin-bottom: 20px;
+        line-height: 1.2;
+        text-align: center;
+    }
+    
+    .subtitle-text {
+        font-size: 1.2em;
+        color: #555;
+        margin-bottom: 40px;
+        line-height: 1.6;
+        text-align: center;
+    }
+    
+    .info-box {
+        background: rgba(145, 255, 60, 0.15);
+        border-left: 4px solid rgb(145, 255, 60);
+        padding: 20px;
+        border-radius: 8px;
+        margin: 30px 0;
+        font-size: 1.05em;
+        line-height: 1.7;
+        color: #333;
+    }
+    
+    .btn-container {
+        text-align: center;
+        margin-top: 40px;
+    }
+    
+    .nav-btn {
+        padding: 14px 28px;
+        font-size: 1em;
+        font-weight: 600;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .btn-next {
+        background: rgb(50, 95, 80);
+        color: white;
+        padding: 14px 48px;
+    }
+    
+    .btn-next:hover {
+        background: rgb(40, 75, 60);
+        transform: translateY(-2px);
+    }
+    
+    @media (max-width: 768px) {
+        .typeform-container {
+            padding: 15px;
+        }
+        
+        .welcome-title {
+            font-size: 1.8em;
+        }
+        
+        .subtitle-text {
+            font-size: 1.05em;
+        }
+        
+        .welcome-icon {
+            font-size: 48px;
+        }
+    }
+</style>
+
+<div class="typeform-container">
+    <div class="content-wrapper">
+        <div class="welcome-icon">👋</div>
+        <h1 class="welcome-title">Thanks for accessing the survey!</h1>
+        <p class="subtitle-text">We're testing a new recovery app for CrossFit Bern. The survey takes less than 5 minutes. There are no right or wrong answers, and your responses will be kept confidential.</p>
+
+        <div class="info-box">
+            By continuing with this survey, we assume that you consent to our use of your data for research purposes.
+        </div>
+
+        <div class="btn-container">
+            <button type="button" class="nav-btn btn-next" onclick="document.querySelector('form').submit()">Next →</button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

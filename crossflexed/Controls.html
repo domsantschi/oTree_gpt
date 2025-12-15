@@ -1,0 +1,308 @@
+{% block title %}<span style="display: none;">Feedback</span>{% endblock %}
+{% block content %}
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+    
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    
+    .typeform-container {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 20px;
+        background: white;
+    }
+    
+    .question-screen {
+        display: none;
+        max-width: 650px;
+        width: 100%;
+        margin: 0 auto;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    
+    .question-screen.active {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    .question-number {
+        color: rgb(145, 255, 60);
+        font-size: 0.9em;
+        font-weight: 600;
+        margin-bottom: 12px;
+        letter-spacing: 0.5px;
+    }
+    
+    .question-text {
+        font-size: 1.8em;
+        font-weight: 600;
+        color: rgb(50, 95, 80);
+        margin-bottom: 40px;
+        line-height: 1.3;
+    }
+    
+    .dropdown-wrapper {
+        margin-bottom: 40px;
+    }
+    
+    .dropdown-wrapper select {
+        width: 100%;
+        padding: 16px 20px;
+        font-size: 1.1em;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        background: #f5f5f5;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .dropdown-wrapper select:focus {
+        outline: none;
+        border-color: rgb(145, 255, 60);
+        background: rgba(145, 255, 60, 0.1);
+    }
+    
+    .scale-legend {
+        background: rgba(145, 255, 60, 0.1);
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 0.9em;
+        line-height: 1.6;
+        color: #555;
+    }
+    
+    .navigation-buttons {
+        display: flex;
+        gap: 12px;
+        margin-top: 30px;
+    }
+    
+    .nav-btn {
+        padding: 14px 28px;
+        font-size: 1em;
+        font-weight: 600;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .btn-next {
+        background: rgb(50, 95, 80);
+        color: white;
+        flex: 1;
+    }
+    
+    .btn-next:hover {
+        background: rgb(40, 75, 60);
+    }
+    
+    .btn-next:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+    }
+    
+    .btn-back {
+        background: transparent;
+        color: rgb(50, 95, 80);
+        border: 2px solid rgb(50, 95, 80);
+    }
+    
+    .btn-back:hover {
+        background: rgba(50, 95, 80, 0.1);
+    }
+    
+    .progress-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: #f0f0f0;
+        z-index: 1000;
+    }
+    
+    .progress-fill {
+        height: 100%;
+        background: rgb(145, 255, 60);
+        width: 0%;
+        transition: width 0.3s ease;
+    }
+    
+    /* Hide actual form fields - target the wrapper divs */
+    .otree-form-fields {
+        display: none;
+    }
+    
+    @media (max-width: 768px) {
+        .typeform-container {
+            padding: 15px;
+        }
+        
+        .question-text {
+            font-size: 1.4em;
+        }
+        
+        .dropdown-wrapper select {
+            padding: 14px 18px;
+            font-size: 1em;
+        }
+    }
+</style>
+
+<div class="progress-bar">
+    <div class="progress-fill" id="progressBar"></div>
+</div>
+
+<div class="typeform-container">
+    <!-- Question 1: Likelihood -->
+    <div class="question-screen active" data-screen="1">
+        <div class="question-number">FEEDBACK | QUESTION 13 OF 17</div>
+        <div class="question-text">If CrossFit Bern offered such a post-workout recovery solution, how likely are you to use it?</div>
+        
+        
+        <div class="dropdown-wrapper">
+            <select id="stretching_solution_likelihood_display" data-field="stretching_solution_likelihood">
+                <option value="">Select an option...</option>
+                <option value="Never">Never</option>
+                <option value="Rarely">Rarely</option>
+                <option value="Sometimes">Sometimes</option>
+                <option value="Often">Often</option>
+                <option value="After every workout">After every workout</option>
+                <option value="Not sure">Not sure</option>
+            </select>
+        </div>
+        
+        <div class="navigation-buttons">
+            <button type="button" class="nav-btn btn-next" onclick="showScreen(2)" disabled id="next1">Next →</button>
+        </div>
+    </div>
+    
+    <!-- Question 2: Improvement Assessment -->
+    <div class="question-screen" data-screen="2">
+        <div class="question-number">FEEDBACK | QUESTION 14 OF 17</div>
+        <div class="question-text">To what extent would you assess the CrossFit-Bern offer to be improved thanks to this?</div>
+        
+       
+        <div class="dropdown-wrapper">
+            <select id="offer_improvement_assessment_display" data-field="offer_improvement_assessment">
+                <option value="">Select an option...</option>
+                <option value="Not at all">Not at all</option>
+                <option value="Rather not">Rather not</option>
+                <option value="Neutral">Neutral</option>
+                <option value="A bit">A bit</option>
+                <option value="A lot">A lot</option>
+                <option value="Prefer not to say">Prefer not to say</option>
+            </select>
+        </div>
+        
+        <div class="navigation-buttons">
+            <button type="button" class="nav-btn btn-back" onclick="showScreen(1)">← Back</button>
+            <button type="button" class="nav-btn btn-next" id="submitBtn" disabled>Next →</button>
+        </div>
+    </div>
+</div>
+
+<!-- Hidden actual form fields that oTree will read -->
+<div class="otree-form-fields">
+    {{ formfield 'stretching_solution_likelihood' }}
+    {{ formfield 'offer_improvement_assessment' }}
+</div>
+
+<script>
+    let currentScreen = 1;
+    const totalScreens = 2;
+    const totalQuestions = 17;
+    const startQuestion = 12; // Controls starts at question 13 (4 context + 8 condition = 12 before)
+    
+    function updateProgress() {
+        const currentQuestion = startQuestion + currentScreen;
+        const progress = (currentQuestion / totalQuestions) * 100;
+        document.getElementById('progressBar').style.width = progress + '%';
+    }
+    
+    function showScreen(screenNum) {
+        const screens = document.querySelectorAll('.question-screen');
+        screens.forEach(screen => {
+            screen.classList.remove('active');
+        });
+        
+        currentScreen = screenNum;
+        const targetScreen = document.querySelector(`[data-screen="${screenNum}"]`);
+        if (targetScreen) {
+            setTimeout(() => {
+                targetScreen.classList.add('active');
+                window.scrollTo(0, 0);
+            }, 100);
+        }
+        
+        updateProgress();
+    }
+    
+    // Enable/disable next button and update hidden fields
+    document.querySelectorAll('select[data-field]').forEach(select => {
+        select.addEventListener('change', function() {
+            const fieldName = this.getAttribute('data-field');
+            const value = this.value;
+            
+            // Update the hidden oTree field - try multiple selectors
+            let hiddenField = document.querySelector(`select[name="${fieldName}"]`);
+            if (!hiddenField) {
+                hiddenField = document.querySelector(`input[name="${fieldName}"]`);
+            }
+            if (!hiddenField) {
+                hiddenField = document.getElementById(`id_${fieldName}`);
+            }
+            
+            if (hiddenField) {
+                hiddenField.value = value;
+                const event = new Event('change', { bubbles: true });
+                hiddenField.dispatchEvent(event);
+            }
+            
+            // Enable next button
+            const screen = this.closest('.question-screen');
+            const nextBtn = screen.querySelector('.btn-next');
+            if (nextBtn && value !== '') {
+                nextBtn.disabled = false;
+            }
+        });
+    });
+    
+    // Handle submit button
+    document.getElementById('submitBtn').addEventListener('click', function() {
+        document.querySelector('form').submit();
+    });
+    
+    // Initialize progress
+    updateProgress();
+</script>
+        <div class="question-text">To what extent would you assess the CrossFit-Bern offer to be improved thanks to this?</div>
+        <div class="scale-legend">
+            <span><strong>1</strong> Not at all</span>
+            <span><strong>2</strong> Rather not</span>
+            <span><strong>3</strong> Neutral</span>
+            <span><strong>4</strong> A bit</span>
+            <span><strong>5</strong> A lot</span>
+        </div>
+        {{ formfield 'offer_improvement_assessment' }}
+    </div>
+    
+    <div class="text-center mt-4">
+        {{ next_button }}
+    </div>
+</div>
+
+{% endblock %}

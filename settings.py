@@ -27,11 +27,11 @@ SESSION_CONFIGS = [
     #      app_sequence=['chat_multiple_agents',],
     #      num_demo_participants=1,
     #  ),
-    #  dict(
-    #      name='threejs',
-    #      app_sequence=['threejs',],
-    #      num_demo_participants=1,
-    #  ),
+     dict(
+         name='crossflexed',
+         app_sequence=['crossflexed',],
+         num_demo_participants=1,
+     ),
         dict(
             name='spec_design',
             app_sequence=['spec_design',],

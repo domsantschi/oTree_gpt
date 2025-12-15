@@ -1,0 +1,587 @@
+{% block title %}<span style="display: none;">App Evaluation</span>{% endblock %}
+{% block content %}
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+    
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    
+    .typeform-container {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 20px;
+        background: white;
+    }
+    
+    .question-screen {
+        display: none;
+        max-width: 650px;
+        width: 100%;
+        margin: 0 auto;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    
+    .question-screen.active {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    .question-number {
+        color: rgb(145, 255, 60);
+        font-size: 0.9em;
+        font-weight: 600;
+        margin-bottom: 12px;
+        letter-spacing: 0.5px;
+    }
+    
+    .question-text {
+        font-size: 1.8em;
+        font-weight: 600;
+        color: rgb(50, 95, 80);
+        margin-bottom: 40px;
+        line-height: 1.3;
+    }
+    
+    .iframe-container {
+        width: 100%;
+        height: 500px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+    }
+    
+    .iframe-container iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+    
+    .intro-message {
+        background: rgba(145, 255, 60, 0.15);
+        border-left: 4px solid rgb(145, 255, 60);
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 30px;
+        font-size: 1.1em;
+        color: #333;
+    }
+    
+    .likert-options {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 40px;
+    }
+    
+    .likert-option {
+        position: relative;
+    }
+    
+    .likert-option input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+    
+    .likert-label {
+        display: block;
+        padding: 18px 24px;
+        background: #f5f5f5;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 1.1em;
+        color: #333;
+        font-weight: 500;
+    }
+    
+    .likert-option input[type="radio"]:checked + .likert-label {
+        background: rgba(145, 255, 60, 0.2);
+        border-color: rgb(145, 255, 60);
+        color: rgb(50, 95, 80);
+    }
+    
+    .likert-label:hover {
+        border-color: rgb(145, 255, 60);
+        background: rgba(145, 255, 60, 0.1);
+    }
+    
+    .navigation-buttons {
+        display: flex;
+        gap: 12px;
+        margin-top: 30px;
+    }
+    
+    .nav-btn {
+        padding: 14px 28px;
+        font-size: 1em;
+        font-weight: 600;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .btn-next {
+        background: rgb(50, 95, 80);
+        color: white;
+        flex: 1;
+    }
+    
+    .btn-next:hover {
+        background: rgb(40, 75, 60);
+    }
+    
+    .btn-next:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+    }
+    
+    .btn-back {
+        background: transparent;
+        color: rgb(50, 95, 80);
+        border: 2px solid rgb(50, 95, 80);
+    }
+    
+    .btn-back:hover {
+        background: rgba(50, 95, 80, 0.1);
+    }
+    
+    .progress-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: #f0f0f0;
+        z-index: 1000;
+    }
+    
+    .progress-fill {
+        height: 100%;
+        background: rgb(145, 255, 60);
+        width: 0%;
+        transition: width 0.3s ease;
+    }
+    
+    /* Hidden form fields - target the wrapper */
+    .otree-form-fields {
+        display: none;
+    }
+    
+    @media (max-width: 768px) {
+        .typeform-container {
+            padding: 15px;
+        }
+        
+        .question-text {
+            font-size: 1.4em;
+        }
+        
+        .iframe-container {
+            height: 400px;
+        }
+        
+        .likert-label {
+            padding: 16px 20px;
+            font-size: 1em;
+        }
+    }
+</style>
+
+<div class="progress-bar">
+    <div class="progress-fill" id="progressBar"></div>
+</div>
+
+<div class="typeform-container">
+    <!-- Intro Screen -->
+    <div class="question-screen active" data-screen="0">
+        <div class="question-number">RECOVERY APP</div>
+        <div class="question-text">Evaluate the CrossFit Bern Recovery App</div>
+        
+        <div class="intro-message">
+            <strong>You probably just finished a workout – congrats!</strong><br><br>
+            Imagine you want to recover efficiently and are looking at the app below.
+        </div>
+        
+        <div class="iframe-container">
+            <iframe src="https://crossfit-stretch.vercel.app/gyms/crossfit-bern" title="Recovery App"></iframe>
+        </div>
+        
+        <div class="navigation-buttons">
+            <button type="button" class="nav-btn btn-next" onclick="showScreen(1)">
+                Continue →
+            </button>
+        </div>
+    </div>
+    
+    <!-- Question 1: General -->
+    <div class="question-screen" data-screen="1">
+        <div class="question-number">APP EVALUATION | QUESTION 5 OF 17</div>
+        <div class="question-text">The app provides guided cooldown and post-workout routines.</div>
+        
+        <div class="likert-options">
+            <div class="likert-option">
+                <input type="radio" name="app_general_display" value="1" id="q1_1" data-field="app_general">
+                <label for="q1_1" class="likert-label">1 - Strongly disagree</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_general_display" value="2" id="q1_2" data-field="app_general">
+                <label for="q1_2" class="likert-label">2 - Disagree</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_general_display" value="3" id="q1_3" data-field="app_general">
+                <label for="q1_3" class="likert-label">3 - Neutral</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_general_display" value="4" id="q1_4" data-field="app_general">
+                <label for="q1_4" class="likert-label">4 - Agree</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_general_display" value="5" id="q1_5" data-field="app_general">
+                <label for="q1_5" class="likert-label">5 - Strongly agree</label>
+            </div>
+        </div>
+        
+        <div class="navigation-buttons">
+            <button type="button" class="nav-btn btn-back" onclick="showScreen(0)">← Back</button>
+            <button type="button" class="nav-btn btn-next" onclick="showScreen(2)" disabled id="next1">Next →</button>
+        </div>
+    </div>
+    
+    <!-- Question 2: WOD-specific -->
+    <div class="question-screen" data-screen="2">
+        <div class="question-number">APP EVALUATION | QUESTION 6 OF 17</div>
+        <div class="question-text">The app provides recovery suggestions tailored to today's workout.</div>
+        
+        <div class="likert-options">
+            <div class="likert-option">
+                <input type="radio" name="app_wod_specific_display" value="1" id="q2_1" data-field="app_wod_specific">
+                <label for="q2_1" class="likert-label">1 - Strongly disagree</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_wod_specific_display" value="2" id="q2_2" data-field="app_wod_specific">
+                <label for="q2_2" class="likert-label">2 - Disagree</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_wod_specific_display" value="3" id="q2_3" data-field="app_wod_specific">
+                <label for="q2_3" class="likert-label">3 - Neutral</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_wod_specific_display" value="4" id="q2_4" data-field="app_wod_specific">
+                <label for="q2_4" class="likert-label">4 - Agree</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_wod_specific_display" value="5" id="q2_5" data-field="app_wod_specific">
+                <label for="q2_5" class="likert-label">5 - Strongly agree</label>
+            </div>
+        </div>
+        
+        <div class="navigation-buttons">
+            <button type="button" class="nav-btn btn-back" onclick="showScreen(1)">← Back</button>
+            <button type="button" class="nav-btn btn-next" onclick="showScreen(3)" disabled id="next2">Next →</button>
+        </div>
+    </div>
+    
+    <!-- Question 3: Time-efficient -->
+    <div class="question-screen" data-screen="3">
+        <div class="question-number">APP EVALUATION | QUESTION 7 OF 17</div>
+        <div class="question-text">The suggested routines can be completed within about 10 minutes.</div>
+        
+        <div class="likert-options">
+            <div class="likert-option">
+                <input type="radio" name="app_time_efficient_display" value="1" id="q3_1" data-field="app_time_efficient">
+                <label for="q3_1" class="likert-label">1 - Strongly disagree</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_time_efficient_display" value="2" id="q3_2" data-field="app_time_efficient">
+                <label for="q3_2" class="likert-label">2 - Disagree</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_time_efficient_display" value="3" id="q3_3" data-field="app_time_efficient">
+                <label for="q3_3" class="likert-label">3 - Neutral</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_time_efficient_display" value="4" id="q3_4" data-field="app_time_efficient">
+                <label for="q3_4" class="likert-label">4 - Agree</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_time_efficient_display" value="5" id="q3_5" data-field="app_time_efficient">
+                <label for="q3_5" class="likert-label">5 - Strongly agree</label>
+            </div>
+        </div>
+        
+        <div class="navigation-buttons">
+            <button type="button" class="nav-btn btn-back" onclick="showScreen(2)">← Back</button>
+            <button type="button" class="nav-btn btn-next" onclick="showScreen(4)" disabled id="next3">Next →</button>
+        </div>
+    </div>
+    
+    <!-- Question 4: Location -->
+    <div class="question-screen" data-screen="4">
+        <div class="question-number">APP EVALUATION | QUESTION 8 OF 17</div>
+        <div class="question-text">I can perform the suggested routines wherever I am.</div>
+        
+        <div class="likert-options">
+            <div class="likert-option">
+                <input type="radio" name="app_location_display" value="1" id="q4_1" data-field="app_location">
+                <label for="q4_1" class="likert-label">1 - Strongly disagree</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_location_display" value="2" id="q4_2" data-field="app_location">
+                <label for="q4_2" class="likert-label">2 - Disagree</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_location_display" value="3" id="q4_3" data-field="app_location">
+                <label for="q4_3" class="likert-label">3 - Neutral</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_location_display" value="4" id="q4_4" data-field="app_location">
+                <label for="q4_4" class="likert-label">4 - Agree</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_location_display" value="5" id="q4_5" data-field="app_location">
+                <label for="q4_5" class="likert-label">5 - Strongly agree</label>
+            </div>
+        </div>
+        
+        <div class="navigation-buttons">
+            <button type="button" class="nav-btn btn-back" onclick="showScreen(3)">← Back</button>
+            <button type="button" class="nav-btn btn-next" onclick="showScreen(5)" disabled id="next4">Next →</button>
+        </div>
+    </div>
+    
+    <!-- Question 5: Design -->
+    <div class="question-screen" data-screen="5">
+        <div class="question-number">APP EVALUATION | QUESTION 9 OF 17</div>
+        <div class="question-text">The app looks mobile-optimized and is easy to use.</div>
+        
+        <div class="likert-options">
+            <div class="likert-option">
+                <input type="radio" name="app_design_display" value="1" id="q5_1" data-field="app_design">
+                <label for="q5_1" class="likert-label">1 - Strongly disagree</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_design_display" value="2" id="q5_2" data-field="app_design">
+                <label for="q5_2" class="likert-label">2 - Disagree</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_design_display" value="3" id="q5_3" data-field="app_design">
+                <label for="q5_3" class="likert-label">3 - Neutral</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_design_display" value="4" id="q5_4" data-field="app_design">
+                <label for="q5_4" class="likert-label">4 - Agree</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_design_display" value="5" id="q5_5" data-field="app_design">
+                <label for="q5_5" class="likert-label">5 - Strongly agree</label>
+            </div>
+        </div>
+        
+        <div class="navigation-buttons">
+            <button type="button" class="nav-btn btn-back" onclick="showScreen(4)">← Back</button>
+            <button type="button" class="nav-btn btn-next" onclick="showScreen(6)" disabled id="next5">Next →</button>
+        </div>
+    </div>
+    
+    <!-- Question 6: Timing -->
+    <div class="question-screen" data-screen="6">
+        <div class="question-number">APP EVALUATION | QUESTION 10 OF 17</div>
+        <div class="question-text">The videos and exercises clearly show the duration I should spend on each movement.</div>
+        
+        <div class="likert-options">
+            <div class="likert-option">
+                <input type="radio" name="app_timing_display" value="1" id="q6_1" data-field="app_timing">
+                <label for="q6_1" class="likert-label">1 - Strongly disagree</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_timing_display" value="2" id="q6_2" data-field="app_timing">
+                <label for="q6_2" class="likert-label">2 - Disagree</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_timing_display" value="3" id="q6_3" data-field="app_timing">
+                <label for="q6_3" class="likert-label">3 - Neutral</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_timing_display" value="4" id="q6_4" data-field="app_timing">
+                <label for="q6_4" class="likert-label">4 - Agree</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_timing_display" value="5" id="q6_5" data-field="app_timing">
+                <label for="q6_5" class="likert-label">5 - Strongly agree</label>
+            </div>
+        </div>
+        
+        <div class="navigation-buttons">
+            <button type="button" class="nav-btn btn-back" onclick="showScreen(5)">← Back</button>
+            <button type="button" class="nav-btn btn-next" onclick="showScreen(7)" disabled id="next6">Next →</button>
+        </div>
+    </div>
+    
+    <!-- Question 7: Videos -->
+    <div class="question-screen" data-screen="7">
+        <div class="question-number">APP EVALUATION | QUESTION 11 OF 17</div>
+        <div class="question-text">The recovery videos feature a real person demonstrating the movements.</div>
+        
+        <div class="likert-options">
+            <div class="likert-option">
+                <input type="radio" name="app_videos_display" value="1" id="q7_1" data-field="app_videos">
+                <label for="q7_1" class="likert-label">1 - Strongly disagree</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_videos_display" value="2" id="q7_2" data-field="app_videos">
+                <label for="q7_2" class="likert-label">2 - Disagree</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_videos_display" value="3" id="q7_3" data-field="app_videos">
+                <label for="q7_3" class="likert-label">3 - Neutral</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_videos_display" value="4" id="q7_4" data-field="app_videos">
+                <label for="q7_4" class="likert-label">4 - Agree</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_videos_display" value="5" id="q7_5" data-field="app_videos">
+                <label for="q7_5" class="likert-label">5 - Strongly agree</label>
+            </div>
+        </div>
+        
+        <div class="navigation-buttons">
+            <button type="button" class="nav-btn btn-back" onclick="showScreen(6)">← Back</button>
+            <button type="button" class="nav-btn btn-next" onclick="showScreen(8)" disabled id="next7">Next →</button>
+        </div>
+    </div>
+    
+    <!-- Question 8: Instructions -->
+    <div class="question-screen" data-screen="8">
+        <div class="question-number">APP EVALUATION | QUESTION 12 OF 17</div>
+        <div class="question-text">Each exercise includes clear instructions and safety cues.</div>
+        
+        <div class="likert-options">
+            <div class="likert-option">
+                <input type="radio" name="app_instructions_display" value="1" id="q8_1" data-field="app_instructions">
+                <label for="q8_1" class="likert-label">1 - Strongly disagree</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_instructions_display" value="2" id="q8_2" data-field="app_instructions">
+                <label for="q8_2" class="likert-label">2 - Disagree</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_instructions_display" value="3" id="q8_3" data-field="app_instructions">
+                <label for="q8_3" class="likert-label">3 - Neutral</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_instructions_display" value="4" id="q8_4" data-field="app_instructions">
+                <label for="q8_4" class="likert-label">4 - Agree</label>
+            </div>
+            <div class="likert-option">
+                <input type="radio" name="app_instructions_display" value="5" id="q8_5" data-field="app_instructions">
+                <label for="q8_5" class="likert-label">5 - Strongly agree</label>
+            </div>
+        </div>
+        
+        <div class="navigation-buttons">
+            <button type="button" class="nav-btn btn-back" onclick="showScreen(7)">← Back</button>
+            <button type="button" class="nav-btn btn-next" id="submitBtn" disabled>Next →</button>
+        </div>
+    </div>
+</div>
+
+<!-- Hidden actual form fields that oTree will read -->
+<div class="otree-form-fields">
+    {{ formfield 'app_general' }}
+    {{ formfield 'app_wod_specific' }}
+    {{ formfield 'app_time_efficient' }}
+    {{ formfield 'app_location' }}
+    {{ formfield 'app_design' }}
+    {{ formfield 'app_timing' }}
+    {{ formfield 'app_videos' }}
+    {{ formfield 'app_instructions' }}
+</div>
+
+<script>
+    let currentScreen = 0;
+    const totalScreens = 9; // 0 = intro, 1-8 = questions
+    const totalQuestions = 17;
+    const startQuestion = 4; // App evaluation starts at question 5 (4 context questions before)
+    
+    function updateProgress() {
+        // Screen 0 is intro (stays at 4/17), questions start at screen 1
+        const currentQuestion = startQuestion + (currentScreen > 0 ? currentScreen : 0);
+        const progress = (currentQuestion / totalQuestions) * 100;
+        document.getElementById('progressBar').style.width = progress + '%';
+    }
+    
+    function showScreen(screenNum) {
+        // Hide current screen
+        const screens = document.querySelectorAll('.question-screen');
+        screens.forEach(screen => {
+            screen.classList.remove('active');
+        });
+        
+        // Show new screen
+        currentScreen = screenNum;
+        const targetScreen = document.querySelector(`[data-screen="${screenNum}"]`);
+        if (targetScreen) {
+            setTimeout(() => {
+                targetScreen.classList.add('active');
+                window.scrollTo(0, 0);
+            }, 100);
+        }
+        
+        updateProgress();
+    }
+    
+    // Enable/disable next button and update hidden fields based on selection
+    document.querySelectorAll('input[type="radio"][data-field]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const fieldName = this.getAttribute('data-field');
+            const value = this.value;
+            
+            // Update the hidden oTree field - try multiple selectors
+            let hiddenField = document.querySelector(`input[name="${fieldName}"]`);
+            if (!hiddenField) {
+                hiddenField = document.querySelector(`select[name="${fieldName}"]`);
+            }
+            if (!hiddenField) {
+                hiddenField = document.getElementById(`id_${fieldName}`);
+            }
+            
+            if (hiddenField) {
+                hiddenField.value = value;
+                const event = new Event('change', { bubbles: true });
+                hiddenField.dispatchEvent(event);
+            }
+            
+            // Enable next button
+            const screen = this.closest('.question-screen');
+            const nextBtn = screen.querySelector('.btn-next');
+            if (nextBtn) {
+                nextBtn.disabled = false;
+            }
+        });
+    });
+    
+    // Handle submit button
+    document.getElementById('submitBtn').addEventListener('click', function() {
+        document.querySelector('form').submit();
+    });
+    
+    // Initialize progress
+    updateProgress();
+</script>
+
+{% endblock %}
