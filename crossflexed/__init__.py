@@ -232,7 +232,7 @@ class Context(Page):
             player.condition_type = random.choice(['Actual-Condition', 'Expected-Condition'])
 
 
-class Actual_Condition(Page):
+class actual_condition(Page):
     form_model = 'player'
     form_fields = [
         'app_general',
@@ -259,7 +259,7 @@ class Actual_Condition(Page):
         player.condition1_page_time = time.time() - player.participant._start_time
 
 
-class Expected_Condition(Page):
+class expected_condition(Page):
     form_model = 'player'
     form_fields = [
         'expected_general',
@@ -335,8 +335,8 @@ class Thanks(Page):
 page_sequence = [
     Introduction,
     Context,
-    Actual_Condition,
-    Expected_Condition,
+    actual_condition,
+    expected_condition,
     Controls,
     Demographics,
     Thanks,
