@@ -73,6 +73,10 @@ ROOMS = [
         name='spec_design',
         display_name='Spec Design Room',
     ),
+        dict(
+        name='crossflexed',
+        display_name='Crossflexed Room',
+    ),
 ]
 
 
