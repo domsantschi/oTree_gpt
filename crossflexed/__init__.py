@@ -35,6 +35,7 @@ class Player(BasePlayer):
             "35-50 years",
             "51-65 years",
             "Over 65 years",
+            "Prefer not to say",
         ],
     )
     crossfit_experience = models.StringField(
@@ -44,6 +45,7 @@ class Player(BasePlayer):
             "1-3 years",
             "4-10 years",
             "More than 10 years",
+            "Prefer not to say",
         ],
     )
     
@@ -62,7 +64,7 @@ class Player(BasePlayer):
     )
     cooldown_location = models.StringField(
         label="Where do you currently perform the cooldown or post-workout stretching routine?",
-        choices=["At home", "At the gym", "Other"],
+        choices=["At home", "At the gym", "Other", "Prefer not to say"],
         blank=True,
     )
     cooldown_location_other = models.StringField(
@@ -79,102 +81,86 @@ class Player(BasePlayer):
     )
     
     # App evaluation questions (Actual-Condition)
-    app_general = models.IntegerField(
+    app_general = models.StringField(
         label="The app provides guided cooldown and post‑workout routines.",
-        min=1,
-        max=5,
+        choices=["1", "2", "3", "4", "5", "Not sure"],
         doc="General functionality evaluation (1=Strongly disagree, 5=Strongly agree)"
     )
-    app_wod_specific = models.IntegerField(
+    app_wod_specific = models.StringField(
         label="The app provides recovery suggestions tailored to today's workout.",
-        min=1,
-        max=5,
+        choices=["1", "2", "3", "4", "5", "Not sure"],
         doc="WOD-specific tailoring evaluation (1=Strongly disagree, 5=Strongly agree)"
     )
-    app_time_efficient = models.IntegerField(
+    app_time_efficient = models.StringField(
         label="The suggested routines can be completed within about 10 minutes.",
-        min=1,
-        max=5,
+        choices=["1", "2", "3", "4", "5", "Not sure"],
         doc="Time efficiency evaluation (1=Strongly disagree, 5=Strongly agree)"
     )
-    app_location = models.IntegerField(
+    app_location = models.StringField(
         label="I can perform the suggested routines wherever I am.",
-        min=1,
-        max=5,
+        choices=["1", "2", "3", "4", "5", "Not sure"],
         doc="Location flexibility evaluation (1=Strongly disagree, 5=Strongly agree)"
     )
-    app_design = models.IntegerField(
+    app_design = models.StringField(
         label="The app looks mobile‑optimized and is easy to use.",
-        min=1,
-        max=5,
+        choices=["1", "2", "3", "4", "5", "Not sure"],
         doc="Design and usability evaluation (1=Strongly disagree, 5=Strongly agree)"
     )
-    app_timing = models.IntegerField(
+    app_timing = models.StringField(
         label="The videos and exercises clearly show the duration I should spend on each movement.",
-        min=1,
-        max=5,
+        choices=["1", "2", "3", "4", "5", "Not sure"],
         doc="Timing clarity evaluation (1=Strongly disagree, 5=Strongly agree)"
     )
-    app_videos = models.IntegerField(
+    app_videos = models.StringField(
         label="The recovery videos feature a real person demonstrating the movements.",
-        min=1,
-        max=5,
+        choices=["1", "2", "3", "4", "5", "Not sure"],
         doc="Video quality evaluation (1=Strongly disagree, 5=Strongly agree)"
     )
-    app_instructions = models.IntegerField(
+    app_instructions = models.StringField(
         label="Each exercise includes clear instructions and safety cues.",
-        min=1,
-        max=5,
+        choices=["1", "2", "3", "4", "5", "Not sure"],
         doc="Instruction clarity evaluation (1=Strongly disagree, 5=Strongly agree)"
     )
     
     # Expected app evaluation questions (Expected-Condition)
-    expected_general = models.IntegerField(
+    expected_general = models.StringField(
         label="I expect CrossFit Bern to offer guided cooldown and post‑workout routines.",
-        min=1,
-        max=5,
+        choices=["1", "2", "3", "4", "5", "Not sure"],
         doc="Expected general functionality (1=Strongly disagree, 5=Strongly agree)"
     )
-    expected_wod_specific = models.IntegerField(
+    expected_wod_specific = models.StringField(
         label="I expect the routines to be tailored to the workout of the day (WOD).",
-        min=1,
-        max=5,
+        choices=["1", "2", "3", "4", "5", "Not sure"],
         doc="Expected WOD-specific tailoring (1=Strongly disagree, 5=Strongly agree)"
     )
-    expected_time_efficient = models.IntegerField(
+    expected_time_efficient = models.StringField(
         label="I expect the routines to be completable within about 10 minutes.",
-        min=1,
-        max=5,
+        choices=["1", "2", "3", "4", "5", "Not sure"],
         doc="Expected time efficiency (1=Strongly disagree, 5=Strongly agree)"
     )
-    expected_location = models.IntegerField(
+    expected_location = models.StringField(
         label="I expect the routines to be doable anywhere (gym, home, outdoors).",
-        min=1,
-        max=5,
+        choices=["1", "2", "3", "4", "5", "Not sure"],
         doc="Expected location flexibility (1=Strongly disagree, 5=Strongly agree)"
     )
-    expected_design = models.IntegerField(
+    expected_design = models.StringField(
         label="I expect a clean, mobile‑optimized interface that is easy to use.",
-        min=1,
-        max=5,
+        choices=["1", "2", "3", "4", "5", "Not sure"],
         doc="Expected design and usability (1=Strongly disagree, 5=Strongly agree)"
     )
-    expected_timing = models.IntegerField(
+    expected_timing = models.StringField(
         label="I expect videos and exercises to show exact durations for each movement.",
-        min=1,
-        max=5,
+        choices=["1", "2", "3", "4", "5", "Not sure"],
         doc="Expected timing clarity (1=Strongly disagree, 5=Strongly agree)"
     )
-    expected_videos = models.IntegerField(
+    expected_videos = models.StringField(
         label="I expect recovery videos to feature a real person demonstrating the movements.",
-        min=1,
-        max=5,
+        choices=["1", "2", "3", "4", "5", "Not sure"],
         doc="Expected video quality (1=Strongly disagree, 5=Strongly agree)"
     )
-    expected_instructions = models.IntegerField(
+    expected_instructions = models.StringField(
         label="I expect each exercise to include clear instructions and basic safety cues.",
-        min=1,
-        max=5,
+        choices=["1", "2", "3", "4", "5", "Not sure"],
         doc="Expected instruction clarity (1=Strongly disagree, 5=Strongly agree)"
     )
     
