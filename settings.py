@@ -46,8 +46,8 @@ SESSION_CONFIGS = [
             completionlink="https://app.prolific.com/submissions/complete?cc=C17EXCFB",
         ),
         dict(
-            name='prisoner',
-            app_sequence=['prisoner',],
+            name='budgeting',
+            app_sequence=['budgeting',],
             num_demo_participants=2,
             # completionlink="https://app.prolific.com/submissions/complete?cc=C17EXCFB",
         ),

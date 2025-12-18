@@ -1,0 +1,48 @@
+{{ block title }}
+    <div style="display: none;">Time's Up!</div>
+{{ endblock }}
+
+{{ block content }}
+<div class="text-center">
+    <h3>The 5-minute negotiation period has ended.</h3>
+
+    <div class="row mt-4">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Final Results</h4>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h5>Rounds Completed</h5>
+                        <p class="h3">{{ rounds_completed }}</p>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="mb-4">
+                        <h5>Total Deviation from Forecasts</h5>
+                        <p class="h3">CHF {{ total_deviation_formatted }}</p>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div>
+                        <h5>Final Score</h5>
+                        <p class="h3">CHF {{ final_score_formatted }}</p>
+                        <p class="text-muted"><small>(Average deviation per round)</small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <p>Thank you for participating! You will now complete a short questionnaire about your experience.</p>
+    </div>
+</div>
+
+<div class="text-center mt-5">
+    {{ next_button }}
+</div>
+{{ endblock }}

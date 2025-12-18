@@ -1,0 +1,29 @@
+{{ block title }}
+    Your Role
+{{ endblock }}
+
+{{ block content }}
+<div class="text-center">
+    <h3>{{ role }}</h3>
+
+    <div class="alert alert-info mt-4">
+        <p class="mb-0">{{ role_description }}</p>
+    </div>
+
+    <p class="mt-4">
+        You will be negotiating budget allocations with another participant who has been assigned the role of <strong>{{ other_role }}</strong>.
+    </p>
+    
+    <p class="mt-4">
+        {{ other_role_description }}
+    </p>
+
+    <!-- <p class="mt-3">
+        Click "Next" to read the instructions.
+    </p> -->
+</div>
+
+<div class="text-center mt-5">
+    {{ next_button }}
+</div>
+{{ endblock }}
