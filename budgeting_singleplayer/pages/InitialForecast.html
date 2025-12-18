@@ -1,0 +1,246 @@
+{{ block title }}
+    Budget Forecast - {{ account_name }}
+{{ endblock }}
+
+{{ block styles }}
+<style>
+    .slider-container {
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+    }
+    .form-range {
+        width: 100%;
+    }
+    .value-display {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+</style>
+{{ endblock }}
+
+{{ block content }}
+
+<!-- Role Reminder -->
+<div class="alert alert-secondary mb-4">
+    <strong>Your Role:</strong> {{ role }}
+</div>
+
+<!-- Historical Data Section -->
+<div class="card mb-4">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0">Historical Data - {{ account_name }} (Last 5 Years)</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <!-- Table View -->
+            <div class="col-md-6">
+                <h6 class="mb-3">Historical Expenses</h6>
+                <table class="table table-sm table-bordered">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Year</th>
+                            <th>Amount (CHF)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Year -4</td>
+                            <td>{{ historical_formatted.0 }}</td>
+                        </tr>
+                        <tr>
+                            <td>Year -3</td>
+                            <td>{{ historical_formatted.1 }}</td>
+                        </tr>
+                        <tr>
+                            <td>Year -2</td>
+                            <td>{{ historical_formatted.2 }}</td>
+                        </tr>
+                        <tr>
+                            <td>Year -1</td>
+                            <td>{{ historical_formatted.3 }}</td>
+                        </tr>
+                        <tr class="table-info">
+                            <td><strong>Current Year</strong></td>
+                            <td><strong>{{ historical_formatted.4 }}</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Chart View -->
+            <div class="col-md-6">
+                <h6 class="mb-3">Trend Visualization</h6>
+                <canvas id="historicalChart" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Step 1: Forecast -->
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Step 1: Your Forecast</h5>
+    </div>
+    <div class="card-body">
+        <p>Based on the historical data, what is your <strong>best estimate (forecast)</strong> for next year's {{ account_name }} expenses?</p>
+        
+        <div class="slider-container">
+            <label for="forecastSlider" class="form-label"><strong>Your Forecast:</strong></label>
+            
+            <div class="d-flex align-items-center mb-3">
+                <span class="me-2">CHF {{ slider_min }},000</span>
+                <input type="range" 
+                       class="form-range flex-grow-1 mx-2" 
+                       id="forecastSlider"
+                       min="{{ slider_min }}" 
+                       max="{{ slider_max }}"
+                       value="{{ forecast }}"
+                       step="1">
+                <span class="ms-2">CHF {{ slider_max }},000</span>
+            </div>
+            
+            <div class="text-center">
+                <h3 id="forecastValue" class="value-display text-primary">CHF {{ forecast }},000</h3>
+            </div>
+            
+            <input type="hidden" name="initial_forecast" id="initial_forecast" value="{{ forecast }}">
+        </div>
+    </div>
+</div>
+
+<!-- Step 2: Budget Adjustment -->
+<div class="card mb-4">
+    <div class="card-header bg-warning">
+        <h5 class="mb-0">Step 2: Budget Adjustment</h5>
+    </div>
+    <div class="card-body">
+        <p>Now decide how to <strong>adjust</strong> your forecast to set the actual budget. 
+        You may increase it (add a buffer) or decrease it (set a tighter budget).</p>
+        
+        <div class="slider-container">
+            <label for="adjustmentSlider" class="form-label"><strong>Adjustment from Forecast:</strong></label>
+            
+            <div class="d-flex align-items-center mb-3">
+                <span class="me-2">CHF {{ adjustment_min }},000</span>
+                <input type="range" 
+                       class="form-range flex-grow-1 mx-2" 
+                       id="adjustmentSlider"
+                       min="{{ adjustment_min }}" 
+                       max="{{ adjustment_max }}"
+                       value="0"
+                       step="1">
+                <span class="ms-2">+CHF {{ adjustment_max }},000</span>
+            </div>
+            
+            <div class="text-center">
+                <h4 id="adjustmentValue" class="text-muted">Adjustment: CHF 0</h4>
+                <h3 id="finalBudgetValue" class="value-display text-success">Final Budget: CHF {{ forecast }},000</h3>
+            </div>
+            
+            <input type="hidden" name="budget_adjustment" id="budget_adjustment" value="0">
+        </div>
+    </div>
+</div>
+
+<!-- Step 3: Justification -->
+<div class="card mb-4">
+    <div class="card-header bg-secondary text-white">
+        <h5 class="mb-0">Step 3: Justify Your Decision</h5>
+    </div>
+    <div class="card-body">
+        <p><em>Remember: The best justifications may win a CHF 20 ProCity voucher!</em></p>
+        {{ formfield 'initial_justification' }}
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Historical data chart (Bar chart)
+    const ctx = document.getElementById('historicalChart').getContext('2d');
+    const historicalData = {{ historical_data|safe }};
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Year -4', 'Year -3', 'Year -2', 'Year -1', 'Current'],
+            datasets: [{
+                label: '{{ account_name }} (CHF thousands)',
+                data: historicalData,
+                backgroundColor: [
+                    'rgba(23, 162, 184, 0.7)',
+                    'rgba(23, 162, 184, 0.7)',
+                    'rgba(23, 162, 184, 0.7)',
+                    'rgba(23, 162, 184, 0.7)',
+                    'rgba(40, 167, 69, 0.8)'  // Current year highlighted
+                ],
+                borderColor: [
+                    'rgb(23, 162, 184)',
+                    'rgb(23, 162, 184)',
+                    'rgb(23, 162, 184)',
+                    'rgb(23, 162, 184)',
+                    'rgb(40, 167, 69)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    title: {
+                        display: true,
+                        text: 'CHF (thousands)'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                }
+            }
+        }
+    });
+
+    // Slider functionality
+    const forecastSlider = document.getElementById('forecastSlider');
+    const forecastValueDisplay = document.getElementById('forecastValue');
+    const forecastHidden = document.getElementById('initial_forecast');
+    
+    const adjustmentSlider = document.getElementById('adjustmentSlider');
+    const adjustmentValueDisplay = document.getElementById('adjustmentValue');
+    const adjustmentHidden = document.getElementById('budget_adjustment');
+    const finalBudgetDisplay = document.getElementById('finalBudgetValue');
+
+    function updateDisplays() {
+        const forecast = parseInt(forecastSlider.value);
+        const adjustment = parseInt(adjustmentSlider.value);
+        const finalBudget = forecast + adjustment;
+        
+        forecastValueDisplay.textContent = `CHF ${forecast.toLocaleString()},000`;
+        forecastHidden.value = forecast;
+        
+        if (adjustment >= 0) {
+            adjustmentValueDisplay.textContent = `Adjustment: +CHF ${adjustment.toLocaleString()},000`;
+            adjustmentValueDisplay.className = 'text-success';
+        } else {
+            adjustmentValueDisplay.textContent = `Adjustment: CHF ${adjustment.toLocaleString()},000`;
+            adjustmentValueDisplay.className = 'text-danger';
+        }
+        adjustmentHidden.value = adjustment;
+        
+        finalBudgetDisplay.textContent = `Final Budget: CHF ${finalBudget.toLocaleString()},000`;
+    }
+
+    forecastSlider.addEventListener('input', updateDisplays);
+    adjustmentSlider.addEventListener('input', updateDisplays);
+</script>
+
+{{ endblock }}

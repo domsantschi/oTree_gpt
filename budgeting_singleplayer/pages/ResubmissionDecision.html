@@ -1,0 +1,186 @@
+{{ block title }}
+    Revision Decision
+{{ endblock }}
+
+{{ block styles }}
+<style>
+    .slider-container {
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+    }
+    .revision-section {
+        display: none;
+    }
+    .value-display {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+</style>
+{{ endblock }}
+
+{{ block content }}
+
+<!-- Original Submission Summary -->
+<div class="card mb-4">
+    <div class="card-header bg-secondary text-white">
+        <h5 class="mb-0">Your Original Submission</h5>
+    </div>
+    <div class="card-body">
+        <div class="row text-center">
+            <div class="col-md-4">
+                <p class="text-muted mb-1">Forecast</p>
+                <h4>CHF {{ initial_forecast }},000</h4>
+            </div>
+            <div class="col-md-4">
+                <p class="text-muted mb-1">Adjustment</p>
+                <h4>{% if budget_adjustment >= 0 %}+{% endif %}CHF {{ budget_adjustment }},000</h4>
+            </div>
+            <div class="col-md-4">
+                <p class="text-muted mb-1">Final Budget</p>
+                <h4 class="text-primary">CHF {{ final_budget }},000</h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Decision -->
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Your Decision</h5>
+    </div>
+    <div class="card-body">
+        <p>Based on the advice you received, do you want to revise your budget submission?</p>
+        
+        {{ formfield 'resubmit_decision' }}
+    </div>
+</div>
+
+<!-- Revision Section (shown only if revising) -->
+<div class="card mb-4 revision-section" id="revisionSection">
+    <div class="card-header bg-warning">
+        <h5 class="mb-0">Your Revised Submission</h5>
+    </div>
+    <div class="card-body">
+        <!-- Revised Forecast -->
+        <div class="slider-container mb-4">
+            <label for="revisedForecastSlider" class="form-label"><strong>Revised Forecast:</strong></label>
+            
+            <div class="d-flex align-items-center mb-3">
+                <span class="me-2">CHF {{ slider_min }},000</span>
+                <input type="range" 
+                       class="form-range flex-grow-1 mx-2" 
+                       id="revisedForecastSlider"
+                       min="{{ slider_min }}" 
+                       max="{{ slider_max }}"
+                       value="{{ initial_forecast }}"
+                       step="1">
+                <span class="ms-2">CHF {{ slider_max }},000</span>
+            </div>
+            
+            <div class="text-center">
+                <h4 id="revisedForecastValue" class="value-display text-primary">CHF {{ initial_forecast }},000</h4>
+            </div>
+            
+            <input type="hidden" name="revised_forecast" id="revised_forecast" value="{{ initial_forecast }}">
+        </div>
+        
+        <!-- Revised Adjustment -->
+        <div class="slider-container">
+            <label for="revisedAdjustmentSlider" class="form-label"><strong>Revised Adjustment:</strong></label>
+            
+            <div class="d-flex align-items-center mb-3">
+                <span class="me-2">CHF {{ adjustment_min }},000</span>
+                <input type="range" 
+                       class="form-range flex-grow-1 mx-2" 
+                       id="revisedAdjustmentSlider"
+                       min="{{ adjustment_min }}" 
+                       max="{{ adjustment_max }}"
+                       value="{{ budget_adjustment }}"
+                       step="1">
+                <span class="ms-2">+CHF {{ adjustment_max }},000</span>
+            </div>
+            
+            <div class="text-center">
+                <h4 id="revisedAdjustmentValue" class="text-muted">Adjustment: {% if budget_adjustment >= 0 %}+{% endif %}CHF {{ budget_adjustment }},000</h4>
+                <h3 id="revisedFinalBudgetValue" class="value-display text-success">Revised Budget: CHF {{ final_budget }},000</h3>
+            </div>
+            
+            <input type="hidden" name="revised_adjustment" id="revised_adjustment" value="{{ budget_adjustment }}">
+        </div>
+    </div>
+</div>
+
+<!-- Justification -->
+<div class="card mb-4">
+    <div class="card-header bg-secondary text-white">
+        <h5 class="mb-0">Explain Your Decision</h5>
+    </div>
+    <div class="card-body">
+        <p>Please explain your decision, whether you chose to revise or keep your original submission.</p>
+        <p><em>Remember: The best justifications may win a CHF 20 ProCity voucher!</em></p>
+        {{ formfield 'resubmission_justification' }}
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revisionSection = document.getElementById('revisionSection');
+    const radioButtons = document.querySelectorAll('input[name="resubmit_decision"]');
+    
+    const revisedForecastSlider = document.getElementById('revisedForecastSlider');
+    const revisedForecastValue = document.getElementById('revisedForecastValue');
+    const revisedForecastHidden = document.getElementById('revised_forecast');
+    
+    const revisedAdjustmentSlider = document.getElementById('revisedAdjustmentSlider');
+    const revisedAdjustmentValue = document.getElementById('revisedAdjustmentValue');
+    const revisedAdjustmentHidden = document.getElementById('revised_adjustment');
+    const revisedFinalBudgetValue = document.getElementById('revisedFinalBudgetValue');
+
+    function updateRevisionDisplays() {
+        const forecast = parseInt(revisedForecastSlider.value);
+        const adjustment = parseInt(revisedAdjustmentSlider.value);
+        const finalBudget = forecast + adjustment;
+        
+        revisedForecastValue.textContent = `CHF ${forecast.toLocaleString()},000`;
+        revisedForecastHidden.value = forecast;
+        
+        if (adjustment >= 0) {
+            revisedAdjustmentValue.textContent = `Adjustment: +CHF ${adjustment.toLocaleString()},000`;
+            revisedAdjustmentValue.className = 'text-success';
+        } else {
+            revisedAdjustmentValue.textContent = `Adjustment: CHF ${adjustment.toLocaleString()},000`;
+            revisedAdjustmentValue.className = 'text-danger';
+        }
+        revisedAdjustmentHidden.value = adjustment;
+        
+        revisedFinalBudgetValue.textContent = `Revised Budget: CHF ${finalBudget.toLocaleString()},000`;
+    }
+
+    function toggleRevisionSection() {
+        const selectedValue = document.querySelector('input[name="resubmit_decision"]:checked');
+        if (selectedValue && selectedValue.value === 'True') {
+            revisionSection.style.display = 'block';
+        } else {
+            revisionSection.style.display = 'none';
+        }
+    }
+
+    // Event listeners
+    radioButtons.forEach(function(radio) {
+        radio.addEventListener('change', toggleRevisionSection);
+    });
+    
+    revisedForecastSlider.addEventListener('input', updateRevisionDisplays);
+    revisedAdjustmentSlider.addEventListener('input', updateRevisionDisplays);
+    
+    // Initial state
+    toggleRevisionSection();
+});
+</script>
+
+{{ endblock }}

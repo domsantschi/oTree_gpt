@@ -46,10 +46,9 @@ SESSION_CONFIGS = [
             completionlink="https://app.prolific.com/submissions/complete?cc=C17EXCFB",
         ),
         dict(
-            name='budgeting',
-            app_sequence=['budgeting',],
-            num_demo_participants=2,
-            # completionlink="https://app.prolific.com/submissions/complete?cc=C17EXCFB",
+            name='budgeting_singleplayer',
+            app_sequence=['budgeting_singleplayer',],
+            num_demo_participants=1,
         ),
 ]
 # if you set a property in SESSION_CONFIG_DEFAULTS, it will be inherited by all configs

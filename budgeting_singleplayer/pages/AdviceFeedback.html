@@ -1,0 +1,98 @@
+{{ block title }}
+    Expert Advice
+{{ endblock }}
+
+{{ block content }}
+
+<!-- Your Submission Summary -->
+<div class="card mb-4">
+    <div class="card-header bg-secondary text-white">
+        <h5 class="mb-0">Your Submission</h5>
+    </div>
+    <div class="card-body">
+        <div class="row text-center">
+            <div class="col-md-4">
+                <p class="text-muted mb-1">Your Forecast</p>
+                <h4>CHF {{ initial_forecast }},000</h4>
+            </div>
+            <div class="col-md-4">
+                <p class="text-muted mb-1">Your Adjustment</p>
+                <h4>{% if budget_adjustment >= 0 %}+{% endif %}CHF {{ budget_adjustment }},000</h4>
+            </div>
+            <div class="col-md-4">
+                <p class="text-muted mb-1">Your Final Budget</p>
+                <h4 class="text-primary">CHF {{ final_budget }},000</h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Advice Section -->
+<div class="card mb-4">
+    <div class="card-header {% if advice_condition == 'human_expert' %}bg-success{% else %}bg-info{% endif %} text-white">
+        <h5 class="mb-0">
+            {% if advice_condition == 'human_expert' %}
+                <i class="fas fa-user-tie"></i> Advice from {{ advisor_name }}
+            {% else %}
+                <i class="fas fa-robot"></i> Advice from {{ advisor_name }}
+            {% endif %}
+        </h5>
+    </div>
+    <div class="card-body">
+        {% if advice_condition == 'human_expert' %}
+            <div class="alert alert-success mb-3">
+                <strong>Source:</strong> This advice comes from a <strong>civil servant</strong> who specializes in 
+                Public Services budgeting and has extensive experience analyzing this expense account.
+            </div>
+        {% else %}
+            <div class="alert alert-info mb-3">
+                <strong>Source:</strong> This advice comes from an <strong>AI model</strong> that has been specially 
+                trained on Public Services budgeting data and municipal expense patterns.
+            </div>
+        {% endif %}
+
+        <div class="p-3 bg-light rounded">
+            {{ advice_text|safe }}
+        </div>
+
+        <!-- Comparison -->
+        <div class="mt-4">
+            <h6>Comparison with Your Submission:</h6>
+            <table class="table table-bordered">
+                <thead class="table-light">
+                    <tr>
+                        <th></th>
+                        <th>Your Submission</th>
+                        <th>Recommendation</th>
+                        <th>Difference</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Forecast</strong></td>
+                        <td>CHF {{ initial_forecast }},000</td>
+                        <td>CHF {{ recommended_forecast }},000</td>
+                        <td>{{ forecast_diff_display }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Final Budget</strong></td>
+                        <td>CHF {{ final_budget }},000</td>
+                        <td>CHF {{ recommended_budget }},000</td>
+                        <td>{{ budget_diff_display }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="alert alert-warning">
+    <strong>Next Step:</strong> On the next page, you will have the opportunity to decide whether you want to 
+    revise your submission based on this advice, or keep your original submission.
+</div>
+
+<div class="text-center mt-4">
+    {{ next_button }}
+</div>
+
+{{ endblock }}
