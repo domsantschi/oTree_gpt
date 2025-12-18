@@ -4,8 +4,8 @@ import random
 doc = """
 Single-Player Budget Forecasting Experiment:
 Participants are randomly assigned to either be a Politician or Finance Director (IV1),
-submit a budget forecast with justification, receive advice from either a Human Expert 
-or AI Model (IV2), and decide whether to revise their submission.
+submit a budget forecast for municipal operating income with justification, receive advice 
+from either a Human Expert or AI Model (IV2), and decide whether to revise their submission.
 """
 
 
@@ -17,13 +17,18 @@ class C(BaseConstants):
     # Slider adjustment range (percentage above/below forecast)
     SLIDER_RANGE_PERCENT = 50  # Players can adjust +/- 50% from forecast
 
-    # Public Services Account Data (in CHF thousands)
-    ACCOUNT_NAME = 'Public Services'
-    FORECAST = 185  # Best estimate for next year
-    HISTORICAL = [168, 172, 175, 180, 185]  # Last 5 years of actual expenses
+    # Operating Income Data (in CHF thousands)
+    ACCOUNT_NAME = 'Operating Income'
+    FORECAST = 218  # Current year's actual operating income (reference for next year's forecast)
+    
+    # Historical data: 10 years of budgeted vs actual operating income
+    # Actual has consistently exceeded budget, with the gap increasing in recent years
+    HISTORICAL_BUDGET = [150, 152, 155, 158, 160, 163, 167, 170, 175, 180]  # Budgeted amounts
+    HISTORICAL_ACTUAL = [154, 158, 162, 167, 172, 179, 187, 195, 206, 218]  # Actual amounts (exceeded budget)
+    HISTORICAL = HISTORICAL_ACTUAL[-5:]  # Last 5 years of actual income for display
 
     # Advice parameters
-    RECOMMENDED_BUFFER_PERCENT = 5  # Safety buffer recommendation
+    RECOMMENDED_BUFFER_PERCENT = -5  # Conservative buffer (budget below forecast due to history of overperformance)
 
 
 class Subsession(BaseSubsession):
@@ -52,7 +57,7 @@ class Player(BasePlayer):
     initial_forecast = models.IntegerField(
         min=0,
         max=1000,
-        label="Your forecast for next year's Public Services expenses (CHF thousands)"
+        label="Your forecast for next year's Operating Income (CHF thousands)"
     )
     budget_adjustment = models.IntegerField(
         label="Adjustment from forecast to set budget (CHF thousands)",
@@ -212,21 +217,24 @@ def get_advice_text(player: Player):
     forecast = C.FORECAST
     buffer_percent = C.RECOMMENDED_BUFFER_PERCENT
     recommended_budget = int(forecast * (1 + buffer_percent / 100))
-    buffer_amount = recommended_budget - forecast
+    buffer_amount = abs(recommended_budget - forecast)
 
     advice_text = f"""
     <p><strong>Recommended Forecast:</strong> CHF {forecast:,},000</p>
-    <p><strong>Recommended Budget:</strong> CHF {recommended_budget:,},000 (including a {buffer_percent}% safety buffer of CHF {buffer_amount:,},000)</p>
+    <p><strong>Recommended Budget:</strong> CHF {recommended_budget:,},000 (a conservative estimate CHF {buffer_amount:,},000 below forecast)</p>
     
     <p><strong>Rationale:</strong></p>
     <ul>
-        <li><strong>Why a safety buffer:</strong> Public service expenses are subject to uncertainty. 
-        Unexpected events, policy changes, or economic fluctuations can lead to cost overruns. 
-        A modest {buffer_percent}% buffer provides flexibility to handle these uncertainties without 
-        requiring emergency budget revisions.</li>
-        <li><strong>Why not higher:</strong> Excessive buffers lead to economic inefficiencies. 
-        Over-budgeting ties up public funds that could be allocated to other priorities or returned 
-        to taxpayers. A {buffer_percent}% buffer balances prudent risk management with fiscal responsibility.</li>
+        <li><strong>Historical Pattern:</strong> Over the past 10 years, actual operating income has consistently 
+        exceeded budgeted amounts. The gap between actual and budgeted income has widened significantly in 
+        recent years, suggesting a systematic underestimation of revenue potential.</li>
+        <li><strong>Why budget conservatively:</strong> Despite the historical pattern of exceeding budgets, 
+        prudent fiscal management suggests budgeting conservatively for income. This prevents over-commitment 
+        of resources based on optimistic projections and provides a safety margin against unexpected 
+        economic downturns or revenue shortfalls.</li>
+        <li><strong>Why not lower:</strong> Setting the budget too far below realistic income projections 
+        could lead to unnecessary service cuts or missed opportunities for public investment. 
+        A modest {abs(buffer_percent)}% conservative adjustment balances fiscal prudence with realistic planning.</li>
     </ul>
     """
     return advice_text
@@ -235,9 +243,9 @@ def get_advice_text(player: Player):
 def get_advisor_name(player: Player):
     """Get the name/title of the advisor based on condition"""
     if player.advice_condition == 'human_expert':
-        return "Civil Servant Specialized in Public Services"
+        return "Civil Servant Specialized in Municipal Finance"
     else:
-        return "AI Model Trained for Public Services Budgeting"
+        return "AI Model Trained for Municipal Revenue Forecasting"
 
 
 # ===== PAGES =====
@@ -305,7 +313,8 @@ class InitialForecast(Page):
     @staticmethod
     def vars_for_template(player: Player):
         forecast = C.FORECAST
-        historical = C.HISTORICAL
+        historical_budget = C.HISTORICAL_BUDGET
+        historical_actual = C.HISTORICAL_ACTUAL
         slider_min = max(0, int(forecast * (1 - C.SLIDER_RANGE_PERCENT / 100)))
         slider_max = min(1000, int(forecast * (1 + C.SLIDER_RANGE_PERCENT / 100)))
         
@@ -313,15 +322,23 @@ class InitialForecast(Page):
         adjustment_min = -int(forecast * C.SLIDER_RANGE_PERCENT / 100)
         adjustment_max = int(forecast * C.SLIDER_RANGE_PERCENT / 100)
 
-        historical_formatted = ["{:,}".format(val * 1000) for val in historical]
+        # Format historical data for display
+        historical_budget_formatted = ["{:,}".format(val * 1000) for val in historical_budget]
+        historical_actual_formatted = ["{:,}".format(val * 1000) for val in historical_actual]
+        historical_diff_formatted = ["{:,}".format((actual - budget) * 1000) 
+                                      for budget, actual in zip(historical_budget, historical_actual)]
 
         role = player.role_condition.replace('_', ' ').title()
 
         return {
             'account_name': C.ACCOUNT_NAME,
             'forecast': forecast,
-            'historical_data': historical,
-            'historical_formatted': historical_formatted,
+            'historical_budget': historical_budget,
+            'historical_actual': historical_actual,
+            'historical_budget_formatted': historical_budget_formatted,
+            'historical_actual_formatted': historical_actual_formatted,
+            'historical_diff_formatted': historical_diff_formatted,
+            'year_indices': list(range(10)),
             'slider_min': slider_min,
             'slider_max': slider_max,
             'adjustment_min': adjustment_min,

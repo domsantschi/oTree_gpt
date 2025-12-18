@@ -29,49 +29,36 @@
 <!-- Historical Data Section -->
 <div class="card mb-4">
     <div class="card-header bg-info text-white">
-        <h5 class="mb-0">Historical Data - {{ account_name }} (Last 5 Years)</h5>
+        <h5 class="mb-0">Historical Data - {{ account_name }} (Last 10 Years)</h5>
     </div>
     <div class="card-body">
+        <div class="alert alert-warning mb-3">
+            <strong>Key Observation:</strong> Over the past 10 years, actual operating income has consistently 
+            exceeded budgeted amounts. The gap has widened significantly in recent years.
+        </div>
         <div class="row">
             <!-- Table View -->
             <div class="col-md-6">
-                <h6 class="mb-3">Historical Expenses</h6>
+                <h6 class="mb-3">Budgeted vs. Actual Operating Income</h6>
                 <table class="table table-sm table-bordered">
                     <thead class="table-light">
                         <tr>
                             <th>Year</th>
-                            <th>Amount (CHF)</th>
+                            <th>Budgeted (CHF)</th>
+                            <th>Actual (CHF)</th>
+                            <th>Difference</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>Year -4</td>
-                            <td>{{ historical_formatted.0 }}</td>
-                        </tr>
-                        <tr>
-                            <td>Year -3</td>
-                            <td>{{ historical_formatted.1 }}</td>
-                        </tr>
-                        <tr>
-                            <td>Year -2</td>
-                            <td>{{ historical_formatted.2 }}</td>
-                        </tr>
-                        <tr>
-                            <td>Year -1</td>
-                            <td>{{ historical_formatted.3 }}</td>
-                        </tr>
-                        <tr class="table-info">
-                            <td><strong>Current Year</strong></td>
-                            <td><strong>{{ historical_formatted.4 }}</strong></td>
-                        </tr>
+                    <tbody id="historyTableBody">
+                        <!-- Populated by JavaScript -->
                     </tbody>
                 </table>
             </div>
             
             <!-- Chart View -->
             <div class="col-md-6">
-                <h6 class="mb-3">Trend Visualization</h6>
-                <canvas id="historicalChart" height="200"></canvas>
+                <h6 class="mb-3">Budget vs. Actual Trend</h6>
+                <canvas id="historicalChart" height="250"></canvas>
             </div>
         </div>
     </div>
@@ -83,7 +70,7 @@
         <h5 class="mb-0">Step 1: Your Forecast</h5>
     </div>
     <div class="card-body">
-        <p>Based on the historical data, what is your <strong>best estimate (forecast)</strong> for next year's {{ account_name }} expenses?</p>
+        <p>Based on the historical data showing the relationship between budgeted and actual operating income, what is your <strong>best estimate (forecast)</strong> for next year's {{ account_name }}?</p>
         
         <div class="slider-container">
             <label for="forecastSlider" class="form-label"><strong>Your Forecast:</strong></label>
@@ -116,7 +103,9 @@
     </div>
     <div class="card-body">
         <p>Now decide how to <strong>adjust</strong> your forecast to set the actual budget. 
-        You may increase it (add a buffer) or decrease it (set a tighter budget).</p>
+        You may increase it (budget optimistically) or decrease it (budget conservatively).</p>
+        <p class="text-muted"><em>Note: Given that actual income has historically exceeded budgeted amounts, 
+        consider whether to budget conservatively or reflect the trend of overperformance.</em></p>
         
         <div class="slider-container">
             <label for="adjustmentSlider" class="form-label"><strong>Adjustment from Forecast:</strong></label>
@@ -160,32 +149,54 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Historical data chart (Bar chart)
+    // Historical data chart (Line chart comparing budget vs actual)
     const ctx = document.getElementById('historicalChart').getContext('2d');
-    const historicalData = {{ historical_data|safe }};
+    const budgetData = {{ historical_budget|safe }};
+    const actualData = {{ historical_actual|safe }};
+    const yearLabels = ['Y-9', 'Y-8', 'Y-7', 'Y-6', 'Y-5', 'Y-4', 'Y-3', 'Y-2', 'Y-1', 'Current'];
+
+    // Populate the historical data table
+    const tableBody = document.getElementById('historyTableBody');
+    for (let i = 0; i < budgetData.length; i++) {
+        const row = document.createElement('tr');
+        const diff = actualData[i] - budgetData[i];
+        const yearLabel = i === budgetData.length - 1 ? '<strong>Current</strong>' : `Year ${i - 9}`;
+        
+        if (i === budgetData.length - 1) {
+            row.className = 'table-info';
+        }
+        
+        row.innerHTML = `
+            <td>${yearLabel}</td>
+            <td>${(budgetData[i] * 1000).toLocaleString()}</td>
+            <td>${(actualData[i] * 1000).toLocaleString()}</td>
+            <td class="text-success">+${(diff * 1000).toLocaleString()}</td>
+        `;
+        tableBody.appendChild(row);
+    }
 
     new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
-            labels: ['Year -4', 'Year -3', 'Year -2', 'Year -1', 'Current'],
+            labels: yearLabels,
             datasets: [{
-                label: '{{ account_name }} (CHF thousands)',
-                data: historicalData,
-                backgroundColor: [
-                    'rgba(23, 162, 184, 0.7)',
-                    'rgba(23, 162, 184, 0.7)',
-                    'rgba(23, 162, 184, 0.7)',
-                    'rgba(23, 162, 184, 0.7)',
-                    'rgba(40, 167, 69, 0.8)'  // Current year highlighted
-                ],
-                borderColor: [
-                    'rgb(23, 162, 184)',
-                    'rgb(23, 162, 184)',
-                    'rgb(23, 162, 184)',
-                    'rgb(23, 162, 184)',
-                    'rgb(40, 167, 69)'
-                ],
-                borderWidth: 1
+                label: 'Budgeted Income',
+                data: budgetData,
+                borderColor: 'rgb(108, 117, 125)',
+                backgroundColor: 'rgba(108, 117, 125, 0.1)',
+                borderWidth: 2,
+                borderDash: [5, 5],
+                fill: false,
+                tension: 0.1
+            },
+            {
+                label: 'Actual Income',
+                data: actualData,
+                borderColor: 'rgb(40, 167, 69)',
+                backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.1
             }]
         },
         options: {
@@ -204,6 +215,15 @@
                 legend: {
                     display: true,
                     position: 'top'
+                },
+                tooltip: {
+                    callbacks: {
+                        afterBody: function(context) {
+                            const idx = context[0].dataIndex;
+                            const diff = actualData[idx] - budgetData[idx];
+                            return 'Gap: +CHF ' + diff + ',000';
+                        }
+                    }
                 }
             }
         }
