@@ -42,6 +42,18 @@ class Player(BasePlayer):
     round_payoff = models.IntegerField(initial=0)
     total_payoff = models.IntegerField(initial=0)
 
+    # Comprehension checks
+    comp_check_payoff = models.BooleanField(
+        label="True or False: If I choose Action 1 and the other participant chooses Action 2, I will receive 50 points.",
+        widget=widgets.RadioSelect,
+        choices=[[True, 'True'], [False, 'False']]
+    )
+    comp_check_goal = models.BooleanField(
+        label="True or False: The game will continue for exactly 10 rounds.",
+        widget=widgets.RadioSelect,
+        choices=[[True, 'True'], [False, 'False']]
+    )
+
     # Manipulation Check
     manip_check_strategy = models.LongStringField(
         label="What strategy did you use during the game? Please describe your approach.",
@@ -167,10 +179,38 @@ def is_final_round(player: Player):
 
 
 # PAGES
-class Instructions(Page):
+class Instructions1(Page):
     @staticmethod
     def is_displayed(player: Player):
         return player.round_number == 1
+
+
+class Instructions2(Page):
+    form_model = 'player'
+    form_fields = ['comp_check_payoff']
+
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.round_number == 1
+
+    @staticmethod
+    def error_message(player: Player, values):
+        if values['comp_check_payoff'] != False:
+            return 'Incorrect. If you choose Action 1 and the other participant chooses Action 2, you receive 12 points (you are betrayed), not 50 points. Please review the payoff table.'
+
+
+class Instructions3(Page):
+    form_model = 'player'
+    form_fields = ['comp_check_goal']
+
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.round_number == 1
+
+    @staticmethod
+    def error_message(player: Player, values):
+        if values['comp_check_goal'] != False:
+            return 'Incorrect. The number of rounds is not fixed. Each round has a 90% chance to continue and a 10% chance to end, so the total number of rounds is uncertain. Please review the instructions.'
 
 
 class Decision(Page):
@@ -273,7 +313,9 @@ class Thanks(Page):
 
 
 page_sequence = [
-    Instructions,
+    Instructions1,
+    Instructions2,
+    Instructions3,
     Decision,
     ResultsWaitPage,
     RoundResults,
