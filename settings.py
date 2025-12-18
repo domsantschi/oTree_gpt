@@ -45,6 +45,12 @@ SESSION_CONFIGS = [
             num_demo_participants=1,
             completionlink="https://app.prolific.com/submissions/complete?cc=C17EXCFB",
         ),
+        dict(
+            name='prisoner',
+            app_sequence=['prisoner',],
+            num_demo_participants=2,
+            # completionlink="https://app.prolific.com/submissions/complete?cc=C17EXCFB",
+        ),
 ]
 # if you set a property in SESSION_CONFIG_DEFAULTS, it will be inherited by all configs
 # in SESSION_CONFIGS, except those that explicitly override it.
