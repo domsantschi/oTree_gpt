@@ -1,0 +1,128 @@
+{{ block title }}<span style="display: none;">Verification Questions</span>{{ endblock }}
+
+{{ block content }}
+
+<style>
+    .checks-container {
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 25px;
+        background: linear-gradient(to right, #ffffff, #f8f9fa);
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .question-box {
+        border-left: 4px solid #007bff;
+        padding: 20px;
+        background-color: #f8f9fa;
+        margin: 20px 0;
+        transition: transform 0.2s;
+    }
+    
+    .question-box:hover {
+        transform: translateX(5px);
+    }
+    
+    .radio-group {
+        margin: 15px 0;
+        padding-left: 20px;
+    }
+    
+    .radio-option {
+        display: flex;
+        align-items: flex-start;
+        margin: 10px 0;
+        padding: 10px;
+        border-radius: 5px;
+        transition: background-color 0.2s;
+        cursor: pointer;
+    }
+    
+    .radio-option:hover {
+        background-color: rgba(0, 123, 255, 0.05);
+    }
+    
+    .radio-option input[type="radio"] {
+        margin-right: 10px;
+        margin-top: 3px;
+        transform: scale(1.2);
+        flex-shrink: 0;
+    }
+    
+    .radio-option span {
+        flex: 1;
+        line-height: 1.5;
+    }
+    
+    .question-number {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        background-color: #007bff;
+        color: white;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 24px;
+        margin-right: 10px;
+        font-weight: bold;
+    }
+
+    .error-message {
+        color: #dc3545;
+        font-size: 0.9em;
+        margin-top: 5px;
+        padding-left: 20px;
+    }
+</style>
+
+<div class="checks-container">
+    <div class="mb-4">
+        <h4>📋 Verification Questions</h4>
+        <p class="text-muted">We had different versions of the case. We want to know whether you recall which version you were in. Please answer these quick questions about your experience during the task.</p>
+    </div>
+
+    <!-- Speculative Design Check -->
+    <div class="question-box">
+        <p class="mb-3">
+            <span class="question-number">1</span>
+            Did you listen to audio and read a "What If" speculative scenario PDF during the study?
+        </p>
+        <div class="radio-group">
+            <label class="radio-option">
+                <input type="radio" name="video_check" value="Speculative Design Absent" required>
+                No, I <b>&nbsp;did not listen to audio or read a speculative scenario&nbsp;</b> ❌
+            </label>
+            <label class="radio-option">
+                <input type="radio" name="video_check" value="Speculative Design Present">
+                Yes, I <b>&nbsp;listened to audio and read a "What If" scenario about AI&nbsp;</b> 🎧
+            </label>
+        </div>
+        {{ formfield_errors 'video_check' }}
+    </div>
+
+    <!-- Construal Level Check -->
+    <div class="question-box">
+        <p class="mb-3">
+            <span class="question-number">2</span>
+           Before you identified the risks, which of the following describes your task to reflect on the AI Shield product development?
+        </p>
+        <div class="radio-group">
+            <label class="radio-option">
+                <input type="radio" name="construal_check" value="Concrete Construal" required>
+                <span>I described<b>&nbsp;how&nbsp;</b>the SecureHorizon team is developing the product (the specific steps and procedures)</span>
+            </label>
+            <label class="radio-option">
+                <input type="radio" name="construal_check" value="Abstract Construal">
+                <span>I described<b>&nbsp;why&nbsp;</b>the SecureHorizon team is developing the product (the goals and purposes)</span>
+            </label>
+        </div>
+        {{ formfield_errors 'construal_check' }}
+    </div>
+
+    <div class="text-center mt-4">
+        {{ next_button }}
+    </div>
+</div>
+
+{{ endblock }}

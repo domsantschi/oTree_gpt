@@ -1,0 +1,153 @@
+{{ block title }}<span style="display: none;">Welcome</span>{{ endblock }}
+
+{{ block content }}
+
+<style>
+    .intro-container {
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 25px;
+        background: linear-gradient(to right, #ffffff, #f8f9fa);
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .welcome-section {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .welcome-icon {
+        font-size: 48px;
+        color: #007bff;
+        margin-bottom: 15px;
+    }
+    
+    .context-box {
+        border-left: 4px solid #007bff;
+        padding: 20px;
+        background-color: #f8f9fa;
+        margin: 20px 0;
+        border-radius: 0 10px 10px 0;
+    }
+    
+    .steps-container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        margin: 20px 0;
+    }
+    
+    .step-item {
+        display: flex;
+        align-items: flex-start;
+        margin: 15px 0;
+        padding: 10px;
+        border-radius: 5px;
+        transition: transform 0.2s;
+    }
+    
+    .step-item:hover {
+        transform: translateX(5px);
+        background-color: rgba(0, 123, 255, 0.05);
+    }
+    
+    .step-number {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        background-color: #007bff;
+        color: white;
+        border-radius: 50%;
+        margin-right: 15px;
+        font-weight: bold;
+        flex-shrink: 0;
+    }
+    
+    .important-note {
+        background-color: #e9ecef;
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .compensation-box {
+        background-color: #d4edda;
+        border-left: 4px solid #28a745;
+        padding: 20px;
+        border-radius: 0 8px 8px 0;
+        margin: 20px 0;
+    }
+    
+    .compensation-item {
+        display: flex;
+        align-items: flex-start;
+        margin: 12px 0;
+        padding-left: 10px;
+    }
+    
+    .compensation-number {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        background-color: #28a745;
+        color: white;
+        border-radius: 50%;
+        margin-right: 12px;
+        font-weight: bold;
+        flex-shrink: 0;
+        font-size: 0.9em;
+    }
+    
+    .note-icon {
+        font-size: 24px;
+        margin-right: 15px;
+        color: #6c757d;
+    }
+</style>
+
+<div class="intro-container">
+    <div class="welcome-section">
+        <div class="welcome-icon">👋</div>
+        <h3>Welcome to the Study!</h3>
+    </div>
+
+    <div class="context-box">
+        <p>
+            <b>Thank you for your consent to participate in this study</b>. 
+        </p>
+        <p>
+            You will be asked to put yourself in the position of a risk manager tasked with identifying 
+            risks that could impact the preparation phase of a new product development. You will receive 
+            information about the product and then identify potential risks.
+        </p>
+    </div>
+
+    <div class="compensation-box">
+        <h5 style="color: #28a745; margin-bottom: 15px;">🎁 Incentive</h5>
+        <p>
+            Participants who identify the <b>highest number of risks</b> will be entered into a drawing 
+            to win a <b>CHF 20 Galaxus voucher</b>.
+        </p>
+    </div>
+
+    <!-- <div class="important-note">
+        <span class="note-icon">⚠️</span>
+        <div>
+            As the task requires a high level of concentration, it is important that you <b>complete it without interruption</b>.
+        </div>
+    </div> -->
+
+    <div class="text-center mt-4">
+        {{ next_button }}
+    </div>
+</div>
+
+{{ endblock }}

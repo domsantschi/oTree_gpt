@@ -50,6 +50,11 @@ SESSION_CONFIGS = [
             app_sequence=['budgeting_singleplayer',],
             num_demo_participants=1,
         ),
+        dict(
+            name='spec_design2',
+            app_sequence=['spec_design2',],
+            num_demo_participants=1,
+        ),
 ]
 # if you set a property in SESSION_CONFIG_DEFAULTS, it will be inherited by all configs
 # in SESSION_CONFIGS, except those that explicitly override it.

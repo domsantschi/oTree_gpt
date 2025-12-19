@@ -1,0 +1,190 @@
+{% block title %}<span style="display: none;">Reflection Time</span>{% endblock %}
+
+{% block content %}
+
+<style>
+    .condition-container {
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 25px;
+        background: linear-gradient(to right, #ffffff, #f8f9fa);
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .header-section {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .reflection-icon {
+        font-size: 48px;
+        color: #007bff;
+        margin-bottom: 15px;
+    }
+    
+    .content-box {
+        border-left: 4px solid #007bff;
+        padding: 20px;
+        background-color: #f8f9fa;
+        margin: 20px 0;
+        border-radius: 0 10px 10px 0;
+    }
+    
+    .pdf-container {
+        width: 100%;
+        height: 500px;
+        margin: 20px 0;
+        border: 2px solid #dee2e6;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .pdf-container iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+    
+    .audio-container {
+        background-color: #e9ecef;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        text-align: center;
+    }
+    
+    .audio-container audio {
+        width: 100%;
+        max-width: 400px;
+    }
+    
+    .timer-box {
+        background-color: #e9ecef;
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin-top: 20px;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+    
+    .timer-count {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #007bff;
+        margin: 0 5px;
+    }
+    
+    .notice-box {
+        background-color: rgba(0, 123, 255, 0.1);
+        border-left: 4px solid #007bff;
+        padding: 15px 20px;
+        margin: 20px 0;
+        border-radius: 0 8px 8px 0;
+    }
+    
+    .success-message {
+        color: #28a745;
+        font-weight: bold;
+    }
+    
+    .scenario-label {
+        background-color: #dc3545;
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.9em;
+        font-weight: bold;
+        display: inline-block;
+        margin-bottom: 15px;
+    }
+</style>
+
+<div class="condition-container">
+    <div class="header-section">
+        <div class="reflection-icon">💭</div>
+        <h4>Reflection Time</h4>
+    </div>
+    
+    <div class="notice-box">
+        <p><b>Please take a moment to reflect</b> on the information you have reviewed so far 
+        before proceeding with this study.</p>
+    </div>
+    
+    {% if speculative_design == 'Speculative Design Present' %}
+        <div class="content-box">
+            <span class="scenario-label">🎧 "What If" Scenario</span>
+            <p><b>Please review the following speculative scenario</b> while listening to the audio narration. 
+            This scenario explores a potential future situation related to AI risks.</p>
+        </div>
+        
+        <div class="audio-container">
+            <p><b>🔊 Audio Narration</b></p>
+            <audio id="scenario-audio" controls autoplay>
+                <source src="{{ static 'audio.mp3' }}" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            <p class="text-muted mt-2" style="font-size: 0.9em;">Please ensure your audio is enabled</p>
+        </div>
+        
+        <div class="pdf-container">
+            <iframe src="{{ static 'whatif-specdesign.pdf' }}" title="What If Scenario"></iframe>
+        </div>
+    {% else %}
+        <div class="pdf-container">
+            <iframe src="{{ static 'whatif-control.pdf' }}" title="Background Information"></iframe>
+        </div>
+    {% endif %}
+    
+    <div class="content-box">
+        <p style="text-align: center; font-size: 1.1em; margin: 30px 0;">
+            <b>You may use this time to consider:</b>
+        </p>
+        <ul style="line-height: 2em;">
+            <li>The context of SecureHorizon's AI Shield insurance product</li>
+            <li>Potential risks that may arise during product development</li>
+            <li>How you will approach the upcoming risk identification task</li>
+        </ul>
+    </div>
+
+    <div class="timer-box" id="timer-box">
+        <p style="margin: 0">
+            Recommended reflection time: <span class="timer-count" id="countdown">60</span> seconds remaining
+        </p>
+        <p style="margin-top: 10px; font-size: 0.9em; color: #6c757d;">
+            You may proceed whenever you are ready
+        </p>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const nextButton = document.querySelector('.otree-btn-next');
+            const timerBox = document.getElementById('timer-box');
+            const countdownSpan = document.getElementById('countdown');
+            
+            if (nextButton) {
+                // Button is enabled from the start
+                nextButton.disabled = false;
+                nextButton.textContent = 'Continue';
+                
+                let timeLeft = 60;
+                const timer = setInterval(function() {
+                    timeLeft--;
+                    countdownSpan.textContent = timeLeft;
+                    if (timeLeft <= 0) {
+                        clearInterval(timer);
+                        timerBox.innerHTML = '<p class="success-message">✅ You may now proceed</p>';
+                        timerBox.style.backgroundColor = '#d4edda';
+                    }
+                }, 1000);
+            }
+        });
+    </script>
+
+    <div class="text-center mt-4">
+        {{ next_button }}
+    </div>
+</div>
+
+{{ endblock }}

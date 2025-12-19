@@ -1,0 +1,231 @@
+{% load static %}
+{% block title %}<span style="display: none;">Risk Identification Task</span>{% endblock %}
+{% block content %}
+
+<style>
+    .assessment-container {
+        max-width: 900px;
+        margin: 30px auto;
+        padding: 25px;
+        background: linear-gradient(to right, #ffffff, #f8f9fa);
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .risk-item {
+        border-left: 4px solid #007bff;
+        padding: 20px;
+        background-color: #f8f9fa;
+        margin: 20px 0;
+        transition: transform 0.2s;
+        border-radius: 5px;
+    }
+    
+    .risk-item:hover {
+        transform: translateX(5px);
+    }
+    
+    .risk-number {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        background-color: #007bff;
+        color: white;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 24px;
+        margin-right: 10px;
+        font-weight: bold;
+    }
+    
+    .risk-input textarea {
+        width: 100%;
+        min-height: 80px;
+        padding: 12px;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        font-size: 0.95em;
+        resize: vertical;
+        transition: border-color 0.2s;
+        margin-top: 10px;
+    }
+    
+    .risk-input textarea:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+    
+    .add-more-btn {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        margin: 15px 0;
+        transition: background-color 0.2s;
+    }
+    
+    .add-more-btn:hover {
+        background-color: #218838;
+    }
+    
+    .risk-counter {
+        background-color: #00ff559f;
+        color: rgb(0, 0, 0);
+        padding: 10px 15px;
+        border-radius: 5px;
+        margin: 15px 0;
+        font-weight: bold;
+    }
+    
+    .remove-btn {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        padding: 5px 15px;
+        border-radius: 3px;
+        cursor: pointer;
+        margin-top: 10px;
+        font-size: 0.85em;
+        transition: background-color 0.2s;
+    }
+    
+    .remove-btn:hover {
+        background-color: #c82333;
+    }
+</style>
+
+<div class="assessment-container">
+    <div class="mb-4">
+        <h4>📋 Risk Identification Task</h4>
+        <p class="text-muted">Please identify risks related to the AI Shield insurance product and write them below using the list below.</p>
+        <ul class="text-muted" style="font-size: 0.9em;">
+            <li>Think about potential risks across different domains</li>
+            <li>Describe each risk clearly and specifically</li>
+            <li>Add more fields by clicking "Add Another Risk" if needed</li>
+            <li>You can leave fields blank if you don't identify that many risks</li>
+        </ul>
+    </div>
+    
+    <div style="background-color: #d4edda; border-left: 4px solid #28a745; padding: 15px; border-radius: 0 8px 8px 0; margin: 20px 0;">
+        <p style="margin: 0; color: #155724;">
+            <b>🎁 Win a Galaxus Voucher:</b> Participants who identify the highest number of risks with strong relevance 
+            will be entered into a drawing to win a <b>CHF 20 Galaxus voucher</b>. Your reward will be based on both the 
+            <b>quantity and relevance</b> of the risks you identify.
+        </p>
+    </div>
+    
+    <div class="risk-counter">
+        Risks identified: <span id="risk-count-display">0</span>
+    </div>
+    
+    <div id="risks-container">
+        <!-- Risk items will be added here dynamically -->
+    </div>
+    
+    <button type="button" class="add-more-btn" onclick="addRiskField()">
+        ➕ Add Another Risk
+    </button>
+    
+    <!-- Hidden fields to store data -->
+    <input type="hidden" name="risk_count" id="risk_count" value="0">
+    <input type="hidden" name="risk_descriptions" id="risk_descriptions" value="[]">
+    {{ formfield_errors 'risk_count' }}
+    {{ formfield_errors 'risk_descriptions' }}
+    
+    <div class="text-center mt-4">
+        {{ next_button }}
+    </div>
+</div>
+
+<script>
+    let riskCounter = 0;
+    
+    // Initialize with 10 fields
+    function initializeRiskFields() {
+        for (let i = 0; i < 10; i++) {
+            addRiskField();
+        }
+    }
+    
+    function addRiskField() {
+        riskCounter++;
+        const container = document.getElementById('risks-container');
+        
+        const riskDiv = document.createElement('div');
+        riskDiv.className = 'risk-item';
+        riskDiv.id = `risk-item-${riskCounter}`;
+        riskDiv.innerHTML = `
+            <p class="mb-2">
+                <span class="risk-number">${riskCounter}</span>
+                <strong>Risk ${riskCounter}</strong>
+            </p>
+            <div class="risk-input">
+                <textarea 
+                    class="risk-textarea" 
+                    placeholder="Describe this risk..."
+                    oninput="updateRiskData()"
+                    data-risk-id="${riskCounter}"></textarea>
+            </div>
+            ${riskCounter > 10 ? `<button type="button" class="remove-btn" onclick="removeRiskField(${riskCounter})">Remove</button>` : ''}
+        `;
+        
+        container.appendChild(riskDiv);
+    }
+    
+    function removeRiskField(id) {
+        const element = document.getElementById(`risk-item-${id}`);
+        if (element) {
+            element.remove();
+            renumberRisks();
+            updateRiskData();
+        }
+    }
+    
+    function renumberRisks() {
+        const riskItems = document.querySelectorAll('.risk-item');
+        riskItems.forEach((item, index) => {
+            const numberElement = item.querySelector('.risk-number');
+            if (numberElement) {
+                numberElement.textContent = index + 1;
+            }
+        });
+    }
+    
+    function updateRiskData() {
+        const textareas = document.querySelectorAll('.risk-textarea');
+        const risks = [];
+        let nonEmptyCount = 0;
+        
+        textareas.forEach((textarea, index) => {
+            const text = textarea.value.trim();
+            if (text) {
+                risks.push({
+                    number: index + 1,
+                    description: text
+                });
+                nonEmptyCount++;
+            }
+        });
+        
+        // Update hidden fields
+        document.getElementById('risk_count').value = nonEmptyCount;
+        document.getElementById('risk_descriptions').value = JSON.stringify(risks);
+        document.getElementById('risk-count-display').textContent = nonEmptyCount;
+    }
+    
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeRiskFields();
+    });
+    
+    // Update data before form submission
+    document.querySelector('form').addEventListener('submit', function(e) {
+        updateRiskData();
+    });
+</script>
+
+{% endblock %}

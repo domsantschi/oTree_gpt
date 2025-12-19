@@ -1,0 +1,157 @@
+{{ block title }}<span style="display: none;">Case Instructions</span>{{ endblock }}
+{{ block content }}
+
+<style>
+    .background-container {
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 25px;
+        background: linear-gradient(to right, #ffffff, #f8f9fa);
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .company-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .company-icon {
+        font-size: 48px;
+        color: #007bff;
+        margin-bottom: 15px;
+    }
+    
+    .tech-overview {
+        border-left: 4px solid #007bff;
+        padding: 20px;
+        background-color: #f8f9fa;
+        margin: 20px 0;
+        border-radius: 0 10px 10px 0;
+    }
+    
+    .features-list {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        margin: 20px 0;
+    }
+    
+    .feature-item {
+        display: flex;
+        align-items: center;
+        margin: 15px 0;
+        padding: 10px;
+        border-radius: 5px;
+        transition: transform 0.2s;
+    }
+    
+    .feature-item:hover {
+        transform: translateX(5px);
+        background-color: rgba(0, 123, 255, 0.05);
+    }
+    
+    .feature-icon {
+        width: 30px;
+        margin-right: 15px;
+        color: #007bff;
+        text-align: center;
+    }
+    
+    .designer-quote {
+        background-color: #e9ecef;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        position: relative;
+    }
+    
+    .quote-mark {
+        font-size: 24px;
+        color: #007bff;
+        position: absolute;
+        left: -10px;
+        top: -10px;
+    }
+    
+    .context-box {
+        background-color: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 15px 20px;
+        margin: 20px 0;
+        border-radius: 0 8px 8px 0;
+    }
+</style>
+
+<div class="background-container">
+    <div class="company-header">
+        <div class="company-icon">🛡️</div>
+        <h3>Case Instructions: SecureHorizon Insurance</h3>
+        <p class="text-muted">AI Shield Product Innovation</p>
+    </div>
+
+    <div class="tech-overview">
+        <h5>Your Role and Context</h5>
+        <p>
+            You are a risk manager working at SecureHorizon Insurance, a forward-thinking insurance company 
+            that is responding to growing concerns about AI and GenAI risks. As AI-driven automation increasingly 
+            overtakes human roles in critical infrastructure, and AI misalignment risks become well-documented 
+            in cybersecurity research, the need for comprehensive AI risk coverage has never been greater.
+        </p>
+        <p>
+            To address this challenge, SecureHorizon Insurance recently initiated a groundbreaking project called 
+            <b>AI Shield</b> and you have been assigned to identify potential risks during the 
+            preparation phase of this new insurance product line.
+        </p>
+    </div>
+
+    <div class="features-list">
+        <h5>AI Shield: Comprehensive AI Risk Insurance</h5>
+        <p class="mb-3">
+            The AI Shield project aims to develop insurance products that provide coverage for businesses and individuals 
+            in the event that AI or GenAI systems cause harm. The product line will include:
+        </p>
+        <div class="feature-item">
+            <span class="feature-icon">🤖</span>
+            <div><b>AI Malfunction Coverage</b> — protection when AI systems make wrong or unfair decisions based on incomplete or biased data</div>
+        </div>
+        <div class="feature-item">
+            <span class="feature-icon">🔒</span>
+            <div><b>AI Lockout Protection</b> — coverage when AI blocks legitimate services or users</div>
+        </div>
+        <div class="feature-item">
+            <span class="feature-icon">⚠️</span>
+            <div><b>AI Liability Shield</b> — protection against irreversible damage caused by AI systems in customer journeys, claims processing, or underwriting</div>
+        </div>
+    </div>
+
+    <div class="context-box">
+        <p style="margin: 0;"><b>📍 Industry Context:</b></p>
+        <ul style="margin-bottom: 0; margin-top: 10px;">
+            <li>AI-driven automation is already overtaking human roles in critical infrastructure</li>
+            <li>AI misalignment risks are well-documented in cybersecurity research</li>
+            <li>Global energy decentralization is already in motion to prevent systemic failures</li>
+            <li>Human oversight, guardrails and controls are becoming even more critical</li>
+        </ul>
+    </div>
+
+    <div class="designer-quote">
+        <span class="quote-mark">"</span>
+        <p style="margin-bottom: 0">
+            AI and GenAI algorithms can make wrong, unfair decisions, reinforce biases based on incomplete or 
+            skewed data. As an industry, we will certainly have to offer products to our customers that provide 
+            coverage in the event that AI goes awry. This represents both a <b>significant opportunity</b> and 
+            <b>important questions</b> about potential risks.
+        </p>
+        <p class="text-muted mt-2" style="margin-bottom: 0">
+            — Elena Vasquez, Chief Operating Officer
+        </p>
+    </div>
+
+    <div class="text-center mt-4">
+        {{ next_button }}
+    </div>
+</div>
+
+{{ endblock }}
