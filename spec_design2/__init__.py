@@ -94,6 +94,20 @@ class Player(BasePlayer):
         doc="Level of familiarity with artificial intelligence"
     )
     
+    # BIF (Behavioral Identification Form) fields
+    bif_1 = models.IntegerField(label="Picking an apple", min=0, max=1, doc="BIF Question 1")
+    bif_2 = models.IntegerField(label="Painting a room", min=0, max=1, doc="BIF Question 2")
+    bif_3 = models.IntegerField(label="Locking a door", min=0, max=1, doc="BIF Question 3")
+    bif_4 = models.IntegerField(label="Voting", min=0, max=1, doc="BIF Question 4")
+    bif_5 = models.IntegerField(label="Filling out a personality test", min=0, max=1, doc="BIF Question 5")
+    bif_6 = models.IntegerField(label="Greeting someone", min=0, max=1, doc="BIF Question 6")
+    bif_7 = models.IntegerField(label="Taking a test", min=0, max=1, doc="BIF Question 7")
+    bif_8 = models.IntegerField(label="Resisting temptation", min=0, max=1, doc="BIF Question 8")
+    bif_9 = models.IntegerField(label="Traveling by car", min=0, max=1, doc="BIF Question 9")
+    bif_10 = models.IntegerField(label="Talking to a child", min=0, max=1, doc="BIF Question 10")
+    bif_score = models.IntegerField(min=0, max=10, doc="Total BIF score (sum of all responses)")
+    bif_responses = models.LongStringField(doc="JSON string of BIF responses", blank=True)
+    
     # Experimental conditions
     construal_level = models.StringField(
         label="Construal Level",
@@ -226,6 +240,22 @@ class Player(BasePlayer):
         doc="The information allowed me to mentally experience what the risks might be like"
     )
     
+    mediator_attention_check = models.IntegerField(
+        label="To show you are reading carefully, please select 'Agree' for this item.",
+        min=1,
+        max=7,
+        choices=[
+            [1, 'Strongly disagree'],
+            [2, 'Disagree'],
+            [3, 'Somewhat disagree'],
+            [4, 'Neutral'],
+            [5, 'Somewhat agree'],
+            [6, 'Agree'],
+            [7, 'Strongly agree']
+        ],
+        doc="Attention check for mediators section"
+    )
+    
     # Manipulation effort questions
     manipulation_effort = models.IntegerField(
         label="How much effort did it take to complete the manipulation task?",
@@ -261,6 +291,22 @@ class Player(BasePlayer):
         doc="Self-rated level of creativity compared to others"
     )
     
+    attention_check = models.IntegerField(
+        label="To demonstrate that you are paying attention, please select 'Agree' for this question.",
+        min=1,
+        max=7,
+        choices=[
+            [1, 'Strongly disagree'],
+            [2, 'Disagree'],
+            [3, 'Somewhat disagree'],
+            [4, 'Neutral'],
+            [5, 'Somewhat agree'],
+            [6, 'Agree'],
+            [7, 'Strongly agree']
+        ],
+        doc="Attention check question"
+    )
+    
     # Risk identification - count and descriptions
     risk_count = models.IntegerField(
         initial=0,
@@ -280,6 +326,7 @@ class Player(BasePlayer):
     assessment_page_time = models.FloatField(doc="Time spent on assessment page in seconds")
     manip_check_page_time = models.FloatField(doc="Time spent on manipulation check page in seconds")
     controls_page_time = models.FloatField(doc="Time spent on controls page in seconds")
+    bif_page_time = models.FloatField(doc="Time spent on BIF page in seconds")
     demographics_page_time = models.FloatField(doc="Time spent on demographics page in seconds")
     thanks_page_time = models.FloatField(doc="Time spent on thanks page in seconds")
 
@@ -489,11 +536,17 @@ class Mediators(Page):
         'abstract_to_concrete',
         'impact_feeling',
         'mental_experience',
+        'mediator_attention_check',
     ]
     
     @staticmethod
     def is_displayed(player: Player):
         return player.passed_screening
+    
+    @staticmethod
+    def error_message(player: Player, values):
+        if values['mediator_attention_check'] != 6:  # 6 corresponds to 'Agree'
+            return 'Question 10 is incorrect. Please review and try again.'
 
     @staticmethod
     def get_timeout_seconds(player: Player):
@@ -533,6 +586,34 @@ class Controls(Page):
         'creativity',
         'manipulation_effort',
         'manipulation_difficulty',
+        'attention_check',
+    ]
+    
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.passed_screening
+    
+    @staticmethod
+    def error_message(player: Player, values):
+        if values['attention_check'] != 6:  # 6 corresponds to 'Agree'
+            return 'Question 6 is incorrect. Please review and try again.'
+    
+    @staticmethod
+    def get_timeout_seconds(player: Player):
+        import time
+        player.participant._start_time = time.time()
+        return None
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        player.controls_page_time = time.time() - player.participant._start_time
+
+class BIF(Page):
+    form_model = 'player'
+    form_fields = [
+        'bif_1', 'bif_2', 'bif_3', 'bif_4', 'bif_5',
+        'bif_6', 'bif_7', 'bif_8', 'bif_9', 'bif_10',
+        'bif_score', 'bif_responses'
     ]
     
     @staticmethod
@@ -547,7 +628,9 @@ class Controls(Page):
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
-        player.controls_page_time = time.time() - player.participant._start_time
+        player.bif_page_time = time.time() - player.participant._start_time
+        # Log BIF score
+        print(f"Participant {player.participant.label}: BIF score = {player.bif_score}")
 
 class Demographics(Page):
     form_model = 'player'
@@ -624,6 +707,7 @@ page_sequence = [
     Manip_Check,
     Mediators,
     Controls,
+    BIF,
     Demographics,
     Thanks,
     Redirect

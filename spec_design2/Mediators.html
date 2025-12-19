@@ -336,6 +336,30 @@
             </div>
             {{ formfield_errors 'mental_experience' }}
         </div>
+
+        <div class="question-box">
+            <p class="mb-3">
+                <span class="question-number">10</span>
+                To show you are reading carefully, please select "Agree" for this item.
+            </p>
+            <div class="likert-scale">
+                {% for i in range(1, 8) %}
+                    <div class="scale-option">
+                        <input type="radio" name="mediator_attention_check" value="{{ i }}" id="mediator_attn_{{ i }}" required>
+                        <label class="radio-label" for="mediator_attn_{{ i }}">
+                            {% if i == 1 %}Strongly<br>disagree{% endif %}
+                            {% if i == 2 %}Disagree{% endif %}
+                            {% if i == 3 %}Somewhat<br>disagree{% endif %}
+                            {% if i == 4 %}Neutral{% endif %}
+                            {% if i == 5 %}Somewhat<br>agree{% endif %}
+                            {% if i == 6 %}Agree{% endif %}
+                            {% if i == 7 %}Strongly<br>agree{% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ formfield_errors 'mediator_attention_check' }}
+        </div>
     </div>
 
     <div class="text-center mt-4">

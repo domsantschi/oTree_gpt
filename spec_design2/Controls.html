@@ -264,6 +264,45 @@
             {{ formfield_errors 'manipulation_difficulty' }}
         </div>
         
+        <!-- Question 6 -->
+        <div class="question-box">
+            <p class="mb-3">
+                <span class="question-number">6</span>
+                If you are reading this question carefully, please select "Agree".
+            </p>
+            <div class="likert-scale">
+                <div class="scale-option">
+                    <input type="radio" name="attention_check" value="1" id="attn_1" required>
+                    <label class="radio-label" for="attn_1">Strongly<br>disagree</label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="attention_check" value="2" id="attn_2">
+                    <label class="radio-label" for="attn_2">Disagree<br>&nbsp;</label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="attention_check" value="3" id="attn_3">
+                    <label class="radio-label" for="attn_3">Somewhat<br>disagree</label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="attention_check" value="4" id="attn_4">
+                    <label class="radio-label" for="attn_4">Neutral<br>&nbsp;</label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="attention_check" value="5" id="attn_5">
+                    <label class="radio-label" for="attn_5">Somewhat<br>agree</label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="attention_check" value="6" id="attn_6">
+                    <label class="radio-label" for="attn_6">Agree<br>&nbsp;</label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" name="attention_check" value="7" id="attn_7">
+                    <label class="radio-label" for="attn_7">Strongly<br>agree</label>
+                </div>
+            </div>
+            {{ formfield_errors 'attention_check' }}
+        </div>
+        
         <div class="text-center mt-4">
             {{ next_button }}
         </div>

@@ -148,6 +148,44 @@
         border-color: #007bff;
         box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
     }
+    
+    .likert-scale {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 10px;
+        margin: 20px 0;
+        padding: 15px;
+        background-color: white;
+        border-radius: 5px;
+    }
+
+    .scale-option {
+        text-align: center;
+        padding: 10px 5px;
+        transition: all 0.2s;
+        border-radius: 5px;
+    }
+
+    .scale-option:hover {
+        background-color: rgba(0, 123, 255, 0.05);
+    }
+
+    .radio-label-likert {
+        font-size: 0.85em;
+        margin-top: 8px;
+        display: block;
+        color: #495057;
+    }
+
+    input[type="radio"].likert-radio {
+        transform: scale(1.2);
+        margin-bottom: 8px;
+    }
+
+    input[type="radio"].likert-radio:checked + .radio-label-likert {
+        color: #007bff;
+        font-weight: bold;
+    }
 </style>
 
 <div class="demographics-container">
@@ -285,14 +323,79 @@
             <span class="question-number">5</span>
             Please rate your level of familiarity with the following:
         </p>
+        
+        <!-- Part a: Insurance -->
         <div class="mb-4">
-            <p class="mb-2"><strong>a) Insurance</strong></p>
-            {{ formfield 'familiarity_insurance' }}
+            <p class="mb-2"><strong>a) I am familiar with insurance</strong></p>
+            <div class="likert-scale">
+                <div class="scale-option">
+                    <input type="radio" class="likert-radio" name="familiarity_insurance" value="1" id="ins1" required>
+                    <label class="radio-label-likert" for="ins1">Strongly<br>disagree</label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" class="likert-radio" name="familiarity_insurance" value="2" id="ins2">
+                    <label class="radio-label-likert" for="ins2">Disagree<br>&nbsp;</label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" class="likert-radio" name="familiarity_insurance" value="3" id="ins3">
+                    <label class="radio-label-likert" for="ins3">Somewhat<br>disagree</label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" class="likert-radio" name="familiarity_insurance" value="4" id="ins4">
+                    <label class="radio-label-likert" for="ins4">Neutral<br>&nbsp;</label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" class="likert-radio" name="familiarity_insurance" value="5" id="ins5">
+                    <label class="radio-label-likert" for="ins5">Somewhat<br>agree</label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" class="likert-radio" name="familiarity_insurance" value="6" id="ins6">
+                    <label class="radio-label-likert" for="ins6">Agree<br>&nbsp;</label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" class="likert-radio" name="familiarity_insurance" value="7" id="ins7">
+                    <label class="radio-label-likert" for="ins7">Strongly<br>agree</label>
+                </div>
+            </div>
+            {{ formfield_errors 'familiarity_insurance' }}
         </div>
+        
         <hr>
+        
+        <!-- Part b: AI -->
         <div class="mb-3">
-            <p class="mb-2"><strong>b) Artificial Intelligence (AI)</strong></p>
-            {{ formfield 'familiarity_ai' }}
+            <p class="mb-2"><strong>b) I am familiar with artificial intelligence (AI)</strong></p>
+            <div class="likert-scale">
+                <div class="scale-option">
+                    <input type="radio" class="likert-radio" name="familiarity_ai" value="1" id="ai1" required>
+                    <label class="radio-label-likert" for="ai1">Strongly<br>disagree</label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" class="likert-radio" name="familiarity_ai" value="2" id="ai2">
+                    <label class="radio-label-likert" for="ai2">Disagree<br>&nbsp;</label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" class="likert-radio" name="familiarity_ai" value="3" id="ai3">
+                    <label class="radio-label-likert" for="ai3">Somewhat<br>disagree</label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" class="likert-radio" name="familiarity_ai" value="4" id="ai4">
+                    <label class="radio-label-likert" for="ai4">Neutral<br>&nbsp;</label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" class="likert-radio" name="familiarity_ai" value="5" id="ai5">
+                    <label class="radio-label-likert" for="ai5">Somewhat<br>agree</label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" class="likert-radio" name="familiarity_ai" value="6" id="ai6">
+                    <label class="radio-label-likert" for="ai6">Agree<br>&nbsp;</label>
+                </div>
+                <div class="scale-option">
+                    <input type="radio" class="likert-radio" name="familiarity_ai" value="7" id="ai7">
+                    <label class="radio-label-likert" for="ai7">Strongly<br>agree</label>
+                </div>
+            </div>
+            {{ formfield_errors 'familiarity_ai' }}
         </div>
     </div>
 
