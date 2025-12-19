@@ -46,8 +46,8 @@ SESSION_CONFIGS = [
             completionlink="https://app.prolific.com/submissions/complete?cc=C17EXCFB",
         ),
         dict(
-            name='budgeting_singleplayer',
-            app_sequence=['budgeting_singleplayer',],
+            name='budgeting',
+            app_sequence=['budgeting',],
             num_demo_participants=1,
         ),
         dict(
@@ -70,6 +70,12 @@ PARTICIPANT_FIELDS = [
     'failed_knowledge_check',  # Tracks whether the participant failed the knowledge check
     'part_id',                # Tracks participant ID
     '_start_time',            # Used for tracking page timing
+    '_forecast_start',        # Timing for forecast page
+    '_advice_start',          # Timing for advice page
+    '_resubmission_start',    # Timing for resubmission page
+    '_results_start',         # Timing for results page
+    'role_condition',         # Role condition (stored for multi-round access)
+    'advice_condition',       # Advice condition (stored for multi-round access)
 ]
 SESSION_FIELDS = []
 

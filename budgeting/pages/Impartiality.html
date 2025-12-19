@@ -1,0 +1,36 @@
+{{ block title }}
+    Your Perceptions
+{{ endblock }}
+
+{{ block content }}
+
+<div class="card mb-4">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0">Perceptions of the Advice</h5>
+    </div>
+    <div class="card-body">
+        <p>Please indicate your agreement with the following statements about the advice you received:</p>
+        
+        <div class="mb-4">
+            {{ formfield 'impartiality_unbiased' }}
+        </div>
+        
+        <hr>
+        
+        <div class="mb-4">
+            {{ formfield 'impartiality_objective' }}
+        </div>
+        
+        <hr>
+        
+        <div class="mb-4">
+            {{ formfield 'impartiality_fair' }}
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    {{ next_button }}
+</div>
+
+{{ endblock }}
