@@ -21,26 +21,42 @@
 
 {{ block content }}
 
-<!-- Original Submission Summary -->
+<!-- Comparison with Recommendation -->
 <div class="card mb-4">
     <div class="card-header bg-secondary text-white">
-        <h5 class="mb-0">Your Original Submission</h5>
+        <h5 class="mb-0">Comparison with Your Submission</h5>
     </div>
     <div class="card-body">
-        <div class="row text-center">
-            <div class="col-md-4">
-                <p class="text-muted mb-1">Forecast</p>
-                <h4>CHF {{ initial_forecast }},000</h4>
-            </div>
-            <div class="col-md-4">
-                <p class="text-muted mb-1">Adjustment</p>
-                <h4>{% if budget_adjustment >= 0 %}+{% endif %}CHF {{ budget_adjustment }},000</h4>
-            </div>
-            <div class="col-md-4">
-                <p class="text-muted mb-1">Final Budget</p>
-                <h4 class="text-primary">CHF {{ final_budget }},000</h4>
-            </div>
-        </div>
+        <table class="table table-bordered">
+            <thead class="table-light">
+                <tr>
+                    <th></th>
+                    <th>Your Submission</th>
+                    <th>Recommendation</th>
+                    <th>Difference</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Best Estimate</strong></td>
+                    <td>CHF {{ initial_forecast }},000</td>
+                    <td>CHF {{ recommended_estimate }},000</td>
+                    <td>{{ estimate_diff_display }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Buffer</strong></td>
+                    <td>CHF {{ budget_adjustment }},000</td>
+                    <td>CHF {{ recommended_buffer }},000</td>
+                    <td>{{ buffer_diff_display }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Final Budget</strong></td>
+                    <td>CHF {{ final_budget }},000</td>
+                    <td>CHF {{ recommended_budget }},000</td>
+                    <td>{{ budget_diff_display }}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 
@@ -62,9 +78,9 @@
         <h5 class="mb-0">Your Revised Submission</h5>
     </div>
     <div class="card-body">
-        <!-- Revised Forecast -->
+        <!-- Revised Best Estimate -->
         <div class="slider-container mb-4">
-            <label for="revisedForecastSlider" class="form-label"><strong>Revised Forecast:</strong></label>
+            <label for="revisedForecastSlider" class="form-label"><strong>Revised Best Estimate:</strong></label>
             
             <div class="d-flex align-items-center mb-3">
                 <span class="me-2">CHF {{ slider_min }},000</span>
@@ -85,24 +101,24 @@
             <input type="hidden" name="revised_forecast" id="revised_forecast" value="{{ initial_forecast }}">
         </div>
         
-        <!-- Revised Adjustment -->
+        <!-- Revised Buffer -->
         <div class="slider-container">
-            <label for="revisedAdjustmentSlider" class="form-label"><strong>Revised Adjustment:</strong></label>
+            <label for="revisedAdjustmentSlider" class="form-label"><strong>Revised Buffer:</strong></label>
             
             <div class="d-flex align-items-center mb-3">
-                <span class="me-2">CHF {{ adjustment_min }},000</span>
+                <span class="me-2">0%</span>
                 <input type="range" 
                        class="form-range flex-grow-1 mx-2" 
                        id="revisedAdjustmentSlider"
-                       min="{{ adjustment_min }}" 
-                       max="{{ adjustment_max }}"
-                       value="{{ budget_adjustment }}"
+                       min="0" 
+                       max="100"
+                       value="0"
                        step="1">
-                <span class="ms-2">+CHF {{ adjustment_max }},000</span>
+                <span class="ms-2">100%</span>
             </div>
             
             <div class="text-center">
-                <h4 id="revisedAdjustmentValue" class="text-muted">Adjustment: {% if budget_adjustment >= 0 %}+{% endif %}CHF {{ budget_adjustment }},000</h4>
+                <h4 id="revisedAdjustmentValue" class="text-muted">Buffer: 0% (+CHF 0)</h4>
                 <h3 id="revisedFinalBudgetValue" class="value-display text-success">Revised Budget: CHF {{ final_budget }},000</h3>
             </div>
             
@@ -143,19 +159,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateRevisionDisplays() {
         const forecast = parseInt(revisedForecastSlider.value);
-        const adjustment = parseInt(revisedAdjustmentSlider.value);
+        const bufferPercent = parseInt(revisedAdjustmentSlider.value);
+        const adjustment = Math.round(forecast * (bufferPercent / 100));
         const finalBudget = forecast + adjustment;
         
         revisedForecastValue.textContent = `CHF ${forecast.toLocaleString()},000`;
         revisedForecastHidden.value = forecast;
         
-        if (adjustment >= 0) {
-            revisedAdjustmentValue.textContent = `Adjustment: +CHF ${adjustment.toLocaleString()},000`;
-            revisedAdjustmentValue.className = 'text-success';
-        } else {
-            revisedAdjustmentValue.textContent = `Adjustment: CHF ${adjustment.toLocaleString()},000`;
-            revisedAdjustmentValue.className = 'text-danger';
-        }
+        revisedAdjustmentValue.textContent = `Buffer: ${bufferPercent}% (+CHF ${adjustment.toLocaleString()},000)`;
+        revisedAdjustmentValue.className = 'text-success';
         revisedAdjustmentHidden.value = adjustment;
         
         revisedFinalBudgetValue.textContent = `Revised Budget: CHF ${finalBudget.toLocaleString()},000`;

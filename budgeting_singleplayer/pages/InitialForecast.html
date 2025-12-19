@@ -64,16 +64,16 @@
     </div>
 </div>
 
-<!-- Step 1: Forecast -->
+<!-- Step 1: Best Estimate -->
 <div class="card mb-4">
     <div class="card-header bg-primary text-white">
-        <h5 class="mb-0">Step 1: Your Forecast</h5>
+        <h5 class="mb-0">Step 1: Your Best Estimate</h5>
     </div>
     <div class="card-body">
-        <p>Based on the historical data showing the relationship between budgeted and actual operating income, what is your <strong>best estimate (forecast)</strong> for next year's {{ account_name }}?</p>
+        <p>Based on the historical data showing the relationship between budgeted and actual operating income, what is your <strong>best estimate for next year's {{ account_name }}?</strong></p>
         
         <div class="slider-container">
-            <label for="forecastSlider" class="form-label"><strong>Your Forecast:</strong></label>
+            <label for="forecastSlider" class="form-label"><strong>Your Best Estimate:</strong></label>
             
             <div class="d-flex align-items-center mb-3">
                 <span class="me-2">CHF {{ slider_min }},000</span>
@@ -96,34 +96,34 @@
     </div>
 </div>
 
-<!-- Step 2: Budget Adjustment -->
+<!-- Step 2: Buffer for Uncertainty -->
 <div class="card mb-4">
     <div class="card-header bg-warning">
-        <h5 class="mb-0">Step 2: Budget Adjustment</h5>
+        <h5 class="mb-0">Step 2: Buffer for Uncertainty</h5>
     </div>
     <div class="card-body">
-        <p>Now decide how to <strong>adjust</strong> your forecast to set the actual budget. 
-        You may increase it (budget optimistically) or decrease it (budget conservatively).</p>
+        <p>Now decide how much <strong>buffer for uncertainty</strong> to apply to your best estimate when setting the actual budget. 
+        A positive buffer increases the budget (more optimistic), while a negative buffer decreases it (more conservative).</p>
         <p class="text-muted"><em>Note: Given that actual income has historically exceeded budgeted amounts, 
-        consider whether to budget conservatively or reflect the trend of overperformance.</em></p>
+        consider what buffer is appropriate to account for uncertainty.</em></p>
         
         <div class="slider-container">
-            <label for="adjustmentSlider" class="form-label"><strong>Adjustment from Forecast:</strong></label>
+            <label for="adjustmentSlider" class="form-label"><strong>Buffer for Uncertainty:</strong></label>
             
             <div class="d-flex align-items-center mb-3">
-                <span class="me-2">CHF {{ adjustment_min }},000</span>
+                <span class="me-2">0%</span>
                 <input type="range" 
                        class="form-range flex-grow-1 mx-2" 
                        id="adjustmentSlider"
-                       min="{{ adjustment_min }}" 
-                       max="{{ adjustment_max }}"
+                       min="0" 
+                       max="100"
                        value="0"
                        step="1">
-                <span class="ms-2">+CHF {{ adjustment_max }},000</span>
+                <span class="ms-2">100%</span>
             </div>
             
             <div class="text-center">
-                <h4 id="adjustmentValue" class="text-muted">Adjustment: CHF 0</h4>
+                <h4 id="adjustmentValue" class="text-muted">Buffer: 0% (+CHF 0)</h4>
                 <h3 id="finalBudgetValue" class="value-display text-success">Final Budget: CHF {{ forecast }},000</h3>
             </div>
             
@@ -175,58 +175,115 @@
         tableBody.appendChild(row);
     }
 
+    // Custom plugin to draw vertical connecting lines
+    const verticalLinePlugin = {
+        id: 'verticalConnectors',
+        beforeDatasetsDraw(chart) {
+            const ctx = chart.ctx;
+            const meta0 = chart.getDatasetMeta(0); // Budgeted
+            const meta1 = chart.getDatasetMeta(1); // Actual
+            
+            ctx.save();
+            ctx.strokeStyle = 'rgba(108, 117, 125, 0.3)';
+            ctx.lineWidth = 2;
+            
+            for (let i = 0; i < meta0.data.length; i++) {
+                const point0 = meta0.data[i];
+                const point1 = meta1.data[i];
+                
+                ctx.beginPath();
+                ctx.moveTo(point0.x, point0.y);
+                ctx.lineTo(point1.x, point1.y);
+                ctx.stroke();
+            }
+            ctx.restore();
+        }
+    };
+
     new Chart(ctx, {
-        type: 'line',
+        type: 'scatter',
         data: {
             labels: yearLabels,
             datasets: [{
-                label: 'Budgeted Income',
-                data: budgetData,
-                borderColor: 'rgb(108, 117, 125)',
-                backgroundColor: 'rgba(108, 117, 125, 0.1)',
-                borderWidth: 2,
-                borderDash: [5, 5],
-                fill: false,
-                tension: 0.1
+                label: 'Budgeted Result',
+                data: budgetData.map((val, idx) => ({x: idx, y: val})),
+                borderColor: 'rgb(220, 53, 69)',
+                backgroundColor: 'rgb(220, 53, 69)',
+                pointRadius: 6,
+                pointHoverRadius: 8
             },
             {
-                label: 'Actual Income',
-                data: actualData,
-                borderColor: 'rgb(40, 167, 69)',
-                backgroundColor: 'rgba(40, 167, 69, 0.2)',
-                borderWidth: 3,
-                fill: true,
-                tension: 0.1
+                label: 'Actual Result',
+                data: actualData.map((val, idx) => ({x: idx, y: val})),
+                borderColor: 'rgb(13, 110, 253)',
+                backgroundColor: 'rgb(13, 110, 253)',
+                pointRadius: 6,
+                pointHoverRadius: 8
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: true,
             scales: {
+                x: {
+                    type: 'linear',
+                    position: 'bottom',
+                    min: -0.5,
+                    max: 9.5,
+                    ticks: {
+                        stepSize: 1,
+                        callback: function(value, index) {
+                            return yearLabels[value] || '';
+                        }
+                    },
+                    grid: {
+                        display: true,
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    },
+                    title: {
+                        display: false
+                    }
+                },
                 y: {
                     beginAtZero: false,
                     title: {
                         display: true,
-                        text: 'CHF (thousands)'
+                        text: 'Operating Result (CHF thousands)'
+                    },
+                    grid: {
+                        display: true,
+                        color: 'rgba(0, 0, 0, 0.1)'
                     }
                 }
             },
             plugins: {
                 legend: {
                     display: true,
-                    position: 'top'
+                    position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 15
+                    }
                 },
                 tooltip: {
                     callbacks: {
+                        title: function(context) {
+                            return yearLabels[context[0].parsed.x];
+                        },
+                        label: function(context) {
+                            const label = context.dataset.label || '';
+                            return label + ': CHF ' + context.parsed.y.toLocaleString() + ',000';
+                        },
                         afterBody: function(context) {
-                            const idx = context[0].dataIndex;
+                            const idx = context[0].parsed.x;
                             const diff = actualData[idx] - budgetData[idx];
-                            return 'Gap: +CHF ' + diff + ',000';
+                            return 'Gap: +CHF ' + diff.toLocaleString() + ',000';
                         }
                     }
                 }
             }
-        }
+        },
+        plugins: [verticalLinePlugin]
     });
 
     // Slider functionality
@@ -241,19 +298,15 @@
 
     function updateDisplays() {
         const forecast = parseInt(forecastSlider.value);
-        const adjustment = parseInt(adjustmentSlider.value);
+        const bufferPercent = parseInt(adjustmentSlider.value);
+        const adjustment = Math.round(forecast * (bufferPercent / 100));
         const finalBudget = forecast + adjustment;
         
         forecastValueDisplay.textContent = `CHF ${forecast.toLocaleString()},000`;
         forecastHidden.value = forecast;
         
-        if (adjustment >= 0) {
-            adjustmentValueDisplay.textContent = `Adjustment: +CHF ${adjustment.toLocaleString()},000`;
-            adjustmentValueDisplay.className = 'text-success';
-        } else {
-            adjustmentValueDisplay.textContent = `Adjustment: CHF ${adjustment.toLocaleString()},000`;
-            adjustmentValueDisplay.className = 'text-danger';
-        }
+        adjustmentValueDisplay.textContent = `Buffer: ${bufferPercent}% (+CHF ${adjustment.toLocaleString()},000)`;
+        adjustmentValueDisplay.className = 'text-success';
         adjustmentHidden.value = adjustment;
         
         finalBudgetDisplay.textContent = `Final Budget: CHF ${finalBudget.toLocaleString()},000`;

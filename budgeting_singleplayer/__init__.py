@@ -22,13 +22,15 @@ class C(BaseConstants):
     FORECAST = 218  # Current year's actual operating income (reference for next year's forecast)
     
     # Historical data: 10 years of budgeted vs actual operating income
-    # Actual has consistently exceeded budget, with the gap increasing in recent years
-    HISTORICAL_BUDGET = [150, 152, 155, 158, 160, 163, 167, 170, 175, 180]  # Budgeted amounts
-    HISTORICAL_ACTUAL = [154, 158, 162, 167, 172, 179, 187, 195, 206, 218]  # Actual amounts (exceeded budget)
+    # Data shows more annual variability with actual consistently exceeding budget
+    HISTORICAL_BUDGET = [150, 151, 148, 152, 155, 158, 154, 160, 165, 170]  # Budgeted amounts with variation
+    HISTORICAL_ACTUAL = [152, 155, 160, 165, 170, 180, 183, 193, 205, 218]  # Actual amounts with year-to-year variation
     HISTORICAL = HISTORICAL_ACTUAL[-5:]  # Last 5 years of actual income for display
 
     # Advice parameters
-    RECOMMENDED_BUFFER_PERCENT = -5  # Conservative buffer (budget below forecast due to history of overperformance)
+    RECOMMENDED_BEST_ESTIMATE = 100  # Recommended best estimate for next year (lower than current 218)
+    RECOMMENDED_BUFFER = 10  # Buffer in CHF thousands (positive = budget above estimate)
+    # Note: RECOMMENDED_BUDGET = RECOMMENDED_BEST_ESTIMATE + RECOMMENDED_BUFFER = 100 + 10 = 110
 
 
 class Subsession(BaseSubsession):
@@ -57,11 +59,11 @@ class Player(BasePlayer):
     initial_forecast = models.IntegerField(
         min=0,
         max=1000,
-        label="Your forecast for next year's Operating Income (CHF thousands)"
+        label="Your best estimate for next year's Operating Income (CHF thousands)"
     )
     budget_adjustment = models.IntegerField(
-        label="Adjustment from forecast to set budget (CHF thousands)",
-        doc="Positive = increase budget above forecast, Negative = decrease below forecast"
+        label="Buffer for uncertainty (CHF thousands)",
+        doc="Positive = increase budget above estimate, Negative = decrease below estimate"
     )
     initial_justification = models.LongStringField(
         label="Please justify your budget decision:",
@@ -213,28 +215,37 @@ def creating_session(subsession: Subsession):
 
 
 def get_advice_text(player: Player):
-    """Generate the advice text based on condition"""
-    forecast = C.FORECAST
-    buffer_percent = C.RECOMMENDED_BUFFER_PERCENT
-    recommended_budget = int(forecast * (1 + buffer_percent / 100))
-    buffer_amount = abs(recommended_budget - forecast)
+    """Generate the advice text based on condition - same advice for all conditions"""
+    recommended_estimate = C.RECOMMENDED_BEST_ESTIMATE
+    recommended_buffer = C.RECOMMENDED_BUFFER
+    recommended_budget = recommended_estimate + recommended_buffer
+    buffer_amount = abs(recommended_buffer)
+    buffer_percent = round((recommended_buffer / recommended_estimate) * 100, 1)
+
+    # Determine buffer description based on sign
+    if recommended_buffer >= 0:
+        buffer_description = f"a buffer of CHF {buffer_amount:,},000 above best estimate"
+    else:
+        buffer_description = f"a conservative buffer of CHF {buffer_amount:,},000 below best estimate"
 
     advice_text = f"""
-    <p><strong>Recommended Forecast:</strong> CHF {forecast:,},000</p>
-    <p><strong>Recommended Budget:</strong> CHF {recommended_budget:,},000 (a conservative estimate CHF {buffer_amount:,},000 below forecast)</p>
+    <p><strong>Recommended Best Estimate:</strong> CHF {recommended_estimate:,},000</p>
+    <p><strong>Recommended Buffer:</strong> CHF {recommended_buffer:,},000</p>
+    <p><strong>Recommended Budget:</strong> CHF {recommended_budget:,},000</p>
     
     <p><strong>Rationale:</strong></p>
     <ul>
-        <li><strong>Historical Pattern:</strong> Over the past 10 years, actual operating income has consistently 
-        exceeded budgeted amounts. The gap between actual and budgeted income has widened significantly in 
-        recent years, suggesting a systematic underestimation of revenue potential.</li>
-        <li><strong>Why budget conservatively:</strong> Despite the historical pattern of exceeding budgets, 
-        prudent fiscal management suggests budgeting conservatively for income. This prevents over-commitment 
-        of resources based on optimistic projections and provides a safety margin against unexpected 
-        economic downturns or revenue shortfalls.</li>
-        <li><strong>Why not lower:</strong> Setting the budget too far below realistic income projections 
-        could lead to unnecessary service cuts or missed opportunities for public investment. 
-        A modest {abs(buffer_percent)}% conservative adjustment balances fiscal prudence with realistic planning.</li>
+        <li><strong>Why lower than last year:</strong> While the current year's actual operating income reached CHF 218,000, 
+        additional information about the municipality's economic outlook suggests a significant decline is expected next year. 
+        Key factors include anticipated changes in local business activity, potential decreases in commercial tax revenues, 
+        and economic headwinds affecting the region. Therefore, a best estimate of CHF {recommended_estimate:,},000 
+        more accurately reflects next year's expected performance.</li>
+        <li><strong>Why apply a buffer above the estimate:</strong> Despite expecting lower operating income, 
+        there remains uncertainty in the forecast. Adding a modest buffer of CHF {buffer_amount:,},000 ({abs(buffer_percent)}%) 
+        above the best estimate provides some cushion for potential variations while still maintaining fiscal prudence 
+        given the challenging economic environment.</li>
+        <li><strong>Balanced approach:</strong> Setting the budget at CHF {recommended_budget:,},000 balances the need 
+        for realistic expectations with maintaining adequate resources for essential municipal services.</li>
     </ul>
     """
     return advice_text
@@ -318,9 +329,9 @@ class InitialForecast(Page):
         slider_min = max(0, int(forecast * (1 - C.SLIDER_RANGE_PERCENT / 100)))
         slider_max = min(1000, int(forecast * (1 + C.SLIDER_RANGE_PERCENT / 100)))
         
-        # Calculate adjustment range
-        adjustment_min = -int(forecast * C.SLIDER_RANGE_PERCENT / 100)
-        adjustment_max = int(forecast * C.SLIDER_RANGE_PERCENT / 100)
+        # Calculate adjustment range - buffer can only be positive (0 to 100%)
+        adjustment_min = 0
+        adjustment_max = int(forecast * 1.0)  # 100% of forecast
 
         # Format historical data for display
         historical_budget_formatted = ["{:,}".format(val * 1000) for val in historical_budget]
@@ -357,18 +368,25 @@ class AdviceFeedback(Page):
         
         # Calculate what the participant submitted
         final_budget = player.initial_forecast + player.budget_adjustment
-        recommended_forecast = C.FORECAST
-        recommended_budget = int(C.FORECAST * (1 + C.RECOMMENDED_BUFFER_PERCENT / 100))
+        recommended_estimate = C.RECOMMENDED_BEST_ESTIMATE
+        recommended_buffer = C.RECOMMENDED_BUFFER
+        recommended_budget = recommended_estimate + recommended_buffer
         
         # Calculate differences for display
-        forecast_diff = player.initial_forecast - recommended_forecast
+        estimate_diff = player.initial_forecast - recommended_estimate
+        buffer_diff = player.budget_adjustment - recommended_buffer
         budget_diff = final_budget - recommended_budget
         
         # Format differences with +/- sign
-        if forecast_diff >= 0:
-            forecast_diff_display = f"+CHF {forecast_diff:,},000"
+        if estimate_diff >= 0:
+            estimate_diff_display = f"+CHF {estimate_diff:,},000"
         else:
-            forecast_diff_display = f"CHF {forecast_diff:,},000"
+            estimate_diff_display = f"CHF {estimate_diff:,},000"
+            
+        if buffer_diff >= 0:
+            buffer_diff_display = f"+CHF {buffer_diff:,},000"
+        else:
+            buffer_diff_display = f"CHF {buffer_diff:,},000"
             
         if budget_diff >= 0:
             budget_diff_display = f"+CHF {budget_diff:,},000"
@@ -382,9 +400,11 @@ class AdviceFeedback(Page):
             'initial_forecast': player.initial_forecast,
             'budget_adjustment': player.budget_adjustment,
             'final_budget': final_budget,
-            'recommended_forecast': recommended_forecast,
+            'recommended_estimate': recommended_estimate,
+            'recommended_buffer': recommended_buffer,
             'recommended_budget': recommended_budget,
-            'forecast_diff_display': forecast_diff_display,
+            'estimate_diff_display': estimate_diff_display,
+            'buffer_diff_display': buffer_diff_display,
             'budget_diff_display': budget_diff_display,
         }
 
@@ -399,15 +419,45 @@ class ResubmissionDecision(Page):
         forecast = C.FORECAST
         slider_min = max(0, int(forecast * (1 - C.SLIDER_RANGE_PERCENT / 100)))
         slider_max = min(1000, int(forecast * (1 + C.SLIDER_RANGE_PERCENT / 100)))
-        adjustment_min = -int(forecast * C.SLIDER_RANGE_PERCENT / 100)
-        adjustment_max = int(forecast * C.SLIDER_RANGE_PERCENT / 100)
+        adjustment_min = 0
+        adjustment_max = int(forecast * 1.0)  # 100% of forecast
 
         final_budget = player.initial_forecast + player.budget_adjustment
+        recommended_estimate = C.RECOMMENDED_BEST_ESTIMATE
+        recommended_buffer = C.RECOMMENDED_BUFFER
+        recommended_budget = recommended_estimate + recommended_buffer
+        
+        # Calculate differences for display
+        estimate_diff = player.initial_forecast - recommended_estimate
+        buffer_diff = player.budget_adjustment - recommended_buffer
+        budget_diff = final_budget - recommended_budget
+        
+        # Format differences with +/- sign
+        if estimate_diff >= 0:
+            estimate_diff_display = f"+CHF {estimate_diff:,},000"
+        else:
+            estimate_diff_display = f"CHF {estimate_diff:,},000"
+            
+        if buffer_diff >= 0:
+            buffer_diff_display = f"+CHF {buffer_diff:,},000"
+        else:
+            buffer_diff_display = f"CHF {buffer_diff:,},000"
+            
+        if budget_diff >= 0:
+            budget_diff_display = f"+CHF {budget_diff:,},000"
+        else:
+            budget_diff_display = f"CHF {budget_diff:,},000"
 
         return {
             'initial_forecast': player.initial_forecast,
             'budget_adjustment': player.budget_adjustment,
             'final_budget': final_budget,
+            'recommended_estimate': recommended_estimate,
+            'recommended_buffer': recommended_buffer,
+            'recommended_budget': recommended_budget,
+            'estimate_diff_display': estimate_diff_display,
+            'buffer_diff_display': buffer_diff_display,
+            'budget_diff_display': budget_diff_display,
             'slider_min': slider_min,
             'slider_max': slider_max,
             'adjustment_min': adjustment_min,

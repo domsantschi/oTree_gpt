@@ -12,11 +12,11 @@
     <div class="card-body">
         <div class="row text-center">
             <div class="col-md-4">
-                <p class="text-muted mb-1">Your Forecast</p>
+                <p class="text-muted mb-1">Your Best Estimate</p>
                 <h4>CHF {{ initial_forecast }},000</h4>
             </div>
             <div class="col-md-4">
-                <p class="text-muted mb-1">Your Adjustment</p>
+                <p class="text-muted mb-1">Your Buffer</p>
                 <h4>{% if budget_adjustment >= 0 %}+{% endif %}CHF {{ budget_adjustment }},000</h4>
             </div>
             <div class="col-md-4">
@@ -69,10 +69,16 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><strong>Forecast</strong></td>
+                        <td><strong>Best Estimate</strong></td>
                         <td>CHF {{ initial_forecast }},000</td>
-                        <td>CHF {{ recommended_forecast }},000</td>
-                        <td>{{ forecast_diff_display }}</td>
+                        <td>CHF {{ recommended_estimate }},000</td>
+                        <td>{{ estimate_diff_display }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Buffer</strong></td>
+                        <td>CHF {{ budget_adjustment }},000</td>
+                        <td>CHF {{ recommended_buffer }},000</td>
+                        <td>{{ buffer_diff_display }}</td>
                     </tr>
                     <tr>
                         <td><strong>Final Budget</strong></td>
