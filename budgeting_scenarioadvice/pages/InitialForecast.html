@@ -1,0 +1,324 @@
+{{ block title }}
+    {{ category_icon }} {{ category_name }} - Budget Forecast (Round {{ round_number }}/{{ total_rounds }})
+{{ endblock }}
+
+{{ block styles }}
+<style>
+    .slider-container {
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+    }
+    .form-range {
+        width: 100%;
+    }
+    .value-display {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+    .round-indicator {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 20px;
+        display: inline-block;
+        margin-bottom: 15px;
+    }
+</style>
+{{ endblock }}
+
+{{ block content }}
+
+<!-- Round & Role Reminder -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <span class="round-indicator">
+        {{ category_icon }} Round {{ round_number }} of {{ total_rounds }}: {{ category_name }}
+    </span>
+    <div class="alert alert-secondary mb-0 py-2">
+        <strong>Your Role:</strong> {{ role }}
+    </div>
+</div>
+
+<!-- Historical Data Section -->
+<div class="card mb-4">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0">📊 Historical Data - {{ category_name }} (Last 10 Years)</h5>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-warning mb-3">
+            <strong>Key Observation:</strong> {{ trend_description }}
+        </div>
+        <div class="row">
+            <!-- Table View -->
+            <div class="col-md-6">
+                <h6 class="mb-3">Budgeted vs. Actual {{ category_name }} Expenses</h6>
+                <table class="table table-sm table-bordered">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Year</th>
+                            <th>Budgeted (CHF)</th>
+                            <th>Actual (CHF)</th>
+                            <th>Difference</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyTableBody">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Chart View -->
+            <div class="col-md-6">
+                <h6 class="mb-3">Budget vs. Actual Trend</h6>
+                <canvas id="historicalChart" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Step 1: Best Estimate -->
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Step 1: Your Best Estimate</h5>
+    </div>
+    <div class="card-body">
+        <p>Based on the historical data, what is your <strong>best estimate for next year's {{ category_name }} expenses?</strong></p>
+        
+        <div class="slider-container">
+            <label for="forecastSlider" class="form-label"><strong>Your Best Estimate:</strong></label>
+            
+            <div class="d-flex align-items-center mb-3">
+                <span class="me-2">CHF {{ slider_min }},000</span>
+                <input type="range" 
+                       class="form-range flex-grow-1 mx-2" 
+                       id="forecastSlider"
+                       min="{{ slider_min }}" 
+                       max="{{ slider_max }}"
+                       value="{{ current_actual }}"
+                       step="1">
+                <span class="ms-2">CHF {{ slider_max }},000</span>
+            </div>
+            
+            <div class="text-center">
+                <h3 id="forecastValue" class="value-display text-primary">CHF {{ current_actual }},000</h3>
+            </div>
+            
+            <input type="hidden" name="initial_forecast" id="initial_forecast" value="{{ current_actual }}">
+        </div>
+    </div>
+</div>
+
+<!-- Step 2: Buffer for Uncertainty -->
+<div class="card mb-4">
+    <div class="card-header bg-warning">
+        <h5 class="mb-0">Step 2: Buffer for Uncertainty</h5>
+    </div>
+    <div class="card-body">
+        <p>Now decide how much <strong>buffer for uncertainty</strong> to apply to your best estimate when setting the actual budget. 
+        A buffer increases the budget above your estimate to account for potential variations.</p>
+        
+        <div class="slider-container">
+            <label for="adjustmentSlider" class="form-label"><strong>Buffer for Uncertainty:</strong></label>
+            
+            <div class="d-flex align-items-center mb-3">
+                <span class="me-2">0%</span>
+                <input type="range" 
+                       class="form-range flex-grow-1 mx-2" 
+                       id="adjustmentSlider"
+                       min="0" 
+                       max="100"
+                       value="0"
+                       step="1">
+                <span class="ms-2">100%</span>
+            </div>
+            
+            <div class="text-center">
+                <h4 id="adjustmentValue" class="text-muted">Buffer: 0% (+CHF 0)</h4>
+                <h3 id="finalBudgetValue" class="value-display text-success">Final Budget: CHF {{ current_actual }},000</h3>
+            </div>
+            
+            <input type="hidden" name="budget_adjustment" id="budget_adjustment" value="0">
+        </div>
+    </div>
+</div>
+
+<!-- Step 3: Justification -->
+<div class="card mb-4">
+    <div class="card-header bg-secondary text-white">
+        <h5 class="mb-0">Step 3: Justify Your Decision</h5>
+    </div>
+    <div class="card-body">
+        <p><em>Provide a brief justification for your budget decision.</em></p>
+        {{ formfield 'initial_justification' }}
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <button type="submit" class="btn btn-primary btn-lg">Submit Forecast →</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Historical data chart
+    const ctx = document.getElementById('historicalChart').getContext('2d');
+    const budgetData = {{ historical_budget|safe }};
+    const actualData = {{ historical_actual|safe }};
+    const yearLabels = ['Y-9', 'Y-8', 'Y-7', 'Y-6', 'Y-5', 'Y-4', 'Y-3', 'Y-2', 'Y-1', 'Current'];
+
+    // Populate the historical data table
+    const tableBody = document.getElementById('historyTableBody');
+    for (let i = 0; i < budgetData.length; i++) {
+        const row = document.createElement('tr');
+        const diff = actualData[i] - budgetData[i];
+        const yearLabel = i === budgetData.length - 1 ? '<strong>Current</strong>' : `Year ${i - 9}`;
+        
+        if (i === budgetData.length - 1) {
+            row.className = 'table-info';
+        }
+        
+        const diffClass = diff >= 0 ? 'text-success' : 'text-danger';
+        const diffSign = diff >= 0 ? '+' : '';
+        
+        row.innerHTML = `
+            <td>${yearLabel}</td>
+            <td>${(budgetData[i] * 1000).toLocaleString()}</td>
+            <td>${(actualData[i] * 1000).toLocaleString()}</td>
+            <td class="${diffClass}">${diffSign}${(diff * 1000).toLocaleString()}</td>
+        `;
+        tableBody.appendChild(row);
+    }
+
+    // Custom plugin to draw vertical connecting lines
+    const verticalLinePlugin = {
+        id: 'verticalConnectors',
+        beforeDatasetsDraw(chart) {
+            const ctx = chart.ctx;
+            const meta0 = chart.getDatasetMeta(0);
+            const meta1 = chart.getDatasetMeta(1);
+            
+            ctx.save();
+            ctx.strokeStyle = 'rgba(108, 117, 125, 0.3)';
+            ctx.lineWidth = 2;
+            
+            for (let i = 0; i < meta0.data.length; i++) {
+                const point0 = meta0.data[i];
+                const point1 = meta1.data[i];
+                
+                ctx.beginPath();
+                ctx.moveTo(point0.x, point0.y);
+                ctx.lineTo(point1.x, point1.y);
+                ctx.stroke();
+            }
+            ctx.restore();
+        }
+    };
+
+    new Chart(ctx, {
+        type: 'scatter',
+        data: {
+            labels: yearLabels,
+            datasets: [{
+                label: 'Budgeted',
+                data: budgetData.map((val, idx) => ({x: idx, y: val})),
+                borderColor: 'rgb(220, 53, 69)',
+                backgroundColor: 'rgb(220, 53, 69)',
+                pointRadius: 6,
+                pointHoverRadius: 8
+            },
+            {
+                label: 'Actual',
+                data: actualData.map((val, idx) => ({x: idx, y: val})),
+                borderColor: 'rgb(13, 110, 253)',
+                backgroundColor: 'rgb(13, 110, 253)',
+                pointRadius: 6,
+                pointHoverRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                x: {
+                    type: 'linear',
+                    position: 'bottom',
+                    min: -0.5,
+                    max: 9.5,
+                    ticks: {
+                        stepSize: 1,
+                        callback: function(value, index) {
+                            return yearLabels[value] || '';
+                        }
+                    },
+                    grid: {
+                        display: true,
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    }
+                },
+                y: {
+                    beginAtZero: false,
+                    title: {
+                        display: true,
+                        text: 'Expenses (CHF thousands)'
+                    },
+                    grid: {
+                        display: true,
+                        color: 'rgba(0, 0, 0, 0.1)'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 15
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        title: function(context) {
+                            return yearLabels[context[0].parsed.x];
+                        },
+                        label: function(context) {
+                            const label = context.dataset.label || '';
+                            return label + ': CHF ' + context.parsed.y.toLocaleString() + ',000';
+                        }
+                    }
+                }
+            }
+        },
+        plugins: [verticalLinePlugin]
+    });
+
+    // Slider functionality
+    const forecastSlider = document.getElementById('forecastSlider');
+    const forecastValueDisplay = document.getElementById('forecastValue');
+    const forecastHidden = document.getElementById('initial_forecast');
+    
+    const adjustmentSlider = document.getElementById('adjustmentSlider');
+    const adjustmentValueDisplay = document.getElementById('adjustmentValue');
+    const adjustmentHidden = document.getElementById('budget_adjustment');
+    const finalBudgetDisplay = document.getElementById('finalBudgetValue');
+
+    function updateDisplays() {
+        const forecast = parseInt(forecastSlider.value);
+        const bufferPercent = parseInt(adjustmentSlider.value);
+        const adjustment = Math.round(forecast * (bufferPercent / 100));
+        const finalBudget = forecast + adjustment;
+        
+        forecastValueDisplay.textContent = `CHF ${forecast.toLocaleString()},000`;
+        forecastHidden.value = forecast;
+        
+        adjustmentValueDisplay.textContent = `Buffer: ${bufferPercent}% (+CHF ${adjustment.toLocaleString()},000)`;
+        adjustmentValueDisplay.className = 'text-success';
+        adjustmentHidden.value = adjustment;
+        
+        finalBudgetDisplay.textContent = `Final Budget: CHF ${finalBudget.toLocaleString()},000`;
+    }
+
+    forecastSlider.addEventListener('input', updateDisplays);
+    adjustmentSlider.addEventListener('input', updateDisplays);
+</script>
+
+{{ endblock }}

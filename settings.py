@@ -33,18 +33,18 @@ SESSION_CONFIGS = [
          num_demo_participants=1,
          completionlink="https://crossfitbern.ch/",
      ),
-        dict(
-            name='spec_design',
-            app_sequence=['spec_design',],
-            num_demo_participants=1,
-            completionlink= "https://app.prolific.com/submissions/complete?cc=C11UPOF1"
-        ),
-        dict(
-            name='stakeholder',
-            app_sequence=['stakeholder',],
-            num_demo_participants=1,
-            completionlink="https://app.prolific.com/submissions/complete?cc=C17EXCFB",
-        ),
+        # dict(
+        #     name='spec_design',
+        #     app_sequence=['spec_design',],
+        #     num_demo_participants=1,
+        #     completionlink= "https://app.prolific.com/submissions/complete?cc=C11UPOF1"
+        # ),
+        # dict(
+        #     name='stakeholder',
+        #     app_sequence=['stakeholder',],
+        #     num_demo_participants=1,
+        #     completionlink="https://app.prolific.com/submissions/complete?cc=C17EXCFB",
+        # ),
         dict(
             name='budgeting',
             app_sequence=['budgeting',],

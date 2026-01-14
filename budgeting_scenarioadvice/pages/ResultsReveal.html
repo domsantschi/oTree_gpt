@@ -1,0 +1,257 @@
+{{ block title }}
+    {{ category_icon }} {{ category_name }} - Results
+{{ endblock }}
+
+{{ block content }}
+
+<style>
+    .results-container {
+        max-width: 900px;
+        margin: 30px auto;
+        padding: 25px;
+        background: linear-gradient(to right, #ffffff, #f8f9fa);
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .results-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .actual-reveal {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        padding: 30px;
+        border-radius: 15px;
+        text-align: center;
+        margin-bottom: 30px;
+        animation: fadeIn 0.8s ease-in;
+    }
+    
+    .actual-amount {
+        font-size: 3rem;
+        font-weight: bold;
+        margin: 15px 0;
+    }
+    
+    .comparison-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin: 30px 0;
+    }
+    
+    .comparison-card {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        border: 2px solid #e9ecef;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .comparison-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+    
+    .comparison-card.best {
+        border-color: #28a745;
+        background-color: #d4edda;
+    }
+    
+    .comparison-card h5 {
+        color: #495057;
+        margin-bottom: 15px;
+        font-size: 0.95rem;
+    }
+    
+    .budget-amount {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #212529;
+    }
+    
+    .deviation {
+        font-size: 1.1rem;
+        margin: 10px 0;
+        padding: 8px;
+        border-radius: 5px;
+    }
+    
+    .deviation.positive {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+    
+    .deviation.negative {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+    
+    .deviation.zero {
+        background-color: #d4edda;
+        color: #155724;
+    }
+    
+    .accuracy-badge {
+        display: inline-block;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+    
+    .accuracy-excellent {
+        background-color: #28a745;
+        color: white;
+    }
+    
+    .accuracy-good {
+        background-color: #ffc107;
+        color: #212529;
+    }
+    
+    .accuracy-poor {
+        background-color: #dc3545;
+        color: white;
+    }
+    
+    .summary-box {
+        background-color: #e7f1ff;
+        border-left: 4px solid #007bff;
+        padding: 20px;
+        border-radius: 0 10px 10px 0;
+        margin: 30px 0;
+    }
+    
+    .next-round-box {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        color: white;
+        padding: 25px;
+        border-radius: 10px;
+        text-align: center;
+        margin-top: 30px;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @media (max-width: 768px) {
+        .comparison-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="results-container">
+    <div class="results-header">
+        <span style="font-size: 48px;">{{ category_icon }}</span>
+        <h2>{{ category_name }} - Budget Results</h2>
+        <p class="text-muted">Round {{ round_number }} of {{ total_rounds }}</p>
+    </div>
+    
+    <!-- Actual Expense Reveal -->
+    <div class="actual-reveal">
+        <h4>📊 Actual {{ category_name }} Expenses for the Target Year</h4>
+        <div class="actual-amount">CHF {{ actual_expense }},000</div>
+        <p>The actual expenses have now been revealed. Let's see how your forecast compared!</p>
+    </div>
+    
+    <!-- Comparison Grid -->
+    <h4 class="text-center mb-4">📈 Forecast Comparison</h4>
+    <div class="comparison-grid">
+        <!-- Initial Estimate -->
+        <div class="comparison-card {% if initial_accuracy <= final_accuracy and initial_accuracy <= advisor_accuracy %}best{% endif %}">
+            <h5>🎯 Your Initial Budget</h5>
+            <div class="budget-amount">CHF {{ initial_budget }},000</div>
+            <div class="deviation {% if initial_budget > actual_expense %}positive{% elif initial_budget < actual_expense %}negative{% else %}zero{% endif %}">
+                {{ initial_deviation }}
+            </div>
+            <div class="accuracy-badge {% if initial_accuracy <= 5 %}accuracy-excellent{% elif initial_accuracy <= 15 %}accuracy-good{% else %}accuracy-poor{% endif %}">
+                {{ initial_accuracy }}% deviation
+            </div>
+        </div>
+        
+        <!-- Final Estimate -->
+        <div class="comparison-card {% if final_accuracy <= initial_accuracy and final_accuracy <= advisor_accuracy %}best{% endif %}">
+            <h5>✅ Your Final Budget{% if revised %} (Revised){% endif %}</h5>
+            <div class="budget-amount">CHF {{ final_budget }},000</div>
+            <div class="deviation {% if final_budget > actual_expense %}positive{% elif final_budget < actual_expense %}negative{% else %}zero{% endif %}">
+                {{ final_deviation }}
+            </div>
+            <div class="accuracy-badge {% if final_accuracy <= 5 %}accuracy-excellent{% elif final_accuracy <= 15 %}accuracy-good{% else %}accuracy-poor{% endif %}">
+                {{ final_accuracy }}% deviation
+            </div>
+        </div>
+        
+        <!-- Advisor Recommendation -->
+        <div class="comparison-card {% if advisor_accuracy <= initial_accuracy and advisor_accuracy <= final_accuracy %}best{% endif %}">
+            <h5>💡 Advisor Recommendation</h5>
+            <div class="budget-amount">CHF {{ advisor_budget }},000</div>
+            <div class="deviation {% if advisor_budget > actual_expense %}positive{% elif advisor_budget < actual_expense %}negative{% else %}zero{% endif %}">
+                {{ advisor_deviation }}
+            </div>
+            <div class="accuracy-badge {% if advisor_accuracy <= 5 %}accuracy-excellent{% elif advisor_accuracy <= 15 %}accuracy-good{% else %}accuracy-poor{% endif %}">
+                {{ advisor_accuracy }}% deviation
+            </div>
+        </div>
+    </div>
+    
+    <!-- Summary -->
+    <div class="summary-box">
+        <h5>📋 Round Summary</h5>
+        <ul class="mb-0">
+            <li>You {% if revised %}revised your budget{% else %}kept your original budget{% endif %} after receiving advice.</li>
+            <li>Your final budget was <strong>{{ final_deviation }}</strong> compared to actual expenses.</li>
+            <li>
+                {% if final_accuracy < initial_accuracy %}
+                    ✅ Your final estimate was more accurate than your initial estimate!
+                {% elif final_accuracy > initial_accuracy %}
+                    📉 Your initial estimate was more accurate than your final estimate.
+                {% else %}
+                    ➡️ Your accuracy remained the same.
+                {% endif %}
+            </li>
+            <li>
+                {% if final_accuracy < advisor_accuracy %}
+                    🏆 Your final estimate outperformed the advisor's recommendation!
+                {% elif final_accuracy > advisor_accuracy %}
+                    💡 The advisor's recommendation was more accurate than your final estimate.
+                {% else %}
+                    🤝 Your estimate matched the advisor's accuracy.
+                {% endif %}
+            </li>
+        </ul>
+    </div>
+    
+    <!-- Next Round or Completion -->
+    {% if is_last_round %}
+    <div class="next-round-box">
+        <h4>🎉 All Rounds Complete!</h4>
+        <p>You have completed all {{ total_rounds }} budget forecasting rounds.</p>
+        <p>Click below to proceed to a few final questions.</p>
+    </div>
+    {% else %}
+    <div class="next-round-box">
+        <h4>➡️ Ready for the Next Round?</h4>
+        <p>You have completed {{ round_number }} of {{ total_rounds }} rounds.</p>
+        <p>Click below to proceed to the next expense category.</p>
+    </div>
+    {% endif %}
+    
+    <div class="text-center mt-4">
+        <button type="submit" class="btn btn-light btn-lg">
+            {% if is_last_round %}
+                Continue to Final Questions →
+            {% else %}
+                Proceed to Round {{ next_round_number }} →
+            {% endif %}
+        </button>
+    </div>
+</div>
+
+{{ endblock }}

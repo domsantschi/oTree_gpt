@@ -6,12 +6,13 @@
 
 <p>
     {% if advice_condition == 'human_expert' %}
-        The following recommendation comes from a <strong>civil servant</strong> specialized in the budget category.
+        The following recommendations come from <strong>civil servants</strong> specialized in each budget category.
     {% else %}
-        The following recommendation comes from an <strong>AI model</strong> specialized in the budget category.
+        The following recommendations come from <strong>AI models</strong> specialized in each budget category
     {% endif %}
 </p>
 
+{% for data in all_rounds_data %}
 <div class="card mb-4">
     <div class="card-header">
         <strong>{{ data.category_name }}</strong>
@@ -29,37 +30,32 @@
             <tbody>
                 <tr>
                     <td>Best Estimate</td>
-                    <td>CHF <span class="fmt-num">{{ data.initial_forecast }}</span></td>
-                    <td>CHF <span class="fmt-num">{{ data.recommended_estimate }}</span></td>
+                    <td>CHF {{ data.initial_forecast }},000</td>
+                    <td>CHF {{ data.recommended_estimate }},000</td>
                     <td>{{ data.estimate_diff_display }}</td>
                 </tr>
                 <tr>
                     <td>Buffer</td>
-                    <td>CHF <span class="fmt-num">{{ data.budget_adjustment }}</span></td>
-                    <td>CHF <span class="fmt-num">{{ data.recommended_buffer }}</span></td>
+                    <td>CHF {{ data.budget_adjustment }},000</td>
+                    <td>CHF {{ data.recommended_buffer }},000</td>
                     <td>{{ data.buffer_diff_display }}</td>
                 </tr>
                 <tr class="table-active">
                     <td><strong>Total Budget</strong></td>
-                    <td><strong>CHF <span class="fmt-num">{{ data.final_budget }}</span></strong></td>
-                    <td><strong>CHF <span class="fmt-num">{{ data.recommended_budget }}</span></strong></td>
+                    <td><strong>CHF {{ data.final_budget }},000</strong></td>
+                    <td><strong>CHF {{ data.recommended_budget }},000</strong></td>
                     <td><strong>{{ data.budget_diff_display }}</strong></td>
                 </tr>
             </tbody>
         </table>
     </div>
 </div>
+{% endfor %}
 
-<p class="text-muted">On the next page, you can decide whether to revise your submission.</p>
+<p class="text-muted">On the next page, you can decide whether to revise any of your submissions.</p>
 
 <div class="text-center mt-4">
     {{ next_button }}
 </div>
-
-<script>
-    document.querySelectorAll('.fmt-num').forEach(function(el) {
-        el.textContent = parseInt(el.textContent).toLocaleString();
-    });
-</script>
 
 {{ endblock }}

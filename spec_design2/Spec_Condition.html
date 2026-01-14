@@ -113,21 +113,20 @@
     </div>
     
     {% if speculative_design == 'Speculative Design Present' %}
-        <!-- <div class="content-box">
+        <div class="content-box">
             <span class="scenario-label">🎧 "What If" Scenario</span>
             <p><b>Please review the following speculative scenario</b> while listening to the audio narration. 
             This scenario explores a potential future situation related to AI risks.</p>
-        </div> -->
+        </div>
         
-        <!-- <div class="audio-container">
+        <div class="audio-container">
             <p><b>🔊 Audio Narration</b></p>
             <audio id="scenario-audio" controls autoplay>
-                <source src="{{ static 'audio.mp3' }}" type="audio/mpeg">
-                Your browser does not support the audio element.
+            <source src="{{ static 'audio.mp3' }}" type="audio/mpeg">
+            Your browser does not support the audio element.
             </audio>
             <p class="text-muted mt-2" style="font-size: 0.9em;">Please ensure your audio is enabled</p>
         </div>
-         -->
         <div class="pdf-container">
             <iframe src="{{ static 'whatif-specdesign.pdf' }}" title="What If Scenario"></iframe>
         </div>

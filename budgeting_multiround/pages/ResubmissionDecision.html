@@ -1,0 +1,194 @@
+{{ block title }}
+    Revision Decisions
+{{ endblock }}
+
+{{ block styles }}
+<style>
+    .revision-section { display: none; margin-top: 15px; }
+</style>
+{{ endblock }}
+
+{{ block content }}
+
+<p>For each category, decide whether to revise your submission based on the advice.</p>
+
+<!-- Education -->
+<div class="card mb-4">
+    <div class="card-header"><strong>{{ all_rounds_data.0.category_name }}</strong></div>
+    <div class="card-body">
+        <table class="table table-sm mb-3">
+            <tr>
+                <td>Your Budget</td>
+                <td><strong>CHF {{ all_rounds_data.0.final_budget }},000</strong></td>
+            </tr>
+            <tr>
+                <td>Recommended</td>
+                <td><strong>CHF {{ all_rounds_data.0.recommended_budget }},000</strong></td>
+            </tr>
+            <tr>
+                <td>Difference</td>
+                <td>{{ all_rounds_data.0.budget_diff_display }}</td>
+            </tr>
+        </table>
+        
+        <div class="mb-3">
+            {{ formfield 'resubmit_decision_r1' }}
+        </div>
+        
+        <div class="revision-section" id="revisionSection1">
+            <div class="mb-3">
+                <label class="form-label">Revised Estimate (CHF {{ all_rounds_data.0.slider_min }}-{{ all_rounds_data.0.slider_max }},000)</label>
+                <input type="range" class="form-range" id="revisedForecastSlider1"
+                       min="{{ all_rounds_data.0.slider_min }}" max="{{ all_rounds_data.0.slider_max }}"
+                       value="{{ all_rounds_data.0.initial_forecast }}" step="1">
+                <div class="text-center"><span id="revisedForecastValue1">CHF {{ all_rounds_data.0.initial_forecast }},000</span></div>
+                <input type="hidden" name="revised_forecast_r1" id="revised_forecast_r1" value="{{ all_rounds_data.0.initial_forecast }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Buffer (0-100%)</label>
+                <input type="range" class="form-range" id="revisedAdjustmentSlider1" min="0" max="100" value="0" step="1">
+                <div class="text-center"><span id="revisedAdjustmentValue1">0%</span> | <strong id="revisedFinalBudgetValue1">Total: CHF {{ all_rounds_data.0.final_budget }},000</strong></div>
+                <input type="hidden" name="revised_adjustment_r1" id="revised_adjustment_r1" value="0">
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            {{ formfield 'resubmission_justification_r1' }}
+        </div>
+    </div>
+</div>
+
+<!-- Infrastructure -->
+<div class="card mb-4">
+    <div class="card-header"><strong>{{ all_rounds_data.1.category_name }}</strong></div>
+    <div class="card-body">
+        <table class="table table-sm mb-3">
+            <tr>
+                <td>Your Budget</td>
+                <td><strong>CHF {{ all_rounds_data.1.final_budget }},000</strong></td>
+            </tr>
+            <tr>
+                <td>Recommended</td>
+                <td><strong>CHF {{ all_rounds_data.1.recommended_budget }},000</strong></td>
+            </tr>
+            <tr>
+                <td>Difference</td>
+                <td>{{ all_rounds_data.1.budget_diff_display }}</td>
+            </tr>
+        </table>
+        
+        <div class="mb-3">
+            {{ formfield 'resubmit_decision_r2' }}
+        </div>
+        
+        <div class="revision-section" id="revisionSection2">
+            <div class="mb-3">
+                <label class="form-label">Revised Estimate (CHF {{ all_rounds_data.1.slider_min }}-{{ all_rounds_data.1.slider_max }},000)</label>
+                <input type="range" class="form-range" id="revisedForecastSlider2"
+                       min="{{ all_rounds_data.1.slider_min }}" max="{{ all_rounds_data.1.slider_max }}"
+                       value="{{ all_rounds_data.1.initial_forecast }}" step="1">
+                <div class="text-center"><span id="revisedForecastValue2">CHF {{ all_rounds_data.1.initial_forecast }},000</span></div>
+                <input type="hidden" name="revised_forecast_r2" id="revised_forecast_r2" value="{{ all_rounds_data.1.initial_forecast }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Buffer (0-100%)</label>
+                <input type="range" class="form-range" id="revisedAdjustmentSlider2" min="0" max="100" value="0" step="1">
+                <div class="text-center"><span id="revisedAdjustmentValue2">0%</span> | <strong id="revisedFinalBudgetValue2">Total: CHF {{ all_rounds_data.1.final_budget }},000</strong></div>
+                <input type="hidden" name="revised_adjustment_r2" id="revised_adjustment_r2" value="0">
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            {{ formfield 'resubmission_justification_r2' }}
+        </div>
+    </div>
+</div>
+
+<!-- Security -->
+<div class="card mb-4">
+    <div class="card-header"><strong>{{ all_rounds_data.2.category_name }}</strong></div>
+    <div class="card-body">
+        <table class="table table-sm mb-3">
+            <tr>
+                <td>Your Budget</td>
+                <td><strong>CHF {{ all_rounds_data.2.final_budget }},000</strong></td>
+            </tr>
+            <tr>
+                <td>Recommended</td>
+                <td><strong>CHF {{ all_rounds_data.2.recommended_budget }},000</strong></td>
+            </tr>
+            <tr>
+                <td>Difference</td>
+                <td>{{ all_rounds_data.2.budget_diff_display }}</td>
+            </tr>
+        </table>
+        
+        <div class="mb-3">
+            {{ formfield 'resubmit_decision_r3' }}
+        </div>
+        
+        <div class="revision-section" id="revisionSection3">
+            <div class="mb-3">
+                <label class="form-label">Revised Estimate (CHF {{ all_rounds_data.2.slider_min }}-{{ all_rounds_data.2.slider_max }},000)</label>
+                <input type="range" class="form-range" id="revisedForecastSlider3"
+                       min="{{ all_rounds_data.2.slider_min }}" max="{{ all_rounds_data.2.slider_max }}"
+                       value="{{ all_rounds_data.2.initial_forecast }}" step="1">
+                <div class="text-center"><span id="revisedForecastValue3">CHF {{ all_rounds_data.2.initial_forecast }},000</span></div>
+                <input type="hidden" name="revised_forecast_r3" id="revised_forecast_r3" value="{{ all_rounds_data.2.initial_forecast }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Buffer (0-100%)</label>
+                <input type="range" class="form-range" id="revisedAdjustmentSlider3" min="0" max="100" value="0" step="1">
+                <div class="text-center"><span id="revisedAdjustmentValue3">0%</span> | <strong id="revisedFinalBudgetValue3">Total: CHF {{ all_rounds_data.2.final_budget }},000</strong></div>
+                <input type="hidden" name="revised_adjustment_r3" id="revised_adjustment_r3" value="0">
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            {{ formfield 'resubmission_justification_r3' }}
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    {{ next_button }}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    [1, 2, 3].forEach(function(n) {
+        var section = document.getElementById('revisionSection' + n);
+        var radios = document.querySelectorAll('input[name="resubmit_decision_r' + n + '"]');
+        var forecastSlider = document.getElementById('revisedForecastSlider' + n);
+        var forecastValue = document.getElementById('revisedForecastValue' + n);
+        var forecastHidden = document.getElementById('revised_forecast_r' + n);
+        var adjustSlider = document.getElementById('revisedAdjustmentSlider' + n);
+        var adjustValue = document.getElementById('revisedAdjustmentValue' + n);
+        var adjustHidden = document.getElementById('revised_adjustment_r' + n);
+        var finalValue = document.getElementById('revisedFinalBudgetValue' + n);
+
+        function update() {
+            var f = parseInt(forecastSlider.value);
+            var p = parseInt(adjustSlider.value);
+            var a = Math.round(f * p / 100);
+            forecastValue.textContent = 'CHF ' + f + ',000';
+            forecastHidden.value = f;
+            adjustValue.textContent = p + '%';
+            adjustHidden.value = a;
+            finalValue.textContent = 'Total: CHF ' + (f + a) + ',000';
+        }
+
+        function toggle() {
+            var sel = document.querySelector('input[name="resubmit_decision_r' + n + '"]:checked');
+            section.style.display = (sel && sel.value === 'True') ? 'block' : 'none';
+        }
+
+        radios.forEach(function(r) { r.addEventListener('change', toggle); });
+        forecastSlider.addEventListener('input', update);
+        adjustSlider.addEventListener('input', update);
+        toggle();
+    });
+});
+</script>
+
+{{ endblock }}

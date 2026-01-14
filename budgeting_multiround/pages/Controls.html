@@ -36,11 +36,15 @@
 
 <div class="card mb-4">
     <div class="card-header">
-        <strong>Political Ideology</strong>
+        <strong>Political Affiliation</strong>
     </div>
     <div class="card-body">
         <div class="mb-3">
-            {{ formfield 'political_ideology' }}
+            {{ formfield 'party_sympathy' }}
+        </div>
+        
+        <div class="mb-3" id="partyOtherContainer" style="display: none;">
+            {{ formfield 'party_other' }}
         </div>
     </div>
 </div>
@@ -71,5 +75,28 @@
 <div class="text-center mt-4">
     {{ next_button }}
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const partyRadios = document.querySelectorAll('input[name="party_sympathy"]');
+    const otherContainer = document.getElementById('partyOtherContainer');
+    
+    function toggleOtherField() {
+        const selected = document.querySelector('input[name="party_sympathy"]:checked');
+        if (selected && selected.value === 'Andere') {
+            otherContainer.style.display = 'block';
+        } else {
+            otherContainer.style.display = 'none';
+        }
+    }
+    
+    partyRadios.forEach(function(radio) {
+        radio.addEventListener('change', toggleOtherField);
+    });
+    
+    // Initial state
+    toggleOtherField();
+});
+</script>
 
 {{ endblock }}

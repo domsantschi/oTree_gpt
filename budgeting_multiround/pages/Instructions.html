@@ -1,0 +1,25 @@
+{{ block title }}
+    Instructions
+{{ endblock }}
+
+{{ block content }}
+
+<div class="card mb-3">
+    <div class="card-body">
+        <p class="card-text mb-4">Please read the following instructions carefully.</p>
+        
+        <ul class="list-unstyled">
+            <li class="mb-2">• In this study, you will complete <strong>{{ num_rounds }} rounds</strong> of budget forecasting for different public expense categories: Education, Infrastructure, and Security.</li>
+            <li class="mb-2">• In each round, you will analyze historical expense data, submit a budget forecast, and justify your decision.</li>
+            <li class="mb-2">• After completing all rounds, you will review expert advice for all categories and decide whether to revise any of your submissions.</li>
+            <li class="mb-2">• Your budget consists of two components: a <strong>best estimate</strong> (your forecast of the most likely expense) and a <strong>buffer</strong> (additional amount for uncertainty).</li>
+            <li class="mb-2">• Your goal is to set budgets that are as close as possible to the actual expenses.</li>
+        </ul>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    {{ next_button }}
+</div>
+
+{{ endblock }}

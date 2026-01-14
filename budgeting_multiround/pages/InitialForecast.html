@@ -1,23 +1,29 @@
 {{ block title }}
-    Budgeting Task
+    {{ category_name }} - Budget Forecast (Round {{ round_number }}/{{ total_rounds }})
 {{ endblock }}
 
 {{ block content }}
 
+<p><strong>Role:</strong> {{ role }}</p>
+
+<div class="alert alert-info">
+    <strong>Scenario:</strong> It is the end of the fiscal year. You are tasked with forecasting the {{ category_name }} expenses for the upcoming year (Year Y). Below you will find historical data from the past 10 years (Y-10 to Y-1) to inform your estimate.
+</div>
+
 <!-- Historical Data -->
 <div class="card mb-4">
     <div class="card-header">
-        <strong>Historical Data</strong>
+        <strong>Historical Data - {{ category_name }} (Years Y-10 to Y-1)</strong>
     </div>
     <div class="card-body">
-        <!-- <p class="text-muted">{{ trend_description }}</p> -->
+        <p class="text-muted">{{ trend_description }}</p>
         <div class="row">
             <div class="col-md-6">
                 <table class="table table-sm">
                     <thead>
                         <tr>
                             <th>Year</th>
-                            <th>Budget</th>
+                            <th>Budgeted</th>
                             <th>Actual</th>
                             <th>Diff</th>
                         </tr>
@@ -32,7 +38,7 @@
         
         <!-- Comprehension Check -->
         <div class="mt-3 p-3 bg-light rounded">
-            <label class="form-label"><strong>Comprehension Check:</strong> What were the actual expenses in Y9? (enter the number without commas)</label>
+            <label class="form-label"><strong>Comprehension Check:</strong> What were the actual expenses in the most recent year (Y-1)? (in CHF thousands)</label>
             <input type="number" name="comprehension_check" id="comprehension_check" class="form-control" style="max-width: 200px;" placeholder="Enter value" required>
         </div>
     </div>
@@ -41,15 +47,15 @@
 <!-- Step 1: Best Estimate -->
 <div class="card mb-4">
     <div class="card-header">
-        <strong>Step 1: Best Estimate for Y10</strong>
+        <strong>Step 1: Best Estimate for Year Y</strong>
     </div>
     <div class="card-body">
-        <p>What is your best estimate for the next year's (Y10) expenses?</p>
+        <p>What is your best estimate for the upcoming year's (Year Y) {{ category_name }} expenses?</p>
         <div class="mb-3">
-            <label class="form-label">Estimate (CHF <span id="sliderMinLabel"></span> - <span id="sliderMaxLabel"></span>)</label>
+            <label class="form-label">Estimate (CHF {{ slider_min }}-{{ slider_max }},000)</label>
             <input type="range" class="form-range" id="forecastSlider"
                    min="{{ slider_min }}" max="{{ slider_max }}" value="{{ last_year_actual }}" step="1">
-            <div class="text-center"><strong id="forecastValue">CHF <span id="initialForecastLabel"></span></strong></div>
+            <div class="text-center"><strong id="forecastValue">CHF {{ last_year_actual }},000</strong></div>
             <input type="hidden" name="initial_forecast" id="initial_forecast" value="{{ last_year_actual }}">
         </div>
     </div>
@@ -67,7 +73,7 @@
             <input type="range" class="form-range" id="adjustmentSlider" min="0" max="100" value="0" step="1">
             <div class="text-center">
                 <span id="adjustmentValue">0%</span> | 
-                <strong id="finalBudgetValue">Total: CHF <span id="initialTotalLabel"></span></strong>
+                <strong id="finalBudgetValue">Total: CHF {{ last_year_actual }},000</strong>
             </div>
             <input type="hidden" name="budget_adjustment" id="budget_adjustment" value="0">
         </div>
@@ -92,37 +98,27 @@
 <script>
     const budgetData = {{ historical_budget|safe }};
     const actualData = {{ historical_actual|safe }};
-    const yearLabels = ['Y1', 'Y2', 'Y3', 'Y4', 'Y5', 'Y6', 'Y7', 'Y8', 'Y9'];
-    const chartLabels = ['Y1', 'Y2', 'Y3', 'Y4', 'Y5', 'Y6', 'Y7', 'Y8', 'Y9', 'Y10'];
+    const yearLabels = ['Y-10', 'Y-9', 'Y-8', 'Y-7', 'Y-6', 'Y-5', 'Y-4', 'Y-3', 'Y-2', 'Y-1'];
 
-    // Helper function to format numbers with commas
-    function formatNumber(num) {
-        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-
-    // Populate table (Y1-Y9 in ascending order, then Y10 blank)
+    // Populate table
     const tableBody = document.getElementById('historyTableBody');
     for (let i = 0; i < budgetData.length; i++) {
         const row = document.createElement('tr');
         const diff = actualData[i] - budgetData[i];
         const diffSign = diff >= 0 ? '+' : '';
-        row.innerHTML = '<td>' + yearLabels[i] + '</td><td>' + formatNumber(budgetData[i]) + '</td><td>' + formatNumber(actualData[i]) + '</td><td>' + diffSign + formatNumber(diff) + '</td>';
+        row.innerHTML = '<td>' + yearLabels[i] + '</td><td>' + budgetData[i] + '</td><td>' + actualData[i] + '</td><td>' + diffSign + diff + '</td>';
         tableBody.appendChild(row);
     }
-    // Add blank Y10 row
-    const y10Row = document.createElement('tr');
-    y10Row.innerHTML = '<td class="table-warning"><strong>Y10</strong></td><td class="table-warning">?</td><td>?</td><td>?</td>';
-    tableBody.appendChild(y10Row);
 
-    // Chart (includes Y10 as null to show gap)
+    // Chart
     const ctx = document.getElementById('historicalChart').getContext('2d');
     new Chart(ctx, {
         type: 'line',
         data: {
-            labels: chartLabels,
+            labels: yearLabels,
             datasets: [
-                { label: 'Budget', data: [...budgetData, null], borderColor: 'rgb(220, 53, 69)', fill: false },
-                { label: 'Actual', data: [...actualData, null], borderColor: 'rgb(13, 110, 253)', fill: false }
+                { label: 'Budgeted', data: budgetData, borderColor: 'rgb(220, 53, 69)', fill: false },
+                { label: 'Actual', data: actualData, borderColor: 'rgb(13, 110, 253)', fill: false }
             ]
         },
         options: { responsive: true, scales: { y: { beginAtZero: false } } }
@@ -137,21 +133,15 @@
     const adjustmentHidden = document.getElementById('budget_adjustment');
     const finalBudgetValue = document.getElementById('finalBudgetValue');
 
-    // Set initial formatted labels
-    document.getElementById('sliderMinLabel').textContent = formatNumber({{ slider_min }});
-    document.getElementById('sliderMaxLabel').textContent = formatNumber({{ slider_max }});
-    document.getElementById('initialForecastLabel').textContent = formatNumber({{ last_year_actual }});
-    document.getElementById('initialTotalLabel').textContent = formatNumber({{ last_year_actual }});
-
     function update() {
         const f = parseInt(forecastSlider.value);
         const p = parseInt(adjustmentSlider.value);
         const a = Math.round(f * p / 100);
-        forecastValue.textContent = 'CHF ' + formatNumber(f);
+        forecastValue.textContent = 'CHF ' + f + ',000';
         forecastHidden.value = f;
         adjustmentValue.textContent = p + '%';
         adjustmentHidden.value = a;
-        finalBudgetValue.textContent = 'Total: CHF ' + formatNumber(f + a);
+        finalBudgetValue.textContent = 'Total: CHF ' + (f + a) + ',000';
     }
 
     forecastSlider.addEventListener('input', update);
