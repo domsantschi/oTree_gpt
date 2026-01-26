@@ -47,10 +47,44 @@ class Player(BasePlayer):
     # ===== Consent =====
     declined_consent = models.BooleanField(initial=False)
 
+    # ===== Knowledge Check =====
+    knowledge_q1 = models.StringField(
+        label="Public sector entities such as cities and regional governments budget their revenues and expenses to _______.",
+        choices=[
+            ['a', 'Plan their financial capital need'],
+            ['b', 'Reduce internal communications'],
+            ['c', 'Forecast citizen wellbeing'],
+        ],
+        widget=widgets.RadioSelect
+    )
+    knowledge_q2 = models.StringField(
+        label="Budgeting is important because _______.",
+        choices=[
+            ['a', 'Budgeting completely ignores the performance of the past'],
+            ['b', 'Budgeting helps to improve resource planning'],
+            ['c', 'Budgeting helps to market an organization to its customers'],
+        ],
+        widget=widgets.RadioSelect
+    )
+    knowledge_q3 = models.StringField(
+        label="In budgeting of expenses, a safety buffer can be built in by _______.",
+        choices=[
+            ['a', 'Budgeting expenses higher than expected'],
+            ['b', 'Budgeting expenses lower than expected'],
+            ['c', 'Refraining from any budgeting activities'],
+        ],
+        widget=widgets.RadioSelect
+    )
+
     # ===== Conditions (IVs) =====
-    role_condition = models.StringField(
-        choices=['politician', 'finance_director'],
-        doc="IV1: Role assigned to participant"
+    construal_level = models.StringField(
+        choices=['concrete', 'abstract'],
+        doc="IV1: Construal level condition (concrete=how, abstract=why)"
+    )
+    construal_response = models.LongStringField(
+        label="Please describe your thoughts:",
+        blank=False,
+        doc="Participant's response to the construal level reflection task"
     )
     advice_condition = models.StringField(
         choices=['human_expert', 'ai_model'],
@@ -107,36 +141,36 @@ class Player(BasePlayer):
     advisor_accuracy = models.FloatField(doc="Accuracy of advisor recommendation (absolute % deviation)", blank=True)
 
     # ===== Manipulation Checks (only in final round) =====
-    manip_check_role = models.StringField(
-        label="Which <b>role were you assigned</b> at the beginning of the study?",
+    manip_check_construal = models.StringField(
+        label="<b>At the beginning of the study, you were asked to reflect on...</b>",
         choices=[
-            ['politician', 'Politician'],
-            ['finance_director', 'Finance Director']
+            ['how', 'HOW the budgeting task is done (specific steps and processes)'],
+            ['why', 'WHY the budgeting task is done (broader goals and purposes)']
         ],
         widget=widgets.RadioSelect
     )
     manip_check_advice = models.StringField(
-        label="Who <b>provided the budget advice</b> you received?",
+        label="<b>Who provided the budget advice</b> you received?",
         choices=[
-            ['human_expert', 'A civil servant specialized in each budget category'],
-            ['ai_model', 'An AI model specialized in each budget category']
+            ['human_expert', 'A Financial Controller specialized in the budget category'],
+            ['ai_model', 'An AI Model specialized in the budget category']
         ],
         widget=widgets.RadioSelect
     )
 
-    # ===== Impartiality Mediators (only in final round) =====
-    impartiality_unbiased = models.IntegerField(
-        label="The advice I received was unbiased.",
+    # ===== Advice Perception Mediators =====
+    advice_abstract = models.IntegerField(
+        label="The advice I received was abstract.",
         choices=[[1, '1 - Strongly disagree'], [2, '2'], [3, '3'], [4, '4 - Neutral'], [5, '5'], [6, '6'], [7, '7 - Strongly agree']],
         widget=widgets.RadioSelectHorizontal
     )
-    impartiality_objective = models.IntegerField(
-        label="The advice I received was objective.",
+    advice_not_concrete = models.IntegerField(
+        label="The advice I received was not concrete.",
         choices=[[1, '1 - Strongly disagree'], [2, '2'], [3, '3'], [4, '4 - Neutral'], [5, '5'], [6, '6'], [7, '7 - Strongly agree']],
         widget=widgets.RadioSelectHorizontal
     )
-    impartiality_fair = models.IntegerField(
-        label="The advice I received was fair and balanced.",
+    advice_high_level = models.IntegerField(
+        label="The advice I received was high-level.",
         choices=[[1, '1 - Strongly disagree'], [2, '2'], [3, '3'], [4, '4 - Neutral'], [5, '5'], [6, '6'], [7, '7 - Strongly agree']],
         widget=widgets.RadioSelectHorizontal
     )
@@ -159,6 +193,11 @@ class Player(BasePlayer):
     )
     risk_attitude = models.IntegerField(
         label="I am generally willing to take risks.",
+        choices=[[1, '1 - Strongly disagree'], [2, '2'], [3, '3'], [4, '4 - Neutral'], [5, '5'], [6, '6'], [7, '7 - Strongly agree']],
+        widget=widgets.RadioSelectHorizontal
+    )
+    ai_familiarity = models.IntegerField(
+        label="I regularly use AI tools (e.g., ChatGPT, Copilot) in my daily activities.",
         choices=[[1, '1 - Strongly disagree'], [2, '2'], [3, '3'], [4, '4 - Neutral'], [5, '5'], [6, '6'], [7, '7 - Strongly agree']],
         widget=widgets.RadioSelectHorizontal
     )
@@ -213,8 +252,8 @@ class Player(BasePlayer):
 def creating_session(subsession: Subsession):
     """Randomly assign conditions to each player"""
     for player in subsession.get_players():
-        # IV1: Role condition
-        player.role_condition = random.choice(['politician', 'finance_director'])
+        # IV1: Construal level condition (concrete=how, abstract=why)
+        player.construal_level = random.choice(['concrete', 'abstract'])
         # IV2: Advice source condition
         player.advice_condition = random.choice(['human_expert', 'ai_model'])
         # Set category name
@@ -226,13 +265,6 @@ def get_category_data():
     return C.CATEGORY
 
 
-def calculate_accuracy(estimate, actual):
-    """Calculate accuracy as absolute percentage deviation"""
-    if actual == 0:
-        return 0
-    return round(abs((estimate - actual) / actual) * 100, 2)
-
-
 # ===== PAGES =====
 
 class Consent(Page):
@@ -241,46 +273,43 @@ class Consent(Page):
     form_fields = ['declined_consent']
 
 
+class KnowledgeCheck(Page):
+    template_name = 'budgeting/pages/KnowledgeCheck.html'
+    form_model = 'player'
+    form_fields = ['knowledge_q1', 'knowledge_q2', 'knowledge_q3']
+
+    @staticmethod
+    def error_message(player: Player, values):
+        # Correct answers: q1=a, q2=b, q3=a
+        errors = []
+        if values['knowledge_q1'] != 'a':
+            errors.append('Question 1 is incorrect.')
+        if values['knowledge_q2'] != 'b':
+            errors.append('Question 2 is incorrect.')
+        if values['knowledge_q3'] != 'a':
+            errors.append('Question 3 is incorrect.')
+        
+        if errors:
+            return 'Some answers are incorrect. Please review and try again: ' + ' '.join(errors)
+
+
 class Instructions(Page):
     template_name = 'budgeting/pages/Instructions.html'
 
 
-class RoleAssignment(Page):
-    template_name = 'budgeting/pages/RoleAssignment.html'
+class Context(Page):
+    template_name = 'budgeting/pages/Context.html'
+
+
+class ConstrualLevel(Page):
+    template_name = 'budgeting/pages/ConstrualLevel.html'
+    form_model = 'player'
+    form_fields = ['construal_response']
 
     @staticmethod
     def vars_for_template(player: Player):
-        role = player.role_condition
-        role_display = role.replace('_', ' ').title()
-
-        role_descriptions = {
-            'finance_director': """
-                <p>As a <strong>Finance Director</strong>, your responsibility is to ensure stable, efficient budget 
-                allocations that align with operational needs and fiscal prudence.</p>
-                <p>You are expected to:</p>
-                <ul>
-                    <li>Prioritize accuracy in forecasting</li>
-                    <li>Maintain budget discipline</li>
-                    <li>Ensure resources are allocated efficiently</li>
-                    <li>Balance risk management with cost-effectiveness</li>
-                </ul>
-            """,
-            'politician': """
-                <p>As a <strong>Politician</strong>, your responsibility is to allocate budgets in ways that 
-                serve the public interest and address citizen needs.</p>
-                <p>You are expected to:</p>
-                <ul>
-                    <li>Consider the impact on public services</li>
-                    <li>Balance various stakeholder interests</li>
-                    <li>Ensure adequate funding for essential services</li>
-                    <li>Be accountable to voters for budget decisions</li>
-                </ul>
-            """
-        }
-
         return {
-            'role': role_display,
-            'role_description': role_descriptions.get(role, ''),
+            'construal_level': player.construal_level,
         }
 
 
@@ -315,8 +344,6 @@ class InitialForecast(Page):
         adjustment_min = 0
         adjustment_max = int(last_year_actual * 1.0)
 
-        role = player.role_condition.replace('_', ' ').title()
-
         return {
             'category_name': category['name'],
             'category_icon': category['icon'],
@@ -328,7 +355,6 @@ class InitialForecast(Page):
             'slider_max': slider_max,
             'adjustment_min': adjustment_min,
             'adjustment_max': adjustment_max,
-            'role': role,
         }
 
 
@@ -397,7 +423,7 @@ class AdviceFeedback(Page):
 
         # Advisor name based on condition
         if player.advice_condition == 'human_expert':
-            advisor_name = "Civil Servant Budget Specialist"
+            advisor_name = "Financial Controller"
         else:
             advisor_name = "AI Budget Forecasting Model"
 
@@ -443,9 +469,15 @@ class ResubmissionDecision(Page):
         
         budget_diff = final_budget - recommended_budget
 
+        # Calculate buffer percentage from initial values
+        if player.initial_forecast > 0:
+            initial_buffer_percent = round((player.budget_adjustment / player.initial_forecast) * 100)
+        else:
+            initial_buffer_percent = 0
+
         # Advisor name based on condition
         if player.advice_condition == 'human_expert':
-            advisor_name = "Human Expert"
+            advisor_name = "Financial Controller"
         else:
             advisor_name = "AI Model"
 
@@ -454,6 +486,7 @@ class ResubmissionDecision(Page):
             'category_icon': category['icon'],
             'initial_forecast': player.initial_forecast,
             'budget_adjustment': player.budget_adjustment,
+            'initial_buffer_percent': initial_buffer_percent,
             'final_budget': final_budget,
             'recommended_budget': recommended_budget,
             'budget_diff_display': format_diff(budget_diff),
@@ -475,39 +508,26 @@ class ResubmissionDecision(Page):
 class ManipulationCheck(Page):
     template_name = 'budgeting/pages/ManipulationCheck.html'
     form_model = 'player'
-    form_fields = ['manip_check_role', 'manip_check_advice']
+    form_fields = ['manip_check_construal', 'manip_check_advice']
     
     @staticmethod
     def error_message(player: Player, values):
-        if not values.get('manip_check_role'):
-            return 'Please answer the question about your assigned role.'
+        if not values.get('manip_check_construal'):
+            return 'Please answer the question about the reflection task.'
         if not values.get('manip_check_advice'):
             return 'Please answer the question about who provided the budget advice.'
 
 
-class Impartiality(Page):
-    template_name = 'budgeting/pages/Impartiality.html'
+class Mediators(Page):
+    template_name = 'budgeting/pages/Mediators.html'
     form_model = 'player'
-    form_fields = ['impartiality_unbiased', 'impartiality_objective', 'impartiality_fair', 'attention_check']
-    
-    @staticmethod
-    def error_message(player: Player, values):
-        if values.get('impartiality_unbiased') is None:
-            return 'Please rate whether the advice was unbiased.'
-        if values.get('impartiality_objective') is None:
-            return 'Please rate whether the advice was objective.'
-        if values.get('impartiality_fair') is None:
-            return 'Please rate whether the advice was fair and balanced.'
-        if values.get('attention_check') is None:
-            return 'Please answer all questions.'
-        if values['attention_check'] != 4:
-            return 'Please read all questions carefully and answer accurately.'
+    form_fields = ['advice_abstract', 'advice_not_concrete', 'advice_high_level']
 
 
 class Controls(Page):
     template_name = 'budgeting/pages/Controls.html'
     form_model = 'player'
-    form_fields = ['political_ideology', 'trust_in_government', 'trust_in_ai', 'risk_attitude']
+    form_fields = ['political_ideology', 'trust_in_government', 'trust_in_ai', 'risk_attitude', 'ai_familiarity']
     
     @staticmethod
     def error_message(player: Player, values):
@@ -542,12 +562,14 @@ class Thanks(Page):
 page_sequence = [
     Consent,
     Instructions,
-    RoleAssignment,
+    KnowledgeCheck,
+    Context,
+    ConstrualLevel,
     InitialForecast,
     AdviceFeedback,
     ResubmissionDecision,
     ManipulationCheck,
-    Impartiality,
+    Mediators,
     Controls,
     Demographics,
     Thanks,

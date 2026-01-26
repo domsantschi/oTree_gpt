@@ -1,0 +1,63 @@
+{{ block title }}Welcome{{ endblock }}
+{{ block content }}
+
+<div class="card mb-3">
+    <div class="card-body">
+        <p class="card-text mb-4">Please read the following information carefully before proceeding.</p>
+        
+        <div class="form-group mb-4">
+            <ul class="list-unstyled">
+                <li class="mb-2">• In this study, you will complete <b>two independent tasks in the management accounting context</b>.</li>
+                <li class="mb-2">• Please take approximately <b>10-15 minutes for each task</b> to complete.</li>
+                <li class="mb-2">• There is no psychological discomfort, no physical discomfort, nor any deception in this study.</li>
+                <li class="mb-2">• Your decisions and answers will only be used in anonymous form. We will not store any personally identifying information.</li>
+                <li class="mb-2">• Your anonymized data will be used for academic purposes and may be shared with other academics for research purposes.</li>
+                <li class="mb-2">• Please note that you cannot go back to a previous screen once you proceed.</li>
+                <li class="mb-2">• In case of questions, concerns, or feedback please reach out to the research team.</li>
+            </ul>
+        </div>
+
+        <div class="form-group">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="accept-conditions" name="accept">
+                <label class="form-check-label" for="accept-conditions">
+                    <b>I accept the conditions and would like to continue.</b>
+                </label>
+            </div>
+        </div>
+        
+        <!-- Hidden field for oTree form binding -->
+        <div style="display: none;">
+            {{ formfield 'declined_consent' }}
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body text-center" id="next-button-container">
+        {{ next_button }}
+    </div>
+</div>
+
+{{ endblock }}
+
+{{ block scripts }}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const acceptCheckbox = document.getElementById('accept-conditions');
+        const nextButton = document.querySelector('#next-button-container button');
+        const declinedConsentField = document.querySelector('input[name="declined_consent"]');
+        
+        // Initially disable the next button
+        nextButton.disabled = true;
+        
+        // Handle accept checkbox
+        acceptCheckbox.addEventListener('change', function() {
+            nextButton.disabled = !this.checked;
+            if (declinedConsentField) {
+                declinedConsentField.checked = false;
+            }
+        });
+    });
+</script>
+{{ endblock }}

@@ -1,0 +1,128 @@
+{{ block title }}
+    Revision Decision
+{{ endblock }}
+
+{{ block styles }}
+<style>
+    .revision-section { display: none; margin-top: 15px; }
+</style>
+{{ endblock }}
+
+{{ block content }}
+
+<p>Decide whether to revise your submission based on the <strong>{{ advisor_name }}</strong> advice.</p>
+
+<!-- Education -->
+<div class="card mb-4">
+    <div class="card-header"><strong>{{ category_name }}</strong></div>
+    <div class="card-body">
+        <table class="table table-sm mb-3">
+            <tr>
+                <td>Your Budget</td>
+                <td><strong>CHF <span class="fmt-num">{{ final_budget }}</span></strong></td>
+            </tr>
+            <tr>
+                <td>{{ advisor_name }} Recommendation</td>
+                <td><strong>CHF <span class="fmt-num">{{ recommended_budget }}</span></strong></td>
+            </tr>
+            <tr>
+                <td>Difference</td>
+                <td>{{ budget_diff_display }}</td>
+            </tr>
+        </table>
+        
+        <div class="mb-3">
+            {{ formfield 'resubmit_decision' }}
+        </div>
+        
+        <div class="revision-section" id="revisionSection">
+            <div class="mb-3">
+                <label class="form-label">Revised Estimate (CHF <span id="sliderMinLabel"></span> - <span id="sliderMaxLabel"></span>)</label>
+                <input type="range" class="form-range" id="revisedForecastSlider"
+                       min="{{ slider_min }}" max="{{ slider_max }}"
+                       value="{{ initial_forecast }}" step="1000">
+                <div class="text-center"><span id="revisedForecastValue">CHF <span id="initialForecastLabel"></span></span></div>
+                <input type="hidden" name="revised_forecast" id="revised_forecast" value="{{ initial_forecast }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Buffer (0-100%)</label>
+                <input type="range" class="form-range" id="revisedAdjustmentSlider" min="0" max="100" value="{{ initial_buffer_percent }}" step="1">
+                <div class="text-center"><span id="revisedAdjustmentValue">{{ initial_buffer_percent }}%</span> | <strong id="revisedFinalBudgetValue">Total: CHF <span id="initialTotalLabel"></span></strong></div>
+                <input type="hidden" name="revised_adjustment" id="revised_adjustment" value="{{ budget_adjustment }}">
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            {{ formfield 'resubmission_justification' }}
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    {{ next_button }}
+</div>
+
+<script>
+    function formatNumber(num) {
+        return num.toLocaleString();
+    }
+
+    // Format static numbers
+    document.querySelectorAll('.fmt-num').forEach(function(el) {
+        el.textContent = parseInt(el.textContent).toLocaleString();
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var section = document.getElementById('revisionSection');
+        var radios = document.querySelectorAll('input[name="resubmit_decision"]');
+        var forecastSlider = document.getElementById('revisedForecastSlider');
+        var forecastValue = document.getElementById('revisedForecastValue');
+        var forecastHidden = document.getElementById('revised_forecast');
+        var adjustSlider = document.getElementById('revisedAdjustmentSlider');
+        var adjustValue = document.getElementById('revisedAdjustmentValue');
+        var adjustHidden = document.getElementById('revised_adjustment');
+        var finalValue = document.getElementById('revisedFinalBudgetValue');
+
+        // Initial values from player's previous submission
+        var initialForecast = {{ initial_forecast }};
+        var initialBufferPercent = {{ initial_buffer_percent }};
+        var initialBufferAmount = {{ budget_adjustment }};
+        var initialFinalBudget = {{ final_budget }};
+
+        // Set initial formatted labels
+        document.getElementById('sliderMinLabel').textContent = formatNumber({{ slider_min }});
+        document.getElementById('sliderMaxLabel').textContent = formatNumber({{ slider_max }});
+        document.getElementById('initialForecastLabel').textContent = formatNumber(initialForecast);
+        document.getElementById('initialTotalLabel').textContent = formatNumber(initialFinalBudget);
+
+        // Initialize sliders with previous values
+        forecastSlider.value = initialForecast;
+        adjustSlider.value = initialBufferPercent;
+        forecastHidden.value = initialForecast;
+        adjustHidden.value = initialBufferAmount;
+        adjustValue.textContent = initialBufferPercent + '%';
+
+        function update() {
+            var f = parseInt(forecastSlider.value);
+            var p = parseInt(adjustSlider.value);
+            var a = Math.round(f * p / 100);
+            forecastValue.textContent = 'CHF ' + formatNumber(f);
+            forecastHidden.value = f;
+            adjustValue.textContent = p + '%';
+            adjustHidden.value = a;
+            finalValue.textContent = 'Total: CHF ' + formatNumber(f + a);
+        }
+
+        function toggle() {
+            var sel = document.querySelector('input[name="resubmit_decision"]:checked');
+            section.style.display = (sel && sel.value === 'True') ? 'block' : 'none';
+        }
+
+        radios.forEach(function(r) { r.addEventListener('change', toggle); });
+        forecastSlider.addEventListener('input', update);
+        adjustSlider.addEventListener('input', update);
+        toggle();
+    });
+</script>
+
+{{ endblock }}

@@ -1,0 +1,23 @@
+{{ block title }}
+    Thank You
+{{ endblock }}
+
+{{ block content }}
+
+<p>You have successfully completed the study.</p>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <strong>Feedback (Optional)</strong>
+    </div>
+    <div class="card-body">
+        <p>Please share any comments or suggestions about the study:</p>
+        {{ formfield 'feedback' label="" }}
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    {{ next_button label="Finish Study" }}
+</div>
+
+{{ endblock }}

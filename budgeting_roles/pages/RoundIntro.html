@@ -1,0 +1,27 @@
+{{ block title }}
+    Round {{ round_number }} of {{ total_rounds }}: {{ category_name }}
+{{ endblock }}
+
+{{ block content }}
+
+<div class="card mb-4">
+    <div class="card-header">
+        <strong>{{ category_name }}</strong>
+    </div>
+    <div class="card-body">
+        <p>{{ category_description }}</p>
+        
+        <p>In this round, you will:</p>
+        <ol>
+            <li>Analyze historical expense data</li>
+            <li>Submit your budget forecast</li>
+            <li>Justify your decision</li>
+        </ol>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    {{ next_button }}
+</div>
+
+{{ endblock }}

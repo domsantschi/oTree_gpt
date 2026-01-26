@@ -1,0 +1,65 @@
+{{ block title }}
+    Expert Advice
+{{ endblock }}
+
+{{ block content }}
+
+<p>
+    {% if advice_condition == 'human_expert' %}
+        The following recommendation comes from a <strong>Financial Controller</strong> specialized in the budget category.
+    {% else %}
+        The following recommendation comes from an <strong>AI Model</strong> specialized in the budget category.
+    {% endif %}
+</p>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <strong>{{ data.category_name }}</strong>
+    </div>
+    <div class="card-body">
+        <table class="table table-sm mb-0">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Your Submission</th>
+                    <th>Recommendation</th>
+                    <th>Difference</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Best Estimate</td>
+                    <td>CHF <span class="fmt-num">{{ data.initial_forecast }}</span></td>
+                    <td>CHF <span class="fmt-num">{{ data.recommended_estimate }}</span></td>
+                    <td>{{ data.estimate_diff_display }}</td>
+                </tr>
+                <tr>
+                    <td>Buffer</td>
+                    <td>CHF <span class="fmt-num">{{ data.budget_adjustment }}</span></td>
+                    <td>CHF <span class="fmt-num">{{ data.recommended_buffer }}</span></td>
+                    <td>{{ data.buffer_diff_display }}</td>
+                </tr>
+                <tr class="table-active">
+                    <td><strong>Total Budget</strong></td>
+                    <td><strong>CHF <span class="fmt-num">{{ data.final_budget }}</span></strong></td>
+                    <td><strong>CHF <span class="fmt-num">{{ data.recommended_budget }}</span></strong></td>
+                    <td><strong>{{ data.budget_diff_display }}</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<p class="text-muted">On the next page, you can decide whether to revise your submission.</p>
+
+<div class="text-center mt-4">
+    {{ next_button }}
+</div>
+
+<script>
+    document.querySelectorAll('.fmt-num').forEach(function(el) {
+        el.textContent = parseInt(el.textContent).toLocaleString();
+    });
+</script>
+
+{{ endblock }}

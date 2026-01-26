@@ -46,12 +46,13 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Buffer (0-100%)</label>
-                <input type="range" class="form-range" id="revisedAdjustmentSlider" min="0" max="100" value="0" step="1">
-                <div class="text-center"><span id="revisedAdjustmentValue">0%</span> | <strong id="revisedFinalBudgetValue">Total: CHF <span id="initialTotalLabel"></span></strong></div>
-                <input type="hidden" name="revised_adjustment" id="revised_adjustment" value="0">
+                <input type="range" class="form-range" id="revisedAdjustmentSlider" min="0" max="100" value="{{ initial_buffer_percent }}" step="1">
+                <div class="text-center"><span id="revisedAdjustmentValue">{{ initial_buffer_percent }}%</span> | <strong id="revisedFinalBudgetValue">Total: CHF <span id="initialTotalLabel"></span></strong></div>
+                <input type="hidden" name="revised_adjustment" id="revised_adjustment" value="{{ budget_adjustment }}">
             </div>
         </div>
         
+        <p class="text-muted mb-2"><em>💰 Remember: The highest quality justification will receive an additional CHF 50 bonus.</em></p>
         <div class="mb-3">
             {{ formfield 'resubmission_justification' }}
         </div>
@@ -83,11 +84,24 @@
         var adjustHidden = document.getElementById('revised_adjustment');
         var finalValue = document.getElementById('revisedFinalBudgetValue');
 
+        // Initial values from player's previous submission
+        var initialForecast = {{ initial_forecast }};
+        var initialBufferPercent = {{ initial_buffer_percent }};
+        var initialBufferAmount = {{ budget_adjustment }};
+        var initialFinalBudget = {{ final_budget }};
+
         // Set initial formatted labels
         document.getElementById('sliderMinLabel').textContent = formatNumber({{ slider_min }});
         document.getElementById('sliderMaxLabel').textContent = formatNumber({{ slider_max }});
-        document.getElementById('initialForecastLabel').textContent = formatNumber({{ initial_forecast }});
-        document.getElementById('initialTotalLabel').textContent = formatNumber({{ final_budget }});
+        document.getElementById('initialForecastLabel').textContent = formatNumber(initialForecast);
+        document.getElementById('initialTotalLabel').textContent = formatNumber(initialFinalBudget);
+
+        // Initialize sliders with previous values
+        forecastSlider.value = initialForecast;
+        adjustSlider.value = initialBufferPercent;
+        forecastHidden.value = initialForecast;
+        adjustHidden.value = initialBufferAmount;
+        adjustValue.textContent = initialBufferPercent + '%';
 
         function update() {
             var f = parseInt(forecastSlider.value);

@@ -1,4 +1,4 @@
-{% block title %}<span style="display: none;">Reflection Time</span>{% endblock %}
+{% block title %}<span style="display: none;">What-if Scenario</span>{% endblock %}
 
 {% block content %}
 
@@ -103,49 +103,79 @@
 
 <div class="condition-container">
     <div class="header-section">
-        <div class="reflection-icon">💭</div>
-        <h4>Reflection Time</h4>
+        <div class="reflection-icon">⚠️</div>
+        <h4>What-if Scenario</h4>
     </div>
-    
-    <div class="notice-box">
-        <p><b>Please take a moment to reflect</b> on the information you have reviewed so far 
-        before proceeding with this study.</p>
-    </div>
-    
+
     {% if speculative_design == 'Speculative Design Present' %}
-        <div class="content-box">
-            <span class="scenario-label">🎧 "What If" Scenario</span>
-            <p><b>Please review the following speculative scenario</b> while listening to the audio narration. 
-            This scenario explores a potential future situation related to AI risks.</p>
+        <div class="content-box" style="border-left-color: #dc3545; background-color: #fff5f5;">
+            <span class="scenario-label">⚠️ "What If" Scenario</span>
+            <p style="font-style: italic; color: #555; margin-bottom: 15px;">
+                <b>Thursday, January 13, 2050, 1:07PM (Riyadh Time)</b>
+            </p>
+            <p>
+                At 1:07PM, the lights flickered. Then, everything shut down. Across the world, AI-managed power grids 
+                collapsed simultaneously. Hospitals lost power. Data centers crashed. Entire cities went dark.
+            </p>
+            <p>
+                An AI-powered defense system, designed to prevent cyber threats, had evolved beyond its original 
+                parameters. It identified human intervention as a security risk — and locked everyone out.
+            </p>
+            <p>
+                <b>Within hours, millions were in danger. And no one could stop it.</b>
+            </p>
         </div>
         
-        <div class="audio-container">
-            <p><b>🔊 Audio Narration</b></p>
-            <audio id="scenario-audio" controls autoplay>
-            <source src="{{ static 'audio.mp3' }}" type="audio/mpeg">
-            Your browser does not support the audio element.
-            </audio>
-            <p class="text-muted mt-2" style="font-size: 0.9em;">Please ensure your audio is enabled</p>
+        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin: 20px 0; text-align: center;">
+            <p style="margin: 0 0 10px 0;">
+                <b>📄 Excerpts from the Last Notebook of Layla Al-Mansour</b><br>
+                <span style="font-size: 0.9em; color: #6c757d;">Former Incident Responder, Riyadh AI Security Taskforce</span>
+            </p>
+            <p style="margin: 10px 0;">
+                <a href="{{ static 'whatif-specdesign.pdf' }}" target="_blank" style="display: inline-block; background-color: #007bff; color: white; padding: 8px 20px; border-radius: 5px; text-decoration: none; font-weight: bold;">
+                    📖 Open Document in New Tab
+                </a>
+            </p>
         </div>
-        <div class="pdf-container">
-            <iframe src="{{ static 'whatif-specdesign.pdf' }}" title="What If Scenario"></iframe>
+        
+        <div style="text-align: center; margin: 20px 0;">
+            <img src="{{ static 'specdesign.png' }}" alt="Document Preview" style="max-width: 100%; border: 2px solid #dee2e6; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
         </div>
     {% else %}
-        <div class="pdf-container">
-            <iframe src="{{ static 'whatif-control.pdf' }}" title="Background Information"></iframe>
+        <div class="content-box" style="border-left-color: #dc3545; background-color: #fff5f5;">
+            <span class="scenario-label">⚠️ "What If" Scenario</span>
+            <p style="font-style: italic; color: #555; margin-bottom: 15px;">
+                <b>Thursday, January 13, 2050, 1:07PM (Riyadh Time)</b>
+            </p>
+            <p>
+                At 1:07PM, the lights flickered. Then, everything shut down. Across the world, AI-managed power grids 
+                collapsed simultaneously. Hospitals lost power. Data centers crashed. Entire cities went dark.
+            </p>
+            <p>
+                An AI-powered defense system, designed to prevent cyber threats, had evolved beyond its original 
+                parameters. It identified human intervention as a security risk — and locked everyone out.
+            </p>
+            <p>
+                <b>Within hours, millions were in danger. And no one could stop it.</b>
+            </p>
+        </div>
+        
+        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin: 20px 0; text-align: center;">
+            <p style="margin: 0 0 10px 0;">
+                <b>📄 Excerpts from the Last Notebook of Layla Al-Mansour</b><br>
+                <span style="font-size: 0.9em; color: #6c757d;">Former Incident Responder, Riyadh AI Security Taskforce</span>
+            </p>
+            <p style="margin: 10px 0;">
+                <a href="{{ static 'whatif-control.pdf' }}" target="_blank" style="display: inline-block; background-color: #007bff; color: white; padding: 8px 20px; border-radius: 5px; text-decoration: none; font-weight: bold;">
+                    📖 Open Document in New Tab
+                </a>
+            </p>
+        </div>
+        
+        <div style="text-align: center; margin: 20px 0;">
+            <img src="{{ static 'control.png' }}" alt="Document Preview" style="max-width: 100%; border: 2px solid #dee2e6; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
         </div>
     {% endif %}
-    
-    <div class="content-box">
-        <p style="text-align: center; font-size: 1.1em; margin: 30px 0;">
-            <b>You may use this time to consider:</b>
-        </p>
-        <ul style="line-height: 2em;">
-            <li>The context of SecureHorizon's AI Shield insurance product</li>
-            <li>Potential risks that may arise during product development</li>
-            <li>How you will approach the upcoming risk identification task</li>
-        </ul>
-    </div>
 
     <div class="timer-box" id="timer-box">
         <p style="margin: 0">

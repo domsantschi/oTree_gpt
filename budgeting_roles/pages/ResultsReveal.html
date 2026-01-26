@@ -1,0 +1,74 @@
+{{ block title }}
+    Results
+{{ endblock }}
+
+{{ block content }}
+
+<p>The actual expenses have been revealed. Here are your results:</p>
+
+{% for data in all_rounds_data %}
+<div class="card mb-4">
+    <div class="card-header"><strong>{{ data.category_name }}</strong></div>
+    <div class="card-body">
+        <table class="table table-sm mb-0">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Budget</th>
+                    <th>Deviation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Actual Expense</td>
+                    <td><strong>CHF {{ data.actual_expense }},000</strong></td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>Your Initial</td>
+                    <td>CHF {{ data.initial_budget }},000</td>
+                    <td>{{ data.initial_accuracy }}%</td>
+                </tr>
+                <tr>
+                    <td>Your Final{% if data.revised %} (revised){% endif %}</td>
+                    <td>CHF {{ data.final_budget }},000</td>
+                    <td>{{ data.final_accuracy }}%</td>
+                </tr>
+                <tr>
+                    <td>Advisor</td>
+                    <td>CHF {{ data.advisor_budget }},000</td>
+                    <td>{{ data.advisor_accuracy }}%</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endfor %}
+
+<div class="card mb-4">
+    <div class="card-header"><strong>Summary</strong></div>
+    <div class="card-body">
+        <table class="table table-sm mb-0">
+            <tr>
+                <td>Your Initial Avg. Deviation</td>
+                <td><strong>{{ avg_initial_accuracy }}%</strong></td>
+            </tr>
+            <tr>
+                <td>Your Final Avg. Deviation</td>
+                <td><strong>{{ avg_final_accuracy }}%</strong></td>
+            </tr>
+            <tr>
+                <td>Advisor Avg. Deviation</td>
+                <td><strong>{{ avg_advisor_accuracy }}%</strong></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<p class="text-muted">Click below to proceed to a few final questions.</p>
+
+<div class="text-center mt-4">
+    {{ next_button }}
+</div>
+
+{{ endblock }}

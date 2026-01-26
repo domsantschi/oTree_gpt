@@ -1,0 +1,72 @@
+{{ block title }}
+    Your Perceptions
+{{ endblock }}
+
+{{ block content }}
+
+<style>
+    .otree-form-group .controls {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+    
+    .otree-form-group .form-check-inline {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1;
+        margin: 0;
+        padding: 0 2px;
+    }
+    
+    .otree-form-group .form-check-inline input[type="radio"] {
+        margin-bottom: 0.35rem;
+    }
+    
+    .otree-form-group .form-check-inline label {
+        text-align: center;
+        font-size: 0.75em;
+        margin: 0;
+        line-height: 1.2;
+        word-wrap: break-word;
+        max-width: 100%;
+    }
+</style>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <strong>Perceptions of the Advice</strong>
+    </div>
+    <div class="card-body">
+        <p>Please indicate your agreement with the following statements about the advice you received:</p>
+        
+        <div class="mb-4">
+            {{ formfield 'impartiality_unbiased' }}
+        </div>
+        
+        <hr>
+        
+        <div class="mb-4">
+            {{ formfield 'impartiality_objective' }}
+        </div>
+        
+        <hr>
+        
+        <div class="mb-4">
+            {{ formfield 'impartiality_fair' }}
+        </div>
+        
+        <hr>
+        
+        <div class="mb-4">
+            {{ formfield 'attention_check' }}
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    {{ next_button }}
+</div>
+
+{{ endblock }}

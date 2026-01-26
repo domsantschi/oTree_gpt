@@ -1,0 +1,18 @@
+{{ block title }}Redirecting...{{ endblock }}
+
+{{ block content }}
+<div class="text-center">
+    <p>Thank you for completing the questionnaire.</p>
+    <p>You are being redirected to the next part of the study...</p>
+    <div class="spinner-border text-primary mt-3" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
+<script>
+    // Redirect to spec_design2 session after a brief delay
+    setTimeout(function() {
+        window.location.href = "{{ redirect_url }}";
+    }, 1500);
+</script>
+{{ endblock }}

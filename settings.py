@@ -55,6 +55,11 @@ SESSION_CONFIGS = [
             app_sequence=['spec_design2',],
             num_demo_participants=1,
         ),
+        dict(
+            name='bif_distractor',
+            app_sequence=['bif_distractor',],
+            num_demo_participants=1,
+        ),
 ]
 # if you set a property in SESSION_CONFIG_DEFAULTS, it will be inherited by all configs
 # in SESSION_CONFIGS, except those that explicitly override it.

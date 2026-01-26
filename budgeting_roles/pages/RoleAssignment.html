@@ -1,0 +1,24 @@
+{{ block title }}
+    Role Assignment
+{{ endblock }}
+
+{{ block content }}
+
+<div class="card mb-4">
+    <div class="card-header">
+        <strong>Your Role</strong>
+    </div>
+    <div class="card-body">
+        <p>You have been assigned the role of: <strong>{{ role }}</strong></p>
+        
+        {{ role_description|safe }}
+        
+        <p class="mt-3 text-muted">Please keep this role in mind as you make your budget decisions.</p>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    {{ next_button }}
+</div>
+
+{{ endblock }}

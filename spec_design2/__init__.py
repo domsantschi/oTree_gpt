@@ -93,21 +93,7 @@ class Player(BasePlayer):
         widget=widgets.RadioSelectHorizontal,
         doc="Level of familiarity with artificial intelligence"
     )
-    
-    # BIF (Behavioral Identification Form) fields
-    bif_1 = models.IntegerField(label="Picking an apple", min=0, max=1, doc="BIF Question 1")
-    bif_2 = models.IntegerField(label="Painting a room", min=0, max=1, doc="BIF Question 2")
-    bif_3 = models.IntegerField(label="Locking a door", min=0, max=1, doc="BIF Question 3")
-    bif_4 = models.IntegerField(label="Voting", min=0, max=1, doc="BIF Question 4")
-    bif_5 = models.IntegerField(label="Filling out a personality test", min=0, max=1, doc="BIF Question 5")
-    bif_6 = models.IntegerField(label="Greeting someone", min=0, max=1, doc="BIF Question 6")
-    bif_7 = models.IntegerField(label="Taking a test", min=0, max=1, doc="BIF Question 7")
-    bif_8 = models.IntegerField(label="Resisting temptation", min=0, max=1, doc="BIF Question 8")
-    bif_9 = models.IntegerField(label="Traveling by car", min=0, max=1, doc="BIF Question 9")
-    bif_10 = models.IntegerField(label="Talking to a child", min=0, max=1, doc="BIF Question 10")
-    bif_score = models.IntegerField(min=0, max=10, doc="Total BIF score (sum of all responses)")
-    bif_responses = models.LongStringField(doc="JSON string of BIF responses", blank=True)
-    
+   
     # Experimental conditions
     construal_level = models.StringField(
         label="Construal Level",
@@ -326,7 +312,6 @@ class Player(BasePlayer):
     assessment_page_time = models.FloatField(doc="Time spent on assessment page in seconds")
     manip_check_page_time = models.FloatField(doc="Time spent on manipulation check page in seconds")
     controls_page_time = models.FloatField(doc="Time spent on controls page in seconds")
-    bif_page_time = models.FloatField(doc="Time spent on BIF page in seconds")
     demographics_page_time = models.FloatField(doc="Time spent on demographics page in seconds")
     thanks_page_time = models.FloatField(doc="Time spent on thanks page in seconds")
 
@@ -527,12 +512,6 @@ class Spec_Condition(Page):
 class Mediators(Page):
     form_model = 'player'
     form_fields = [
-        'creative_thinking',
-        'imagination',
-        'broader_implications',
-        'story_format',
-        'real_world_relatable',
-        'processing_effectiveness',
         'abstract_to_concrete',
         'impact_feeling',
         'mental_experience',
@@ -546,7 +525,7 @@ class Mediators(Page):
     @staticmethod
     def error_message(player: Player, values):
         if values['mediator_attention_check'] != 6:  # 6 corresponds to 'Agree'
-            return 'Question 10 is incorrect. Please review and try again.'
+            return 'Question 4 is incorrect. Please review and try again.'
 
     @staticmethod
     def get_timeout_seconds(player: Player):
@@ -608,36 +587,9 @@ class Controls(Page):
     def before_next_page(player: Player, timeout_happened):
         player.controls_page_time = time.time() - player.participant._start_time
 
-class BIF(Page):
-    form_model = 'player'
-    form_fields = [
-        'bif_1', 'bif_2', 'bif_3', 'bif_4', 'bif_5',
-        'bif_6', 'bif_7', 'bif_8', 'bif_9', 'bif_10',
-        'bif_score', 'bif_responses'
-    ]
-    
-    @staticmethod
-    def is_displayed(player: Player):
-        return player.passed_screening
-    
-    @staticmethod
-    def get_timeout_seconds(player: Player):
-        import time
-        player.participant._start_time = time.time()
-        return None
-
-    @staticmethod
-    def before_next_page(player: Player, timeout_happened):
-        player.bif_page_time = time.time() - player.participant._start_time
-        # Log BIF score
-        print(f"Participant {player.participant.label}: BIF score = {player.bif_score}")
-
 class Demographics(Page):
     form_model = 'player'
     form_fields = [
-        'gender',
-        'age',
-        'qualification',
         'work_experience',
         'rm_experience',
         'industry_experience',
@@ -707,7 +659,6 @@ page_sequence = [
     Manip_Check,
     Mediators,
     Controls,
-    BIF,
     Demographics,
     Thanks,
     Redirect

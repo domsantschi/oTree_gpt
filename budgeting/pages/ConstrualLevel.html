@@ -1,0 +1,38 @@
+{{ block title }}Reflection Task{{ endblock }}
+
+{{ block content }}
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">Reflection Task</h5>
+        
+        <p class="card-text">Before you begin the budgeting task, please take a moment to reflect.</p>
+        
+        {% if construal_level == 'concrete' %}
+            <div class="alert alert-primary">
+                <strong>Please describe <u>how</u> budget planning for a public expense account is done.</strong>
+            </div>
+            <p class="card-text">
+                <em>Consider the specific steps, processes, and methods you would use to make budget decisions.</em>
+            </p>
+
+        {% elif construal_level == 'abstract' %}
+            <div class="alert alert-primary">
+                <strong>Please describe <u>why</u> budget planning for a public expense account is done.</strong>
+            </div>
+            <p class="card-text">
+                <em>Consider the broader goals, purposes, and motivations behind accurate budget forecasting.</em>
+            </p>
+        {% endif %}
+        
+        <div class="form-group mt-4">
+            {{ formfield 'construal_response' }}
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    {{ next_button }}
+</div>
+
+{{ endblock }}

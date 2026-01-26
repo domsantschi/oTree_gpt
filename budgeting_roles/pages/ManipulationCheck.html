@@ -1,0 +1,28 @@
+{{ block title }}
+    Quick Check
+{{ endblock }}
+
+{{ block content }}
+
+<div class="card mb-4">
+    <div class="card-header">
+        <strong>Please answer the following questions</strong>
+    </div>
+    <div class="card-body">
+        <p>To help us understand your experience, please answer these questions about the study conditions:</p>
+        
+        <div class="mb-4">
+            {{ formfield 'manip_check_role' }}
+        </div>
+        
+        <div class="mb-4">
+            {{ formfield 'manip_check_advice' }}
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    {{ next_button }}
+</div>
+
+{{ endblock }}

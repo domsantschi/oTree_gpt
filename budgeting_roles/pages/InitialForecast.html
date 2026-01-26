@@ -1,0 +1,161 @@
+{{ block title }}
+    Budgeting Task
+{{ endblock }}
+
+{{ block content }}
+
+<!-- Historical Data -->
+<div class="card mb-4">
+    <div class="card-header">
+        <strong>Historical Data</strong>
+    </div>
+    <div class="card-body">
+        <!-- <p class="text-muted">{{ trend_description }}</p> -->
+        <div class="row">
+            <div class="col-md-6">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Year</th>
+                            <th>Budget</th>
+                            <th>Actual</th>
+                            <th>Diff</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyTableBody"></tbody>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <canvas id="historicalChart" height="250"></canvas>
+            </div>
+        </div>
+        
+        <!-- Comprehension Check -->
+        <div class="mt-3 p-3 bg-light rounded">
+            <label class="form-label"><strong>Comprehension Check:</strong> What were the actual expenses in Y9? (enter the number without commas)</label>
+            <input type="number" name="comprehension_check" id="comprehension_check" class="form-control" style="max-width: 200px;" placeholder="Enter value" required>
+        </div>
+    </div>
+</div>
+
+<!-- Step 1: Best Estimate -->
+<div class="card mb-4">
+    <div class="card-header">
+        <strong>Step 1: Best Estimate for Y10</strong>
+    </div>
+    <div class="card-body">
+        <p>What is your best estimate for the next year's (Y10) expenses?</p>
+        <div class="mb-3">
+            <label class="form-label">Estimate (CHF <span id="sliderMinLabel"></span> - <span id="sliderMaxLabel"></span>)</label>
+            <input type="range" class="form-range" id="forecastSlider"
+                   min="{{ slider_min }}" max="{{ slider_max }}" value="{{ last_year_actual }}" step="1">
+            <div class="text-center"><strong id="forecastValue">CHF <span id="initialForecastLabel"></span></strong></div>
+            <input type="hidden" name="initial_forecast" id="initial_forecast" value="{{ last_year_actual }}">
+        </div>
+    </div>
+</div>
+
+<!-- Step 2: Buffer -->
+<div class="card mb-4">
+    <div class="card-header">
+        <strong>Step 2: Buffer for Uncertainty</strong>
+    </div>
+    <div class="card-body">
+        <p>How much buffer to add for uncertainty?</p>
+        <div class="mb-3">
+            <label class="form-label">Buffer (0-100%)</label>
+            <input type="range" class="form-range" id="adjustmentSlider" min="0" max="100" value="0" step="1">
+            <div class="text-center">
+                <span id="adjustmentValue">0%</span> | 
+                <strong id="finalBudgetValue">Total: CHF <span id="initialTotalLabel"></span></strong>
+            </div>
+            <input type="hidden" name="budget_adjustment" id="budget_adjustment" value="0">
+        </div>
+    </div>
+</div>
+
+<!-- Step 3: Justification -->
+<div class="card mb-4">
+    <div class="card-header">
+        <strong>Step 3: Justification</strong>
+    </div>
+    <div class="card-body">
+        {{ formfield 'initial_justification' }}
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    {{ next_button }}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const budgetData = {{ historical_budget|safe }};
+    const actualData = {{ historical_actual|safe }};
+    const yearLabels = ['Y1', 'Y2', 'Y3', 'Y4', 'Y5', 'Y6', 'Y7', 'Y8', 'Y9'];
+    const chartLabels = ['Y1', 'Y2', 'Y3', 'Y4', 'Y5', 'Y6', 'Y7', 'Y8', 'Y9', 'Y10'];
+
+    // Helper function to format numbers with commas
+    function formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    // Populate table (Y1-Y9 in ascending order, then Y10 blank)
+    const tableBody = document.getElementById('historyTableBody');
+    for (let i = 0; i < budgetData.length; i++) {
+        const row = document.createElement('tr');
+        const diff = actualData[i] - budgetData[i];
+        const diffSign = diff >= 0 ? '+' : '';
+        row.innerHTML = '<td>' + yearLabels[i] + '</td><td>' + formatNumber(budgetData[i]) + '</td><td>' + formatNumber(actualData[i]) + '</td><td>' + diffSign + formatNumber(diff) + '</td>';
+        tableBody.appendChild(row);
+    }
+    // Add blank Y10 row
+    const y10Row = document.createElement('tr');
+    y10Row.innerHTML = '<td class="table-warning"><strong>Y10</strong></td><td class="table-warning">?</td><td>?</td><td>?</td>';
+    tableBody.appendChild(y10Row);
+
+    // Chart (includes Y10 as null to show gap)
+    const ctx = document.getElementById('historicalChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: chartLabels,
+            datasets: [
+                { label: 'Budget', data: [...budgetData, null], borderColor: 'rgb(220, 53, 69)', fill: false },
+                { label: 'Actual', data: [...actualData, null], borderColor: 'rgb(13, 110, 253)', fill: false }
+            ]
+        },
+        options: { responsive: true, scales: { y: { beginAtZero: false } } }
+    });
+
+    // Sliders
+    const forecastSlider = document.getElementById('forecastSlider');
+    const forecastValue = document.getElementById('forecastValue');
+    const forecastHidden = document.getElementById('initial_forecast');
+    const adjustmentSlider = document.getElementById('adjustmentSlider');
+    const adjustmentValue = document.getElementById('adjustmentValue');
+    const adjustmentHidden = document.getElementById('budget_adjustment');
+    const finalBudgetValue = document.getElementById('finalBudgetValue');
+
+    // Set initial formatted labels
+    document.getElementById('sliderMinLabel').textContent = formatNumber({{ slider_min }});
+    document.getElementById('sliderMaxLabel').textContent = formatNumber({{ slider_max }});
+    document.getElementById('initialForecastLabel').textContent = formatNumber({{ last_year_actual }});
+    document.getElementById('initialTotalLabel').textContent = formatNumber({{ last_year_actual }});
+
+    function update() {
+        const f = parseInt(forecastSlider.value);
+        const p = parseInt(adjustmentSlider.value);
+        const a = Math.round(f * p / 100);
+        forecastValue.textContent = 'CHF ' + formatNumber(f);
+        forecastHidden.value = f;
+        adjustmentValue.textContent = p + '%';
+        adjustmentHidden.value = a;
+        finalBudgetValue.textContent = 'Total: CHF ' + formatNumber(f + a);
+    }
+
+    forecastSlider.addEventListener('input', update);
+    adjustmentSlider.addEventListener('input', update);
+</script>
+
+{{ endblock }}

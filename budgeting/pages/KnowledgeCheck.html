@@ -1,0 +1,38 @@
+{{ block title }}Understanding Check{{ endblock }}
+
+{{ block content }}
+
+<div class="card mb-3">
+    <div class="card-body">
+        <!-- <h5 class="card-title">Knowledge Check</h5> -->
+        <p class="card-text">Please answer the following questions to ensure you understand the key concepts.</p>
+        <p class="card-text"><strong>All questions must be answered correctly to continue.</strong></p>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h6 class="card-subtitle mb-3 text-muted">Question 1</h6>
+        {{ formfield 'knowledge_q1' }}
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h6 class="card-subtitle mb-3 text-muted">Question 2</h6>
+        {{ formfield 'knowledge_q2' }}
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h6 class="card-subtitle mb-3 text-muted">Question 3</h6>
+        {{ formfield 'knowledge_q3' }}
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    {{ next_button }}
+</div>
+
+{{ endblock }}
