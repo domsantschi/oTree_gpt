@@ -95,9 +95,21 @@ ROOMS = [
         name='spec_design',
         display_name='Spec Design Room',
     ),
-        dict(
+    dict(
         name='crossflexed',
         display_name='Crossflexed Room',
+    ),
+    dict(
+        name='budgeting',
+        display_name='Budgeting Room',
+    ),
+    dict(
+        name='bif_distractor',
+        display_name='BIF Distractor Room',
+    ),
+    dict(
+        name='spec_design2',
+        display_name='Spec Design 2 Room',
     ),
 ]
 
