@@ -4,7 +4,7 @@
 
 {{ block content }}
 
-<p>You have successfully completed the study.</p>
+<p>You have successfully completed this part of the study.</p>
 
 <div class="card mb-4">
     <div class="card-header">
@@ -17,7 +17,24 @@
 </div>
 
 <div class="text-center mt-4">
-    {{ next_button label="Finish Study" }}
+    <button type="submit" class="btn btn-primary" id="continueBtn">Continue to Next Part</button>
 </div>
+
+<script>
+    document.querySelector('form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var form = this;
+        var formData = new FormData(form);
+        
+        fetch(window.location.href, {
+            method: 'POST',
+            body: formData
+        }).then(function() {
+            window.location.href = "{{ redirect_url }}";
+        }).catch(function() {
+            window.location.href = "{{ redirect_url }}";
+        });
+    });
+</script>
 
 {{ endblock }}

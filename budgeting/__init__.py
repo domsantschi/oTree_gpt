@@ -558,6 +558,12 @@ class Thanks(Page):
             completionlink=player.session.config.get('completionlink', '')
         )
 
+    @staticmethod
+    def vars_for_template(player: Player):
+        return dict(
+            redirect_url='https://ccma-experiments-37b86b110ea3.herokuapp.com/room/bif_distractor'
+        )
+
 
 page_sequence = [
     Consent,

@@ -136,10 +136,8 @@ class Redirect(Page):
     
     @staticmethod
     def vars_for_template(player: Player):
-        # Build the redirect URL to spec_design2 demo session
-        # For production with rooms, use: '/room/spec_design2'
         return dict(
-            redirect_url='/demo/spec_design2'
+            redirect_url='https://ccma-experiments-37b86b110ea3.herokuapp.com/room/spec_design2'
         )
 
 
