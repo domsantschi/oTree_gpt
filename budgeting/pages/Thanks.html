@@ -17,24 +17,7 @@
 </div>
 
 <div class="text-center mt-4">
-    <button type="submit" class="btn btn-primary" id="continueBtn">Continue to Next Part</button>
+    {{ next_button }}
 </div>
-
-<script>
-    document.querySelector('form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        var form = this;
-        var formData = new FormData(form);
-        
-        fetch(window.location.href, {
-            method: 'POST',
-            body: formData
-        }).then(function() {
-            window.location.href = "{{ redirect_url }}";
-        }).catch(function() {
-            window.location.href = "{{ redirect_url }}";
-        });
-    });
-</script>
 
 {{ endblock }}

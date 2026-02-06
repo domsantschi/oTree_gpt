@@ -1,0 +1,87 @@
+{{ block title }}
+    Congratulations!
+{{ endblock }}
+
+{{ block content }}
+
+<div class="card mb-4 border-success">
+    <div class="card-header bg-success text-white">
+        <strong>🎉 Task 1 Complete!</strong>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">Well done!</h5>
+        <p class="card-text">
+            You have successfully completed the <strong>first task</strong> of this study. 
+            Thank you for your thoughtful responses so far.
+        </p>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <strong>📝 Intermediate Mini-Task</strong>
+    </div>
+    <div class="card-body">
+        <p class="card-text">
+            Before continuing with the next part of the study, please complete a short paper-based task:
+        </p>
+        
+        <ol class="mb-4">
+            <li class="mb-2"><strong>Turn the page</strong> of the physical paper you have on your desk.</li>
+            <li class="mb-2"><strong>Complete the intermediate mini-task</strong> as instructed on the paper.</li>
+            <li class="mb-2">Once you're done, <strong>raise your hand</strong> so that the instructor can collect your answers.</li>
+        </ol>
+        
+        <div class="alert alert-info">
+            <strong>📌 Important:</strong> Please wait for the instructor to collect your paper answers before continuing.
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <strong>🔐 Instructor Verification</strong>
+    </div>
+    <div class="card-body">
+        <p class="card-text">
+            <em>For instructor use only:</em> Please type the verification code to enable the Continue button.
+        </p>
+        <div class="form-group">
+            <input type="text" id="instructorCode" class="form-control" placeholder="Enter code here" style="max-width: 200px;">
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <button type="submit" class="btn btn-primary" id="continueBtn" disabled>Continue to Next Task</button>
+</div>
+
+<script>
+    var codeInput = document.getElementById('instructorCode');
+    var continueBtn = document.getElementById('continueBtn');
+    
+    codeInput.addEventListener('input', function() {
+        if (codeInput.value.toLowerCase() === 'ok') {
+            continueBtn.disabled = false;
+        } else {
+            continueBtn.disabled = true;
+        }
+    });
+    
+    document.querySelector('form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var form = this;
+        var formData = new FormData(form);
+        
+        fetch(window.location.href, {
+            method: 'POST',
+            body: formData
+        }).then(function() {
+            window.location.href = "{{ redirect_url }}";
+        }).catch(function() {
+            window.location.href = "{{ redirect_url }}";
+        });
+    });
+</script>
+
+{{ endblock }}

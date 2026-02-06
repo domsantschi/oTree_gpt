@@ -334,7 +334,21 @@ def creating_session(subsession: Subsession):
         for i, p in enumerate(subsession.get_players()):
             p.participant.wealth = cu(0)
             p.participant.part_id = create_id()
-            construal_level, speculative_design = combined_conditions[i % len(combined_conditions)]
+            
+            # Check if construal level was already assigned in budgeting study
+            if 'construal_level' in p.participant.vars:
+                # Map from budgeting format to spec_design2 format
+                budgeting_construal = p.participant.vars['construal_level']
+                if budgeting_construal == 'concrete':
+                    construal_level = 'Concrete Construal'
+                else:  # 'abstract'
+                    construal_level = 'Abstract Construal'
+                # Still randomly assign speculative design
+                speculative_design = random.choice(speculative_design_conditions)
+            else:
+                # If no prior assignment, randomly assign both conditions
+                construal_level, speculative_design = combined_conditions[i % len(combined_conditions)]
+            
             p.construal_level = construal_level
             p.speculative_design = speculative_design
             print(f"Player {i+1} assigned: Construal Level = {construal_level}, Speculative Design = {speculative_design}")

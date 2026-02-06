@@ -300,6 +300,8 @@ def creating_session(subsession: Subsession):
     for player in subsession.get_players():
         # IV1: Construal level condition (concrete=how, abstract=why)
         player.construal_level = random.choice(['concrete', 'abstract'])
+        # Store in participant.vars for use in subsequent apps (e.g., spec_design2)
+        player.participant.vars['construal_level'] = player.construal_level
         # IV2: Advice source condition
         player.advice_condition = random.choice(['human_expert', 'ai_model'])
         # Set category name
@@ -613,11 +615,19 @@ class Thanks(Page):
             completionlink=player.session.config.get('completionlink', '')
         )
 
+
+class Intermediate(Page):
+    template_name = 'budgeting/pages/Intermediate.html'
+    
     @staticmethod
     def vars_for_template(player: Player):
         return dict(
-            redirect_url='https://ccma-experiments-37b86b110ea3.herokuapp.com/room/bif_distractor'
+            redirect_url='https://ccma-experiments-37b86b110ea3.herokuapp.com/room/spec_design2'
         )
+    
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        player.participant.vars['completed_budgeting'] = True
 
 
 page_sequence = [
@@ -635,4 +645,5 @@ page_sequence = [
     ManipulationCheck,
     Demographics,
     Thanks,
+    Intermediate,
 ]
