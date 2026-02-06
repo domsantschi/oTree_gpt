@@ -1,4 +1,4 @@
-{{ block title }}<span style="display: none;">About You</span>{{ endblock }}
+{{ block title }}<span style="display: none;">Study Feedback</span>{{ endblock }}
 {{ block content }}
 
 <style>
@@ -91,133 +91,16 @@
 
 <div class="controls-container">
     <div class="mb-4">
-        <h4>About You</h4>
-        <p class="text-muted">Please answer the following questions.</p>
+        <h4>Study Feedback</h4>
+        <p class="text-muted">The following questions ask about your experience completing the risk identification task. Please reflect on the task you just completed and answer the questions below.</p>
     </div>
     
     <form method="post">
-        
-        <!-- Question 1: Risk Taking -->
+
+        <!-- Question 1: Manipulation Effort -->
         <div class="question-box">
             <p class="mb-3">
                 <span class="question-number">1</span>
-                How would you rate your own <b>willingness to undertake risky business propositions </b> compared to other individuals?
-            </p>
-            <div class="likert-scale">
-                <div class="scale-option">
-                    <input type="radio" name="risk_taking" value="1" id="rt1" required>
-                    <label class="radio-label" for="rt1">Extremely<br>less willing</label>
-                </div>
-                <div class="scale-option">
-                    <input type="radio" name="risk_taking" value="2" id="rt2">
-                    <label class="radio-label" for="rt2">Much less<br>willing</label>
-                </div>
-                <div class="scale-option">
-                    <input type="radio" name="risk_taking" value="3" id="rt3">
-                    <label class="radio-label" for="rt3">Less<br>willing</label>
-                </div>
-                <div class="scale-option">
-                    <input type="radio" name="risk_taking" value="4" id="rt4">
-                    <label class="radio-label" for="rt4">About the<br>same</label>
-                </div>
-                <div class="scale-option">
-                    <input type="radio" name="risk_taking" value="5" id="rt5">
-                    <label class="radio-label" for="rt5">More<br>willing</label>
-                </div>
-                <div class="scale-option">
-                    <input type="radio" name="risk_taking" value="6" id="rt6">
-                    <label class="radio-label" for="rt6">Much more<br>willing</label>
-                </div>
-                <div class="scale-option">
-                    <input type="radio" name="risk_taking" value="7" id="rt7">
-                    <label class="radio-label" for="rt7">Extremely<br>more willing</label>
-                </div>
-            </div>
-            {{ formfield_errors 'risk_taking' }}
-        </div>
-
-        <!-- Question 2: Risk Avoidance (Reverse Scaled) -->
-        <div class="question-box">
-            <p class="mb-3">
-                <span class="question-number">2</span>
-                How would you rate your own <b>willingness to avoid</b> risky business propositions compared to other individuals?
-            </p>
-            <div class="likert-scale">
-                <div class="scale-option">
-                    <input type="radio" name="risk_avoidance" value="1" id="ra1" required>
-                    <label class="radio-label" for="ra1">Extremely<br>less willing</label>
-                </div>
-                <div class="scale-option">
-                    <input type="radio" name="risk_avoidance" value="2" id="ra2">
-                    <label class="radio-label" for="ra2">Much less<br>willing</label>
-                </div>
-                <div class="scale-option">
-                    <input type="radio" name="risk_avoidance" value="3" id="ra3">
-                    <label class="radio-label" for="ra3">Less<br>willing</label>
-                </div>
-                <div class="scale-option">
-                    <input type="radio" name="risk_avoidance" value="4" id="ra4">
-                    <label class="radio-label" for="ra4">About the<br>same</label>
-                </div>
-                <div class="scale-option">
-                    <input type="radio" name="risk_avoidance" value="5" id="ra5">
-                    <label class="radio-label" for="ra5">More<br>willing</label>
-                </div>
-                <div class="scale-option">
-                    <input type="radio" name="risk_avoidance" value="6" id="ra6">
-                    <label class="radio-label" for="ra6">Much more<br>willing</label>
-                </div>
-                <div class="scale-option">
-                    <input type="radio" name="risk_avoidance" value="7" id="ra7">
-                    <label class="radio-label" for="ra7">Extremely<br>more willing</label>
-                </div>
-            </div>
-            {{ formfield_errors 'risk_avoidance' }}
-        </div>
-
-        <!-- Question 3: Creativity -->
-        <div class="question-box">
-            <p class="mb-3">
-                <span class="question-number">3</span>
-                How would you rate your <b>level of creativity</b> compared to other individuals?
-            </p>
-            <div class="likert-scale">
-                <div class="scale-option">
-                    <input type="radio" name="creativity" value="1" id="cr1" required>
-                    <label class="radio-label" for="cr1">Extremely<br>low</label>
-                </div>
-                <div class="scale-option">
-                    <input type="radio" name="creativity" value="2" id="cr2">
-                    <label class="radio-label" for="cr2">Low<br></label>
-                </div>
-                <div class="scale-option">
-                    <input type="radio" name="creativity" value="3" id="cr3">
-                    <label class="radio-label" for="cr3">Rather<br>low</label>
-                </div>
-                <div class="scale-option">
-                    <input type="radio" name="creativity" value="4" id="cr4">
-                    <label class="radio-label" for="cr4">About the<br>same</label>
-                </div>
-                <div class="scale-option">
-                    <input type="radio" name="creativity" value="5" id="cr5">
-                    <label class="radio-label" for="cr5">Rather<br>high</label>
-                </div>
-                <div class="scale-option">
-                    <input type="radio" name="creativity" value="6" id="cr6">
-                    <label class="radio-label" for="cr6">High<br></label>
-                </div>
-                <div class="scale-option">
-                    <input type="radio" name="creativity" value="7" id="cr7">
-                    <label class="radio-label" for="cr7">Extremely<br>high</label>
-                </div>
-            </div>
-            {{ formfield_errors 'creativity' }}
-        </div>
-
-        <!-- Question 4: Manipulation Effort -->
-        <div class="question-box">
-            <p class="mb-3">
-                <span class="question-number">4</span>
                 <b>How much effort</b> did it take to complete the risk identification task?
             </p>
             <div class="likert-scale">
@@ -239,10 +122,10 @@
             {{ formfield_errors 'manipulation_effort' }}
         </div>
 
-        <!-- Question 5: Manipulation Difficulty -->
+        <!-- Question 2: Manipulation Difficulty -->
         <div class="question-box">
             <p class="mb-3">
-                <span class="question-number">5</span>
+                <span class="question-number">2</span>
                 <b>How difficult</b> was it to complete the risk identification task?
             </p>
             <div class="likert-scale">
@@ -264,10 +147,10 @@
             {{ formfield_errors 'manipulation_difficulty' }}
         </div>
         
-        <!-- Question 6 -->
+        <!-- Question 3: Attention Check -->
         <div class="question-box">
             <p class="mb-3">
-                <span class="question-number">6</span>
+                <span class="question-number">3</span>
                 If you are reading this question carefully, please <b>select "Agree"</b>.
             </p>
             <div class="likert-scale">

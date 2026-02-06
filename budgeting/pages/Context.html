@@ -2,44 +2,172 @@
 
 {{ block content }}
 
+<style>
+    .timeline-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: stretch;
+        margin: 30px 0;
+        position: relative;
+    }
+    
+    .timeline-step {
+        flex: 1;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 0 5px;
+        position: relative;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .timeline-step:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        right: -15px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 0;
+        height: 0;
+        border-top: 15px solid transparent;
+        border-bottom: 15px solid transparent;
+        border-left: 15px solid #6c757d;
+        z-index: 1;
+    }
+    
+    .timeline-step h6 {
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #007bff;
+        padding-bottom: 5px;
+    }
+    
+    .timeline-step p {
+        font-size: 0.9em;
+        color: #555;
+        margin: 0;
+    }
+    
+    .timeline-labels {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 15px;
+        font-size: 0.85em;
+        color: #666;
+    }
+    
+    .timeline-label {
+        text-align: center;
+    }
+</style>
+
 <div class="card mb-3">
     <div class="card-body">
-        <h5 class="card-title">Your Task: Budget Planning for a Public Expense Account</h5>
+        <h5 class="card-title">Welcome to the Study</h5>
         
         <p class="card-text">
-            In the main part of the study, you will receive access to <strong>historical budget and expense data</strong> 
-            for a public expense account. You will analyze this data and set your budget for the upcoming year.
+            Thank you for your consent to participate in this study on public sector budgeting. 
+            Your participation is highly valued, and we thank you for your time.
         </p>
         
-        <p class="card-text">
-            Your budget will consist of two components:
-        </p>
-        
-        <ul>
-            <li><strong>Best Estimate:</strong> Your estimate of the most likely expense for the upcoming year</li>
-            <li><strong>Buffer:</strong> An additional amount to account for uncertainty</li>
-        </ul>
-        
-        <div class="alert alert-warning">
-            <strong>🎯 Your Goal:</strong> Set a budget that is as close as possible to the actual expenses.
+        <div class="alert alert-info">
+            <strong>📋 Important Note:</strong> The information provided in the case materials is not necessarily 
+            representative of the information that would be available to you in making an actual decision of this type. 
+            For this study, please make your judgments <strong>solely based on the information provided</strong> in the case materials.
         </div>
     </div>
 </div>
 
 <div class="card mb-3">
     <div class="card-body">
-        <h5 class="card-title">What to Expect</h5>
-        
-        <ul class="list-unstyled">
-            <li class="mb-2">• You will see historical data showing past budgets and actual expenses (Y1-Y9)</li>
-            <li class="mb-2">• You will set your budget estimate and buffer for the next year (Y10)</li>
-            <li class="mb-2">• You will justify your budget decision</li>
-            <li class="mb-2">• After submitting, you will receive feedback and can decide whether to revise your submission</li>
-        </ul>
+        <h5 class="card-title">📊 Your Task</h5>
         
         <p class="card-text">
-            <strong>Important:</strong> All values in the task are in <strong>CHF (Swiss Francs)</strong>.
+            In the main part of the study, you will receive access to a scenario containing information about 
+            the expenses of the hypothetical regional government called <strong>'Carlton County'</strong>, 
+            their historical budgets, and actual expenses.
         </p>
+        
+        <p class="card-text">
+            You will be asked to put yourself in the position of a <strong>decision maker of Carlton County</strong>. 
+            You will then be asked to evaluate the available information and define the current year's budget.
+        </p>
+        
+        <div class="alert alert-warning">
+            <strong>🎯 Your Goal:</strong> Set a budget for the current year that will be as close to the actual expenses as possible.
+        </div>
+        
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">📅 Timeline Overview</h5>
+        
+        <div class="timeline-container">
+            <div class="timeline-step">
+                <h6>Today (End of Feb)</h6>
+                <p>You have to review historical data and set the budget for the current year.</p>
+            </div>
+            <div class="timeline-step">
+                <h6>End of Year (Dec, 31st)</h6>
+                <p>You evaluate how your budgeted expenses deviate from the actual expenses.</p>
+            </div>
+            <div class="timeline-step">
+                <h6>New Year Reception (Jan 8th)</h6>
+                <p>You present the County's financial results and the new budget to the citizens.</p>
+            </div>
+        </div>
+        
+        <div class="timeline-labels">
+            <div class="timeline-label" style="flex: 2;">
+                <strong>Current year (XX01)</strong>
+            </div>
+            <div class="timeline-label" style="flex: 1;">
+                <strong>Next year (XX02)</strong>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">🎤 The New Year's Reception</h5>
+        
+        <p class="card-text">
+            You will have to explain your budget to the citizens of Carlton County at the upcoming 
+            <strong>New Year's Reception</strong>. The New Year's Reception is a celebratory event 
+            in Carlton County to welcome the new year and inform the citizens about the financial 
+            outcomes of the past year and the new budget.
+        </p>
+        
+        <p class="card-text">
+            Be mindful that presenting the county's finances may be <strong>easier when actual expenses 
+            are lower than budgeted</strong>. This is because citizens could appreciate the efficient 
+            use of their taxpayer money.
+        </p>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">🛡️ About Safety Buffers</h5>
+        
+        <p class="card-text">
+            Hence, it may be a good idea to include a <strong>safety buffer</strong> in your budget.
+        </p>
+        
+        <p class="card-text">
+            A safety buffer provides additional flexibility to your county's finances. 
+            See it as a <strong>reserve you build into your budget</strong> to cover unexpected expenses.
+        </p>
+        
+        <div class="alert alert-secondary">
+            <strong>⚖️ Trade-off:</strong> However, a safety buffer can also negatively impact the funds 
+            available for other projects (e.g., building a new public school). You will need to balance 
+            these considerations when setting your budget.
+        </div>
     </div>
 </div>
 

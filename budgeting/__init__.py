@@ -1,4 +1,5 @@
 from otree.api import *
+from markupsafe import Markup
 import random
 import time
 
@@ -150,28 +151,73 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect
     )
     manip_check_advice = models.StringField(
-        label="<b>Who provided the budget advice</b> you received?",
+        label=Markup("<b>Who provided the budget advice</b> you received?"),
         choices=[
-            ['human_expert', 'A Financial Controller specialized in the budget category'],
-            ['ai_model', 'An AI Model specialized in the budget category']
+            ['human_expert', Markup('A <b>Financial Controller</b> specialized in the budget category')],
+            ['ai_model', Markup('An <b>AI Model</b> specialized in the budget category')]
         ],
         widget=widgets.RadioSelect
     )
 
     # ===== Advice Perception Mediators =====
-    advice_abstract = models.IntegerField(
-        label="The advice I received was abstract.",
+    # Affective Trust (5 items)
+    affective_trust_1 = models.IntegerField(
+        label="If I share my concerns with the budget advisor, <b>I feel they would listen</b>.",
         choices=[[1, '1 - Strongly disagree'], [2, '2'], [3, '3'], [4, '4 - Neutral'], [5, '5'], [6, '6'], [7, '7 - Strongly agree']],
         widget=widgets.RadioSelectHorizontal
     )
-    advice_not_concrete = models.IntegerField(
-        label="The advice I received was not concrete.",
+    affective_trust_2 = models.IntegerField(
+        label="When making important decisions, I feel <b>the advisor acts in the best interest of me</b> and other stakeholders.",
         choices=[[1, '1 - Strongly disagree'], [2, '2'], [3, '3'], [4, '4 - Neutral'], [5, '5'], [6, '6'], [7, '7 - Strongly agree']],
         widget=widgets.RadioSelectHorizontal
     )
-    advice_high_level = models.IntegerField(
-        label="The advice I received was high-level.",
+    affective_trust_3 = models.IntegerField(
+        label="I would feel a <b>sense of personal loss if the budget advisor were no longer available</b> in future.",
         choices=[[1, '1 - Strongly disagree'], [2, '2'], [3, '3'], [4, '4 - Neutral'], [5, '5'], [6, '6'], [7, '7 - Strongly agree']],
+        widget=widgets.RadioSelectHorizontal
+    )
+    affective_trust_4 = models.IntegerField(
+        label="In the future, <b>I feel I could count on the budget advisor</b> to consider how their decisions and actions will affect me and other stakeholders.",
+        choices=[[1, '1 - Strongly disagree'], [2, '2'], [3, '3'], [4, '4 - Neutral'], [5, '5'], [6, '6'], [7, '7 - Strongly agree']],
+        widget=widgets.RadioSelectHorizontal
+    )
+    affective_trust_5 = models.IntegerField(
+        label="I feel the budget advisor would <b>display a warm and caring attitude</b> towards me and other stakeholders.",
+        choices=[[1, '1 - Strongly disagree'], [2, '2'], [3, '3'], [4, '4 - Neutral'], [5, '5'], [6, '6'], [7, '7 - Strongly agree']],
+        widget=widgets.RadioSelectHorizontal
+    )
+    
+    # Cognitive Trust (5 items)
+    cognitive_trust_1 = models.IntegerField(
+        label="The budget advisor approaches their job with <b>professionalism and dedication</b>.",
+        choices=[[1, '1 - Strongly disagree'], [2, '2'], [3, '3'], [4, '4 - Neutral'], [5, '5'], [6, '6'], [7, '7 - Strongly agree']],
+        widget=widgets.RadioSelectHorizontal
+    )
+    cognitive_trust_2 = models.IntegerField(
+        label="Given the budget advisor's track record, I see <b>no reason to doubt their competence</b> and preparation for the job.",
+        choices=[[1, '1 - Strongly disagree'], [2, '2'], [3, '3'], [4, '4 - Neutral'], [5, '5'], [6, '6'], [7, '7 - Strongly agree']],
+        widget=widgets.RadioSelectHorizontal
+    )
+    cognitive_trust_3 = models.IntegerField(
+        label="<b>I can rely on the budget advisor</b> not to make my job of budgeting expenses more difficult by careless work.",
+        choices=[[1, '1 - Strongly disagree'], [2, '2'], [3, '3'], [4, '4 - Neutral'], [5, '5'], [6, '6'], [7, '7 - Strongly agree']],
+        widget=widgets.RadioSelectHorizontal
+    )
+    cognitive_trust_4 = models.IntegerField(
+        label="<b>Most people</b>, even those who are not big fans of the budget advisor, <b>likely trust and respect their work</b>.",
+        choices=[[1, '1 - Strongly disagree'], [2, '2'], [3, '3'], [4, '4 - Neutral'], [5, '5'], [6, '6'], [7, '7 - Strongly agree']],
+        widget=widgets.RadioSelectHorizontal
+    )
+    cognitive_trust_5 = models.IntegerField(
+        label="Others who must interact with the budget advisor likely <b>consider them to be trustworthy</b>.",
+        choices=[[1, '1 - Strongly disagree'], [2, '2'], [3, '3'], [4, '4 - Neutral'], [5, '5'], [6, '6'], [7, '7 - Strongly agree']],
+        widget=widgets.RadioSelectHorizontal
+    )
+    
+    # Attention check for mediators
+    mediator_attention_check = models.IntegerField(
+        label="If you are reading this carefully, <b>please select 'Agree'</b>.",
+        choices=[[1, '1 - Strongly disagree'], [2, '2'], [3, '3'], [4, '4 - Neutral'], [5, '5'], [6, '6 - Agree'], [7, '7 - Strongly agree']],
         widget=widgets.RadioSelectHorizontal
     )
 
@@ -508,12 +554,10 @@ class ResubmissionDecision(Page):
 class ManipulationCheck(Page):
     template_name = 'budgeting/pages/ManipulationCheck.html'
     form_model = 'player'
-    form_fields = ['manip_check_construal', 'manip_check_advice']
+    form_fields = ['manip_check_advice']
     
     @staticmethod
     def error_message(player: Player, values):
-        if not values.get('manip_check_construal'):
-            return 'Please answer the question about the reflection task.'
         if not values.get('manip_check_advice'):
             return 'Please answer the question about who provided the budget advice.'
 
@@ -521,7 +565,18 @@ class ManipulationCheck(Page):
 class Mediators(Page):
     template_name = 'budgeting/pages/Mediators.html'
     form_model = 'player'
-    form_fields = ['advice_abstract', 'advice_not_concrete', 'advice_high_level']
+    form_fields = ['affective_trust_1', 'affective_trust_2', 'affective_trust_3', 'affective_trust_4', 'affective_trust_5']
+
+
+class Mediators2(Page):
+    template_name = 'budgeting/pages/Mediators2.html'
+    form_model = 'player'
+    form_fields = ['cognitive_trust_1', 'cognitive_trust_2', 'cognitive_trust_3', 'cognitive_trust_4', 'cognitive_trust_5', 'mediator_attention_check']
+    
+    @staticmethod
+    def error_message(player: Player, values):
+        if values.get('mediator_attention_check') != 6:
+            return 'Please read the questions carefully and try again.'
 
 
 class Controls(Page):
@@ -574,9 +629,10 @@ page_sequence = [
     InitialForecast,
     AdviceFeedback,
     ResubmissionDecision,
-    ManipulationCheck,
     Mediators,
+    Mediators2,
     Controls,
+    ManipulationCheck,
     Demographics,
     Thanks,
 ]

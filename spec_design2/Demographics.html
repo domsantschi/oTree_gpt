@@ -197,6 +197,36 @@
     <div class="question-box">
         <p class="mb-3">
             <span class="question-number">1</span>
+            What is your <b>highest completed level of education</b>?
+        </p>
+        <div class="radio-group">
+            <div class="radio-option">
+                <input type="radio" name="qualification" value="High School / Baccalauréat" id="edu1" required>
+                <label for="edu1">High School / Baccalauréat</label>
+            </div>
+            <div class="radio-option">
+                <input type="radio" name="qualification" value="Bachelor's Degree" id="edu2">
+                <label for="edu2">Bachelor's Degree</label>
+            </div>
+            <div class="radio-option">
+                <input type="radio" name="qualification" value="Master's Degree" id="edu3">
+                <label for="edu3">Master's Degree</label>
+            </div>
+            <div class="radio-option">
+                <input type="radio" name="qualification" value="Doctoral Degree (PhD)" id="edu4">
+                <label for="edu4">Doctoral Degree (PhD)</label>
+            </div>
+            <div class="radio-option">
+                <input type="radio" name="qualification" value="Other" id="edu5">
+                <label for="edu5">Other</label>
+            </div>
+        </div>
+        {{ formfield_errors 'qualification' }}
+    </div>
+
+    <div class="question-box">
+        <p class="mb-3">
+            <span class="question-number">2</span>
             Please indicate your years of work experience in the following areas:
         </p>
         <table class="experience-table">
@@ -234,7 +264,7 @@
 
     <div class="question-box">
         <p class="mb-3">
-            <span class="question-number">2</span>
+            <span class="question-number">3</span>
             Please rate your level of familiarity with the following:
         </p>
         

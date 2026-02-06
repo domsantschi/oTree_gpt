@@ -55,11 +55,11 @@ class Player(BasePlayer):
     qualification = models.StringField(
         label="Highest Level of Education",
         choices=[
-            "Diploma",
-            "Bachelor Degree",
-            "Masters Degree",
-            "Doctoral Degree",
-            "None of the above",
+            "High School / Baccalauréat",
+            "Bachelor's Degree",
+            "Master's Degree",
+            "Doctoral Degree (PhD)",
+            "Other",
         ],
     )
     work_experience = models.IntegerField(
@@ -312,6 +312,7 @@ class Player(BasePlayer):
     assessment_page_time = models.FloatField(doc="Time spent on assessment page in seconds")
     manip_check_page_time = models.FloatField(doc="Time spent on manipulation check page in seconds")
     controls_page_time = models.FloatField(doc="Time spent on controls page in seconds")
+    characteristics_page_time = models.FloatField(doc="Time spent on characteristics page in seconds")
     demographics_page_time = models.FloatField(doc="Time spent on demographics page in seconds")
     thanks_page_time = models.FloatField(doc="Time spent on thanks page in seconds")
 
@@ -560,9 +561,6 @@ class Manip_Check(Page):
 class Controls(Page):
     form_model = 'player'
     form_fields = [
-        'risk_taking', 
-        'risk_avoidance',
-        'creativity',
         'manipulation_effort',
         'manipulation_difficulty',
         'attention_check',
@@ -575,7 +573,7 @@ class Controls(Page):
     @staticmethod
     def error_message(player: Player, values):
         if values['attention_check'] != 6:  # 6 corresponds to 'Agree'
-            return 'Question 6 is incorrect. Please review and try again.'
+            return 'Question 3 is incorrect. Please review and try again.'
     
     @staticmethod
     def get_timeout_seconds(player: Player):
@@ -587,9 +585,32 @@ class Controls(Page):
     def before_next_page(player: Player, timeout_happened):
         player.controls_page_time = time.time() - player.participant._start_time
 
+class Characteristics(Page):
+    form_model = 'player'
+    form_fields = [
+        'risk_taking', 
+        'risk_avoidance',
+        'creativity',
+    ]
+    
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.passed_screening
+    
+    @staticmethod
+    def get_timeout_seconds(player: Player):
+        import time
+        player.participant._start_time = time.time()
+        return None
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        player.characteristics_page_time = time.time() - player.participant._start_time
+
 class Demographics(Page):
     form_model = 'player'
     form_fields = [
+        'qualification',
         'work_experience',
         'rm_experience',
         'industry_experience',
@@ -656,9 +677,10 @@ page_sequence = [
     CLT_Condition,
     Spec_Condition,
     Assessment,
-    Manip_Check,
     Mediators,
     Controls,
+    Characteristics,
+    Manip_Check,
     Demographics,
     Thanks,
     Redirect
