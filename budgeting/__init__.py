@@ -135,21 +135,7 @@ class Player(BasePlayer):
         blank=False
     )
 
-    # Accuracy results (stored after reveal)
-    actual_expense = models.IntegerField(doc="Actual expense for the target year", blank=True)
-    initial_accuracy = models.FloatField(doc="Accuracy of initial estimate (absolute % deviation)", blank=True)
-    final_accuracy = models.FloatField(doc="Accuracy of final estimate (absolute % deviation)", blank=True)
-    advisor_accuracy = models.FloatField(doc="Accuracy of advisor recommendation (absolute % deviation)", blank=True)
-
     # ===== Manipulation Checks (only in final round) =====
-    manip_check_construal = models.StringField(
-        label="<b>At the beginning of the study, you were asked to reflect on...</b>",
-        choices=[
-            ['how', 'HOW the budgeting task is done (specific steps and processes)'],
-            ['why', 'WHY the budgeting task is done (broader goals and purposes)']
-        ],
-        widget=widgets.RadioSelect
-    )
     manip_check_advice = models.StringField(
         label=Markup("<b>Who provided the budget advice</b> you received?"),
         choices=[
@@ -223,27 +209,27 @@ class Player(BasePlayer):
 
     # ===== Controls (only in final round) =====
     political_ideology = models.IntegerField(
-        label="Where would you place yourself on the political spectrum?",
+        label="Where would you place yourself on the <b>political spectrum</b>?",
         choices=[[1, '1 - Very left-leaning'], [2, '2'], [3, '3'], [4, '4 - Neutral'], [5, '5'], [6, '6'], [7, '7 - Very right-leaning']],
         widget=widgets.RadioSelectHorizontal
     )
     trust_in_government = models.IntegerField(
-        label="I trust human experts to provide accurate and reliable advice.",
+        label="I <b>trust human experts</b> to provide accurate and reliable advice.",
         choices=[[1, '1 - Strongly disagree'], [2, '2'], [3, '3'], [4, '4 - Neutral'], [5, '5'], [6, '6'], [7, '7 - Strongly agree']],
         widget=widgets.RadioSelectHorizontal
     )
     trust_in_ai = models.IntegerField(
-        label="I trust AI models to provide accurate and reliable advice.",
+        label="I <b>trust AI models</b> to provide accurate and reliable advice.",
         choices=[[1, '1 - Strongly disagree'], [2, '2'], [3, '3'], [4, '4 - Neutral'], [5, '5'], [6, '6'], [7, '7 - Strongly agree']],
         widget=widgets.RadioSelectHorizontal
     )
     risk_attitude = models.IntegerField(
-        label="I am generally willing to take risks.",
+        label="I am generally <b>willing to take risks</b>.",
         choices=[[1, '1 - Strongly disagree'], [2, '2'], [3, '3'], [4, '4 - Neutral'], [5, '5'], [6, '6'], [7, '7 - Strongly agree']],
         widget=widgets.RadioSelectHorizontal
     )
     ai_familiarity = models.IntegerField(
-        label="I regularly use AI tools (e.g., ChatGPT, Copilot) in my daily activities.",
+        label="I <b>regularly use AI tools</b> (e.g., ChatGPT, Copilot) in my daily activities.",
         choices=[[1, '1 - Strongly disagree'], [2, '2'], [3, '3'], [4, '4 - Neutral'], [5, '5'], [6, '6'], [7, '7 - Strongly agree']],
         widget=widgets.RadioSelectHorizontal
     )
@@ -287,10 +273,21 @@ class Player(BasePlayer):
     )
 
     # Page timing
-    forecast_page_time = models.FloatField(blank=True)
-    advice_page_time = models.FloatField(blank=True)
-    resubmission_page_time = models.FloatField(blank=True)
-    results_page_time = models.FloatField(blank=True)
+    consent_page_time = models.FloatField(blank=True, doc="Time spent on consent page in seconds")
+    instructions_page_time = models.FloatField(blank=True, doc="Time spent on instructions page in seconds")
+    knowledge_check_page_time = models.FloatField(blank=True, doc="Time spent on knowledge check page in seconds")
+    context_page_time = models.FloatField(blank=True, doc="Time spent on context page in seconds")
+    construal_level_page_time = models.FloatField(blank=True, doc="Time spent on construal level page in seconds")
+    forecast_page_time = models.FloatField(blank=True, doc="Time spent on initial forecast page in seconds")
+    advice_page_time = models.FloatField(blank=True, doc="Time spent on advice feedback page in seconds")
+    resubmission_page_time = models.FloatField(blank=True, doc="Time spent on resubmission decision page in seconds")
+    mediators_page_time = models.FloatField(blank=True, doc="Time spent on mediators page in seconds")
+    mediators2_page_time = models.FloatField(blank=True, doc="Time spent on mediators2 page in seconds")
+    controls_page_time = models.FloatField(blank=True, doc="Time spent on controls page in seconds")
+    manipulation_check_page_time = models.FloatField(blank=True, doc="Time spent on manipulation check page in seconds")
+    demographics_page_time = models.FloatField(blank=True, doc="Time spent on demographics page in seconds")
+    thanks_page_time = models.FloatField(blank=True, doc="Time spent on thanks page in seconds")
+    intermediate_page_time = models.FloatField(blank=True, doc="Time spent on intermediate page in seconds")
 
 
 # ===== FUNCTIONS =====
@@ -302,6 +299,8 @@ def creating_session(subsession: Subsession):
         player.construal_level = random.choice(['concrete', 'abstract'])
         # Store in participant.vars for use in subsequent apps (e.g., spec_design2)
         player.participant.vars['construal_level'] = player.construal_level
+        # Store participant code for linking sessions across studies
+        player.participant.vars['budgeting_participant_code'] = player.participant.code
         # IV2: Advice source condition
         player.advice_condition = random.choice(['human_expert', 'ai_model'])
         # Set category name
@@ -320,11 +319,25 @@ class Consent(Page):
     form_model = 'player'
     form_fields = ['declined_consent']
 
+    @staticmethod
+    def get_timeout_seconds(player: Player):
+        player.participant._page_start = time.time()
+        return None
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        player.consent_page_time = time.time() - player.participant._page_start
+
 
 class KnowledgeCheck(Page):
     template_name = 'budgeting/pages/KnowledgeCheck.html'
     form_model = 'player'
     form_fields = ['knowledge_q1', 'knowledge_q2', 'knowledge_q3']
+
+    @staticmethod
+    def get_timeout_seconds(player: Player):
+        player.participant._page_start = time.time()
+        return None
 
     @staticmethod
     def error_message(player: Player, values):
@@ -340,13 +353,35 @@ class KnowledgeCheck(Page):
         if errors:
             return 'Some answers are incorrect. Please review and try again: ' + ' '.join(errors)
 
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        player.knowledge_check_page_time = time.time() - player.participant._page_start
+
 
 class Instructions(Page):
     template_name = 'budgeting/pages/Instructions.html'
 
+    @staticmethod
+    def get_timeout_seconds(player: Player):
+        player.participant._page_start = time.time()
+        return None
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        player.instructions_page_time = time.time() - player.participant._page_start
+
 
 class Context(Page):
     template_name = 'budgeting/pages/Context.html'
+
+    @staticmethod
+    def get_timeout_seconds(player: Player):
+        player.participant._page_start = time.time()
+        return None
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        player.context_page_time = time.time() - player.participant._page_start
 
 
 class ConstrualLevel(Page):
@@ -355,10 +390,19 @@ class ConstrualLevel(Page):
     form_fields = ['construal_response']
 
     @staticmethod
+    def get_timeout_seconds(player: Player):
+        player.participant._page_start = time.time()
+        return None
+
+    @staticmethod
     def vars_for_template(player: Player):
         return {
             'construal_level': player.construal_level,
         }
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        player.construal_level_page_time = time.time() - player.participant._page_start
 
 
 class InitialForecast(Page):
@@ -557,11 +601,20 @@ class ManipulationCheck(Page):
     template_name = 'budgeting/pages/ManipulationCheck.html'
     form_model = 'player'
     form_fields = ['manip_check_advice']
+
+    @staticmethod
+    def get_timeout_seconds(player: Player):
+        player.participant._page_start = time.time()
+        return None
     
     @staticmethod
     def error_message(player: Player, values):
         if not values.get('manip_check_advice'):
             return 'Please answer the question about who provided the budget advice.'
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        player.manipulation_check_page_time = time.time() - player.participant._page_start
 
 
 class Mediators(Page):
@@ -569,22 +622,45 @@ class Mediators(Page):
     form_model = 'player'
     form_fields = ['affective_trust_1', 'affective_trust_2', 'affective_trust_3', 'affective_trust_4', 'affective_trust_5']
 
+    @staticmethod
+    def get_timeout_seconds(player: Player):
+        player.participant._page_start = time.time()
+        return None
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        player.mediators_page_time = time.time() - player.participant._page_start
+
 
 class Mediators2(Page):
     template_name = 'budgeting/pages/Mediators2.html'
     form_model = 'player'
     form_fields = ['cognitive_trust_1', 'cognitive_trust_2', 'cognitive_trust_3', 'cognitive_trust_4', 'cognitive_trust_5', 'mediator_attention_check']
+
+    @staticmethod
+    def get_timeout_seconds(player: Player):
+        player.participant._page_start = time.time()
+        return None
     
     @staticmethod
     def error_message(player: Player, values):
         if values.get('mediator_attention_check') != 6:
             return 'Please read the questions carefully and try again.'
 
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        player.mediators2_page_time = time.time() - player.participant._page_start
+
 
 class Controls(Page):
     template_name = 'budgeting/pages/Controls.html'
     form_model = 'player'
     form_fields = ['political_ideology', 'trust_in_government', 'trust_in_ai', 'risk_attitude', 'ai_familiarity']
+
+    @staticmethod
+    def get_timeout_seconds(player: Player):
+        player.participant._page_start = time.time()
+        return None
     
     @staticmethod
     def error_message(player: Player, values):
@@ -597,11 +673,24 @@ class Controls(Page):
         if values.get('risk_attitude') is None:
             return 'Please rate your willingness to take risks.'
 
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        player.controls_page_time = time.time() - player.participant._page_start
+
 
 class Demographics(Page):
     template_name = 'budgeting/pages/Demographics.html'
     form_model = 'player'
     form_fields = ['age', 'gender', 'work_experience', 'politics_experience', 'budgeting_experience']
+
+    @staticmethod
+    def get_timeout_seconds(player: Player):
+        player.participant._page_start = time.time()
+        return None
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        player.demographics_page_time = time.time() - player.participant._page_start
 
 
 class Thanks(Page):
@@ -610,14 +699,28 @@ class Thanks(Page):
     form_fields = ['feedback']
 
     @staticmethod
+    def get_timeout_seconds(player: Player):
+        player.participant._page_start = time.time()
+        return None
+
+    @staticmethod
     def js_vars(player: Player):
         return dict(
             completionlink=player.session.config.get('completionlink', '')
         )
 
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        player.thanks_page_time = time.time() - player.participant._page_start
+
 
 class Intermediate(Page):
     template_name = 'budgeting/pages/Intermediate.html'
+
+    @staticmethod
+    def get_timeout_seconds(player: Player):
+        player.participant._page_start = time.time()
+        return None
     
     @staticmethod
     def vars_for_template(player: Player):
@@ -627,6 +730,7 @@ class Intermediate(Page):
     
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
+        player.intermediate_page_time = time.time() - player.participant._page_start
         player.participant.vars['completed_budgeting'] = True
 
 

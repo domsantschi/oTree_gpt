@@ -69,10 +69,23 @@
     </div>
 
     <div class="feedback-section">
+        <h5>� Bonus Prize Consideration</h5>
+        <p class="text-muted">
+            As mentioned earlier, the participant who submits the <b>highest quality response</b> 
+            will receive an additional <b>CHF 50 cash prize</b>.
+        </p>
+        <p class="text-muted">
+            If you would like to be considered for this bonus prize, please provide your email address below (optional):
+        </p>
+        
+        <input type="email" name="prize_email" class="form-control" placeholder="your.email@example.com">
+    </div>
+
+    <div class="feedback-section">
         <h5>📝 We Value Your Feedback!</h5>
         <p class="text-muted">Please share any comments or suggestions about the study (optional):</p>
         
-        {{ formfield 'feedback' label="" }}
+        {{ formfield 'feedback' }}
         
         <p class="text-muted mt-3">
             Thank you for your participation! Click "Next" to finish.

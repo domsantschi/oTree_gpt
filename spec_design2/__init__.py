@@ -37,6 +37,10 @@ class Group(BaseGroup):
 class Player(BasePlayer):
     
     prolific_id = models.StringField(default=str(" "))
+    budgeting_participant_code = models.StringField(
+        blank=True,
+        doc="Participant code from the budgeting study to link sessions"
+    )
     
     gender = models.StringField(
         label="Gender",
@@ -105,8 +109,8 @@ class Player(BasePlayer):
     )
     
     # Manipulation checks
-    video_check = models.StringField(
-        label="Did you listen to audio and read a speculative scenario PDF during the study?",
+    specdesign_check = models.StringField(
+        label="Did you get access to a speculative What If scenario with images during the study?",
         choices=["Speculative Design Absent", "Speculative Design Present"],
         doc="Manipulation check for speculative design condition"
     )
@@ -124,6 +128,11 @@ class Player(BasePlayer):
     feedback = models.LongStringField(
         label="Any feedback about the study?",
         blank=True
+    )
+    prize_email = models.StringField(
+        label="Email address for prize consideration",
+        blank=True,
+        doc="Email address for participants who want to be considered for the CHF 50 bonus prize"
     )
     
     # Screening questions
@@ -206,24 +215,24 @@ class Player(BasePlayer):
         doc="The scenario helped me process information related to potential risks more effectively"
     )
     
-    # Mediators - Information Impact
-    abstract_to_concrete = models.IntegerField(
-        label="Abstract to concrete transformation",
+    # Mediators - Speculative Design Impact
+    scenario_creativity = models.IntegerField(
+        label="Scenario augmented creativity",
         min=1,
         max=7,
-        doc="The information made abstract risks feel more concrete and tangible"
+        doc="The what-if scenario augmented my creativity to identify risks"
     )
-    impact_feeling = models.IntegerField(
-        label="Impact feeling",
+    risk_accessibility = models.IntegerField(
+        label="Risk accessibility",
         min=1,
         max=7,
-        doc="The information helped me feel the potential impact of the risks"
+        doc="The what-if scenario made the risks of the product innovation more accessible"
     )
-    mental_experience = models.IntegerField(
-        label="Mental experience of risks",
+    risk_tangibility = models.IntegerField(
+        label="Risk tangibility",
         min=1,
         max=7,
-        doc="The information allowed me to mentally experience what the risks might be like"
+        doc="The what-if scenario made the risks of the new product innovation more tangible"
     )
     
     mediator_attention_check = models.IntegerField(
@@ -305,14 +314,16 @@ class Player(BasePlayer):
 
     # Page timing fields
     consent_page_time = models.FloatField(doc="Time spent on consent page in seconds")
+    screening_page_time = models.FloatField(doc="Time spent on screening page in seconds")
     introduction_page_time = models.FloatField(doc="Time spent on introduction page in seconds")
     background_page_time = models.FloatField(doc="Time spent on background page in seconds")
-    condition1_page_time = models.FloatField(doc="Time spent on condition 1 page in seconds")
-    condition2_page_time = models.FloatField(doc="Time spent on condition 2 page in seconds")
+    clt_condition_page_time = models.FloatField(doc="Time spent on construal level condition page in seconds")
+    spec_condition_page_time = models.FloatField(doc="Time spent on speculative design condition page in seconds")
     assessment_page_time = models.FloatField(doc="Time spent on assessment page in seconds")
-    manip_check_page_time = models.FloatField(doc="Time spent on manipulation check page in seconds")
+    mediators_page_time = models.FloatField(doc="Time spent on mediators page in seconds")
     controls_page_time = models.FloatField(doc="Time spent on controls page in seconds")
     characteristics_page_time = models.FloatField(doc="Time spent on characteristics page in seconds")
+    manip_check_page_time = models.FloatField(doc="Time spent on manipulation check page in seconds")
     demographics_page_time = models.FloatField(doc="Time spent on demographics page in seconds")
     thanks_page_time = models.FloatField(doc="Time spent on thanks page in seconds")
 
@@ -334,6 +345,11 @@ def creating_session(subsession: Subsession):
         for i, p in enumerate(subsession.get_players()):
             p.participant.wealth = cu(0)
             p.participant.part_id = create_id()
+            
+            # Check if participant came from budgeting study and save linking code
+            if 'budgeting_participant_code' in p.participant.vars:
+                p.budgeting_participant_code = p.participant.vars['budgeting_participant_code']
+                print(f"Player {i+1} linked to budgeting participant: {p.budgeting_participant_code}")
             
             # Check if construal level was already assigned in budgeting study
             if 'construal_level' in p.participant.vars:
@@ -381,6 +397,12 @@ class Screening(Page):
     form_fields = ['screening_q1', 'screening_q2', 'screening_q3']
     
     @staticmethod
+    def get_timeout_seconds(player: Player):
+        import time
+        player.participant._start_time = time.time()
+        return None
+    
+    @staticmethod
     def error_message(player: Player, values):
         # Correct answers
         correct_answers = {
@@ -403,6 +425,7 @@ class Screening(Page):
     
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
+        player.screening_page_time = time.time() - player.participant._start_time
         # Always mark as passed since they can't proceed without correct answers
         player.passed_screening = True
         print(f"Participant {player.participant.label}: Passed screening")
@@ -479,7 +502,7 @@ class CLT_Condition(Page):
     
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
-        player.condition1_page_time = time.time() - player.participant._start_time
+        player.clt_condition_page_time = time.time() - player.participant._start_time
         # Log the construal response
         print(f"Participant {player.participant.label}: Construal response = {player.construal_response}")
 
@@ -522,14 +545,14 @@ class Spec_Condition(Page):
     
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
-        player.condition2_page_time = time.time() - player.participant._start_time
+        player.spec_condition_page_time = time.time() - player.participant._start_time
 
 class Mediators(Page):
     form_model = 'player'
     form_fields = [
-        'abstract_to_concrete',
-        'impact_feeling',
-        'mental_experience',
+        'scenario_creativity',
+        'risk_accessibility',
+        'risk_tangibility',
         'mediator_attention_check',
     ]
     
@@ -550,11 +573,11 @@ class Mediators(Page):
  
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
-        player.controls_page_time = time.time() - player.participant._start_time
+        player.mediators_page_time = time.time() - player.participant._start_time
 
 class Manip_Check(Page):
     form_model = 'player'
-    form_fields = ['video_check', 'construal_check']
+    form_fields = ['specdesign_check', 'construal_check']
     
     @staticmethod
     def is_displayed(player: Player):
@@ -570,7 +593,7 @@ class Manip_Check(Page):
     def before_next_page(player: Player, timeout_happened):
         player.manip_check_page_time = time.time() - player.participant._start_time
         # Log manipulation check responses
-        print(f"Participant {player.participant.label}: Video check = {player.video_check}, Construal check = {player.construal_check}")
+        print(f"Participant {player.participant.label}: Specdesign check = {player.specdesign_check}, Construal check = {player.construal_check}")
 
 class Controls(Page):
     form_model = 'player'
@@ -648,7 +671,7 @@ class Demographics(Page):
 
 class Thanks(Page):
     form_model = 'player'
-    form_fields = ['feedback']  # Capture feedback in the database
+    form_fields = ['prize_email', 'feedback']  # Capture email and feedback in the database
     
     @staticmethod
     def is_displayed(player: Player):

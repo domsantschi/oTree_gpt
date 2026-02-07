@@ -75,12 +75,17 @@ PARTICIPANT_FIELDS = [
     'failed_knowledge_check',  # Tracks whether the participant failed the knowledge check
     'part_id',                # Tracks participant ID
     '_start_time',            # Used for tracking page timing
+    '_page_start',            # Generic page timing field
     '_forecast_start',        # Timing for forecast page
     '_advice_start',          # Timing for advice page
     '_resubmission_start',    # Timing for resubmission page
     '_results_start',         # Timing for results page
     'role_condition',         # Role condition (stored for multi-round access)
     'advice_condition',       # Advice condition (stored for multi-round access)
+    'construal_level',        # Construal level from budgeting study
+    'budgeting_participant_code',  # Participant code from budgeting study
+    'completed_budgeting',    # Whether participant completed budgeting study
+    'wealth',                 # For spec_design2
 ]
 SESSION_FIELDS = []
 

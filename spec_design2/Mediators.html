@@ -119,8 +119,8 @@
             <div class="likert-scale">
                 {% for i in range(1, 8) %}
                     <div class="scale-option">
-                        <input type="radio" name="abstract_to_concrete" value="{{ i }}" id="abstract_to_concrete_{{ i }}" required>
-                        <label class="radio-label" for="abstract_to_concrete_{{ i }}">
+                        <input type="radio" name="scenario_creativity" value="{{ i }}" id="scenario_creativity_{{ i }}" required>
+                        <label class="radio-label" for="scenario_creativity_{{ i }}">
                             {% if i == 1 %}Strongly<br>disagree{% endif %}
                             {% if i == 2 %}Disagree{% endif %}
                             {% if i == 3 %}Somewhat<br>disagree{% endif %}
@@ -132,7 +132,7 @@
                     </div>
                 {% endfor %}
             </div>
-            {{ formfield_errors 'abstract_to_concrete' }}
+            {{ formfield_errors 'scenario_creativity' }}
         </div>
 
         <div class="question-box">
@@ -143,8 +143,8 @@
             <div class="likert-scale">
                 {% for i in range(1, 8) %}
                     <div class="scale-option">
-                        <input type="radio" name="impact_feeling" value="{{ i }}" id="impact_feeling_{{ i }}" required>
-                        <label class="radio-label" for="impact_feeling_{{ i }}">
+                        <input type="radio" name="risk_accessibility" value="{{ i }}" id="risk_accessibility_{{ i }}" required>
+                        <label class="radio-label" for="risk_accessibility_{{ i }}">
                             {% if i == 1 %}Strongly<br>disagree{% endif %}
                             {% if i == 2 %}Disagree{% endif %}
                             {% if i == 3 %}Somewhat<br>disagree{% endif %}
@@ -156,7 +156,7 @@
                     </div>
                 {% endfor %}
             </div>
-            {{ formfield_errors 'impact_feeling' }}
+            {{ formfield_errors 'risk_accessibility' }}
         </div>
 
         <div class="question-box">
@@ -167,8 +167,8 @@
             <div class="likert-scale">
                 {% for i in range(1, 8) %}
                     <div class="scale-option">
-                        <input type="radio" name="mental_experience" value="{{ i }}" id="mental_experience_{{ i }}" required>
-                        <label class="radio-label" for="mental_experience_{{ i }}">
+                        <input type="radio" name="risk_tangibility" value="{{ i }}" id="risk_tangibility_{{ i }}" required>
+                        <label class="radio-label" for="risk_tangibility_{{ i }}">
                             {% if i == 1 %}Strongly<br>disagree{% endif %}
                             {% if i == 2 %}Disagree{% endif %}
                             {% if i == 3 %}Somewhat<br>disagree{% endif %}
@@ -180,7 +180,7 @@
                     </div>
                 {% endfor %}
             </div>
-            {{ formfield_errors 'mental_experience' }}
+            {{ formfield_errors 'risk_tangibility' }}
         </div>
 
         <div class="question-box">
