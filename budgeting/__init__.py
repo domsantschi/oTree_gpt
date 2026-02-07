@@ -724,8 +724,14 @@ class Intermediate(Page):
     
     @staticmethod
     def vars_for_template(player: Player):
+        # Include participant code and construal level in redirect URL for linking across studies
+        base_url = 'https://ccma-experiments-37b86b110ea3.herokuapp.com/room/spec_design2'
+        participant_code = player.participant.code
+        construal = player.construal_level  # 'concrete' or 'abstract'
+        # Encode both in participant_label: CODE_CONSTRUAL
+        redirect_url = f"{base_url}?participant_label={participant_code}_{construal}"
         return dict(
-            redirect_url='https://ccma-experiments-37b86b110ea3.herokuapp.com/room/spec_design2'
+            redirect_url=redirect_url
         )
     
     @staticmethod

@@ -346,28 +346,14 @@ def creating_session(subsession: Subsession):
             p.participant.wealth = cu(0)
             p.participant.part_id = create_id()
             
-            # Check if participant came from budgeting study and save linking code
-            if 'budgeting_participant_code' in p.participant.vars:
-                p.budgeting_participant_code = p.participant.vars['budgeting_participant_code']
-                print(f"Player {i+1} linked to budgeting participant: {p.budgeting_participant_code}")
-            
-            # Check if construal level was already assigned in budgeting study
-            if 'construal_level' in p.participant.vars:
-                # Map from budgeting format to spec_design2 format
-                budgeting_construal = p.participant.vars['construal_level']
-                if budgeting_construal == 'concrete':
-                    construal_level = 'Concrete Construal'
-                else:  # 'abstract'
-                    construal_level = 'Abstract Construal'
-                # Still randomly assign speculative design
-                speculative_design = random.choice(speculative_design_conditions)
-            else:
-                # If no prior assignment, randomly assign both conditions
-                construal_level, speculative_design = combined_conditions[i % len(combined_conditions)]
+            # Note: budgeting_participant_code and construal_level are set in Consent.before_next_page
+            # when the participant joins via URL redirect from budgeting study.
+            # For participants not coming from budgeting, randomly assign conditions here.
+            construal_level, speculative_design = combined_conditions[i % len(combined_conditions)]
             
             p.construal_level = construal_level
             p.speculative_design = speculative_design
-            print(f"Player {i+1} assigned: Construal Level = {construal_level}, Speculative Design = {speculative_design}")
+            print(f"Player {i+1} initial assignment: Construal Level = {construal_level}, Speculative Design = {speculative_design}")
 
 # --- Pages --------------------------------------------------------------------
 
@@ -385,6 +371,24 @@ class Consent(Page):
     def before_next_page(player: Player, timeout_happened):
         import time
         player.consent_page_time = time.time() - player.participant._start_time
+        
+        # Parse budgeting participant code and construal level from URL parameter
+        # Format: participant_label = CODE_CONSTRUAL (e.g., "abc123_concrete")
+        if player.participant.label and '_' in player.participant.label:
+            parts = player.participant.label.rsplit('_', 1)
+            if len(parts) == 2:
+                budgeting_code, construal = parts
+                player.budgeting_participant_code = budgeting_code
+                # Map construal level from budgeting format to spec_design2 format
+                if construal == 'concrete':
+                    player.construal_level = 'Concrete Construal'
+                elif construal == 'abstract':
+                    player.construal_level = 'Abstract Construal'
+                print(f"Linked to budgeting participant: {budgeting_code}, Construal: {player.construal_level}")
+        elif player.participant.label:
+            # Fallback: just participant code without construal
+            player.budgeting_participant_code = player.participant.label
+            print(f"Linked to budgeting participant: {player.budgeting_participant_code}")
         
         # Log consent decision
         if player.declined_consent:
