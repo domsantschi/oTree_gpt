@@ -49,6 +49,9 @@
         <div class="form-group">
             <input type="text" id="instructorCode" class="form-control" placeholder="Enter code here" style="max-width: 200px;">
         </div>
+        <p class="text-muted mt-3" style="font-size: 0.8em;">
+            <em>Session link: {{ participant_code }}_{{ construal_level }}</em>
+        </p>
     </div>
 </div>
 
@@ -77,9 +80,18 @@
             method: 'POST',
             body: formData
         }).then(function() {
-            window.location.href = "{{ redirect_url }}";
+            // Redirect with participant info as participant_label parameter
+            var baseUrl = 'https://ccma-experiments-37b86b110ea3.herokuapp.com/room/spec_design2';
+            var participantCode = '{{ participant_code }}';
+            var construalLevel = '{{ construal_level }}';
+            var redirectUrl = baseUrl + '?participant_label=' + participantCode + '_' + construalLevel;
+            window.location.href = redirectUrl;
         }).catch(function() {
-            window.location.href = "{{ redirect_url }}";
+            var baseUrl = 'https://ccma-experiments-37b86b110ea3.herokuapp.com/room/spec_design2';
+            var participantCode = '{{ participant_code }}';
+            var construalLevel = '{{ construal_level }}';
+            var redirectUrl = baseUrl + '?participant_label=' + participantCode + '_' + construalLevel;
+            window.location.href = redirectUrl;
         });
     });
 </script>
