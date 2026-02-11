@@ -5,32 +5,41 @@
 {{ block content }}
 
 <style>
-    .otree-form-group .controls {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
+    .likert-scale {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 10px;
+        margin: 15px 0;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
     }
-    
-    .otree-form-group .form-check-inline {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        flex: 1;
-        margin: 0;
-        padding: 0 2px;
-    }
-    
-    .otree-form-group .form-check-inline input[type="radio"] {
-        margin-bottom: 0.35rem;
-    }
-    
-    .otree-form-group .form-check-inline label {
+
+    .scale-option {
         text-align: center;
-        font-size: 0.75em;
-        margin: 0;
+        padding: 10px 5px;
+    }
+
+    .scale-option input[type="radio"] {
+        transform: scale(1.2);
+        margin-bottom: 8px;
+    }
+
+    .radio-label {
+        font-size: 0.8em;
+        margin-top: 8px;
+        display: block;
+        color: #495057;
         line-height: 1.2;
-        word-wrap: break-word;
-        max-width: 100%;
+    }
+
+    .question-item {
+        padding: 15px 0;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .question-item:last-child {
+        border-bottom: none;
     }
 </style>
 
@@ -40,34 +49,110 @@
     </div>
     <div class="card-body">
         <p><b>Please indicate your agreement</b> with the following statements about the budget advisor:</p>
-        <p class="text-muted"><em>(1 = Strongly Disagree; 7 = Strongly Agree)</em></p>
         
-        <div class="mb-4">
-            {{ formfield 'affective_trust_1' }}
+        <div class="question-item">
+            <p class="mb-2">If I share my concerns with the budget advisor, <b>I feel they would listen</b>.</p>
+            <div class="likert-scale">
+                {% for i in range(1, 8) %}
+                    <div class="scale-option">
+                        <input type="radio" name="affective_trust_1" value="{{ i }}" id="affective_trust_1_{{ i }}" required>
+                        <label class="radio-label" for="affective_trust_1_{{ i }}">
+                            {% if i == 1 %}Strongly<br>disagree{% endif %}
+                            {% if i == 2 %}Disagree{% endif %}
+                            {% if i == 3 %}Somewhat<br>disagree{% endif %}
+                            {% if i == 4 %}Neutral{% endif %}
+                            {% if i == 5 %}Somewhat<br>agree{% endif %}
+                            {% if i == 6 %}Agree{% endif %}
+                            {% if i == 7 %}Strongly<br>agree{% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ formfield_errors 'affective_trust_1' }}
         </div>
         
-        <hr>
-        
-        <div class="mb-4">
-            {{ formfield 'affective_trust_2' }}
+        <div class="question-item">
+            <p class="mb-2">When making important decisions, I feel <b>the advisor acts in the best interest of me</b> and other stakeholders.</p>
+            <div class="likert-scale">
+                {% for i in range(1, 8) %}
+                    <div class="scale-option">
+                        <input type="radio" name="affective_trust_2" value="{{ i }}" id="affective_trust_2_{{ i }}" required>
+                        <label class="radio-label" for="affective_trust_2_{{ i }}">
+                            {% if i == 1 %}Strongly<br>disagree{% endif %}
+                            {% if i == 2 %}Disagree{% endif %}
+                            {% if i == 3 %}Somewhat<br>disagree{% endif %}
+                            {% if i == 4 %}Neutral{% endif %}
+                            {% if i == 5 %}Somewhat<br>agree{% endif %}
+                            {% if i == 6 %}Agree{% endif %}
+                            {% if i == 7 %}Strongly<br>agree{% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ formfield_errors 'affective_trust_2' }}
         </div>
         
-        <hr>
-        
-        <div class="mb-4">
-            {{ formfield 'affective_trust_3' }}
+        <div class="question-item">
+            <p class="mb-2">I would feel a <b>sense of personal loss if the budget advisor were no longer available</b> in future.</p>
+            <div class="likert-scale">
+                {% for i in range(1, 8) %}
+                    <div class="scale-option">
+                        <input type="radio" name="affective_trust_3" value="{{ i }}" id="affective_trust_3_{{ i }}" required>
+                        <label class="radio-label" for="affective_trust_3_{{ i }}">
+                            {% if i == 1 %}Strongly<br>disagree{% endif %}
+                            {% if i == 2 %}Disagree{% endif %}
+                            {% if i == 3 %}Somewhat<br>disagree{% endif %}
+                            {% if i == 4 %}Neutral{% endif %}
+                            {% if i == 5 %}Somewhat<br>agree{% endif %}
+                            {% if i == 6 %}Agree{% endif %}
+                            {% if i == 7 %}Strongly<br>agree{% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ formfield_errors 'affective_trust_3' }}
         </div>
         
-        <hr>
-        
-        <div class="mb-4">
-            {{ formfield 'affective_trust_4' }}
+        <div class="question-item">
+            <p class="mb-2">In the future, <b>I feel I could count on the budget advisor</b> to consider how their decisions and actions will affect me and other stakeholders.</p>
+            <div class="likert-scale">
+                {% for i in range(1, 8) %}
+                    <div class="scale-option">
+                        <input type="radio" name="affective_trust_4" value="{{ i }}" id="affective_trust_4_{{ i }}" required>
+                        <label class="radio-label" for="affective_trust_4_{{ i }}">
+                            {% if i == 1 %}Strongly<br>disagree{% endif %}
+                            {% if i == 2 %}Disagree{% endif %}
+                            {% if i == 3 %}Somewhat<br>disagree{% endif %}
+                            {% if i == 4 %}Neutral{% endif %}
+                            {% if i == 5 %}Somewhat<br>agree{% endif %}
+                            {% if i == 6 %}Agree{% endif %}
+                            {% if i == 7 %}Strongly<br>agree{% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ formfield_errors 'affective_trust_4' }}
         </div>
         
-        <hr>
-        
-        <div class="mb-4">
-            {{ formfield 'affective_trust_5' }}
+        <div class="question-item">
+            <p class="mb-2">I feel the budget advisor would <b>display a warm and caring attitude</b> towards me and other stakeholders.</p>
+            <div class="likert-scale">
+                {% for i in range(1, 8) %}
+                    <div class="scale-option">
+                        <input type="radio" name="affective_trust_5" value="{{ i }}" id="affective_trust_5_{{ i }}" required>
+                        <label class="radio-label" for="affective_trust_5_{{ i }}">
+                            {% if i == 1 %}Strongly<br>disagree{% endif %}
+                            {% if i == 2 %}Disagree{% endif %}
+                            {% if i == 3 %}Somewhat<br>disagree{% endif %}
+                            {% if i == 4 %}Neutral{% endif %}
+                            {% if i == 5 %}Somewhat<br>agree{% endif %}
+                            {% if i == 6 %}Agree{% endif %}
+                            {% if i == 7 %}Strongly<br>agree{% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ formfield_errors 'affective_trust_5' }}
         </div>
     </div>
 </div>

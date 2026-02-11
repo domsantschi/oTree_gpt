@@ -5,32 +5,41 @@
 {{ block content }}
 
 <style>
-    .otree-form-group .controls {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
+    .likert-scale {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 10px;
+        margin: 15px 0;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
     }
-    
-    .otree-form-group .form-check-inline {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        flex: 1;
-        margin: 0;
-        padding: 0 2px;
-    }
-    
-    .otree-form-group .form-check-inline input[type="radio"] {
-        margin-bottom: 0.35rem;
-    }
-    
-    .otree-form-group .form-check-inline label {
+
+    .scale-option {
         text-align: center;
-        font-size: 0.75em;
-        margin: 0;
+        padding: 10px 5px;
+    }
+
+    .scale-option input[type="radio"] {
+        transform: scale(1.2);
+        margin-bottom: 8px;
+    }
+
+    .radio-label {
+        font-size: 0.8em;
+        margin-top: 8px;
+        display: block;
+        color: #495057;
         line-height: 1.2;
-        word-wrap: break-word;
-        max-width: 100%;
+    }
+
+    .question-item {
+        padding: 15px 0;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .question-item:last-child {
+        border-bottom: none;
     }
 </style>
 
@@ -40,40 +49,131 @@
     </div>
     <div class="card-body">
         <p><b>Please indicate your agreement</b> with the following statements about the budget advisor:</p>
-        <p class="text-muted"><em>(1 = Strongly Disagree; 7 = Strongly Agree)</em></p>
         
-        <div class="mb-4">
-            {{ formfield 'cognitive_trust_1' }}
+        <div class="question-item">
+            <p class="mb-2">The budget advisor approaches their job with <b>professionalism and dedication</b>.</p>
+            <div class="likert-scale">
+                {% for i in range(1, 8) %}
+                    <div class="scale-option">
+                        <input type="radio" name="cognitive_trust_1" value="{{ i }}" id="cognitive_trust_1_{{ i }}" required>
+                        <label class="radio-label" for="cognitive_trust_1_{{ i }}">
+                            {% if i == 1 %}Strongly<br>disagree{% endif %}
+                            {% if i == 2 %}Disagree{% endif %}
+                            {% if i == 3 %}Somewhat<br>disagree{% endif %}
+                            {% if i == 4 %}Neutral{% endif %}
+                            {% if i == 5 %}Somewhat<br>agree{% endif %}
+                            {% if i == 6 %}Agree{% endif %}
+                            {% if i == 7 %}Strongly<br>agree{% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ formfield_errors 'cognitive_trust_1' }}
         </div>
         
-        <hr>
-        
-        <div class="mb-4">
-            {{ formfield 'cognitive_trust_2' }}
+        <div class="question-item">
+            <p class="mb-2">Given the budget advisor's track record, I see <b>no reason to doubt their competence</b> and preparation for the job.</p>
+            <div class="likert-scale">
+                {% for i in range(1, 8) %}
+                    <div class="scale-option">
+                        <input type="radio" name="cognitive_trust_2" value="{{ i }}" id="cognitive_trust_2_{{ i }}" required>
+                        <label class="radio-label" for="cognitive_trust_2_{{ i }}">
+                            {% if i == 1 %}Strongly<br>disagree{% endif %}
+                            {% if i == 2 %}Disagree{% endif %}
+                            {% if i == 3 %}Somewhat<br>disagree{% endif %}
+                            {% if i == 4 %}Neutral{% endif %}
+                            {% if i == 5 %}Somewhat<br>agree{% endif %}
+                            {% if i == 6 %}Agree{% endif %}
+                            {% if i == 7 %}Strongly<br>agree{% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ formfield_errors 'cognitive_trust_2' }}
         </div>
         
-        <hr>
-        
-        <div class="mb-4">
-            {{ formfield 'cognitive_trust_3' }}
+        <div class="question-item">
+            <p class="mb-2"><b>I can rely on the budget advisor</b> not to make my job of budgeting expenses more difficult by careless work.</p>
+            <div class="likert-scale">
+                {% for i in range(1, 8) %}
+                    <div class="scale-option">
+                        <input type="radio" name="cognitive_trust_3" value="{{ i }}" id="cognitive_trust_3_{{ i }}" required>
+                        <label class="radio-label" for="cognitive_trust_3_{{ i }}">
+                            {% if i == 1 %}Strongly<br>disagree{% endif %}
+                            {% if i == 2 %}Disagree{% endif %}
+                            {% if i == 3 %}Somewhat<br>disagree{% endif %}
+                            {% if i == 4 %}Neutral{% endif %}
+                            {% if i == 5 %}Somewhat<br>agree{% endif %}
+                            {% if i == 6 %}Agree{% endif %}
+                            {% if i == 7 %}Strongly<br>agree{% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ formfield_errors 'cognitive_trust_3' }}
         </div>
         
-        <hr>
-        
-        <div class="mb-4">
-            {{ formfield 'cognitive_trust_4' }}
+        <div class="question-item">
+            <p class="mb-2"><b>Most people</b>, even those who are not big fans of the budget advisor, <b>likely trust and respect their work</b>.</p>
+            <div class="likert-scale">
+                {% for i in range(1, 8) %}
+                    <div class="scale-option">
+                        <input type="radio" name="cognitive_trust_4" value="{{ i }}" id="cognitive_trust_4_{{ i }}" required>
+                        <label class="radio-label" for="cognitive_trust_4_{{ i }}">
+                            {% if i == 1 %}Strongly<br>disagree{% endif %}
+                            {% if i == 2 %}Disagree{% endif %}
+                            {% if i == 3 %}Somewhat<br>disagree{% endif %}
+                            {% if i == 4 %}Neutral{% endif %}
+                            {% if i == 5 %}Somewhat<br>agree{% endif %}
+                            {% if i == 6 %}Agree{% endif %}
+                            {% if i == 7 %}Strongly<br>agree{% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ formfield_errors 'cognitive_trust_4' }}
         </div>
         
-        <hr>
-        
-        <div class="mb-4">
-            {{ formfield 'cognitive_trust_5' }}
+        <div class="question-item">
+            <p class="mb-2">Others who must interact with the budget advisor likely <b>consider them to be trustworthy</b>.</p>
+            <div class="likert-scale">
+                {% for i in range(1, 8) %}
+                    <div class="scale-option">
+                        <input type="radio" name="cognitive_trust_5" value="{{ i }}" id="cognitive_trust_5_{{ i }}" required>
+                        <label class="radio-label" for="cognitive_trust_5_{{ i }}">
+                            {% if i == 1 %}Strongly<br>disagree{% endif %}
+                            {% if i == 2 %}Disagree{% endif %}
+                            {% if i == 3 %}Somewhat<br>disagree{% endif %}
+                            {% if i == 4 %}Neutral{% endif %}
+                            {% if i == 5 %}Somewhat<br>agree{% endif %}
+                            {% if i == 6 %}Agree{% endif %}
+                            {% if i == 7 %}Strongly<br>agree{% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ formfield_errors 'cognitive_trust_5' }}
         </div>
         
-        <hr>
-        
-        <div class="mb-4">
-            {{ formfield 'mediator_attention_check' }}
+        <div class="question-item">
+            <p class="mb-2">If you are reading this carefully, <b>please select 'Agree'</b>.</p>
+            <div class="likert-scale">
+                {% for i in range(1, 8) %}
+                    <div class="scale-option">
+                        <input type="radio" name="mediator_attention_check" value="{{ i }}" id="mediator_attention_check_{{ i }}" required>
+                        <label class="radio-label" for="mediator_attention_check_{{ i }}">
+                            {% if i == 1 %}Strongly<br>disagree{% endif %}
+                            {% if i == 2 %}Disagree{% endif %}
+                            {% if i == 3 %}Somewhat<br>disagree{% endif %}
+                            {% if i == 4 %}Neutral{% endif %}
+                            {% if i == 5 %}Somewhat<br>agree{% endif %}
+                            {% if i == 6 %}Agree{% endif %}
+                            {% if i == 7 %}Strongly<br>agree{% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ formfield_errors 'mediator_attention_check' }}
         </div>
     </div>
 </div>

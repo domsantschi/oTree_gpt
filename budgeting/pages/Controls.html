@@ -5,32 +5,41 @@
 {{ block content }}
 
 <style>
-    .otree-form-group .controls {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
+    .likert-scale {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 10px;
+        margin: 15px 0;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
     }
-    
-    .otree-form-group .form-check-inline {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        flex: 1;
-        margin: 0;
-        padding: 0 2px;
-    }
-    
-    .otree-form-group .form-check-inline input[type="radio"] {
-        margin-bottom: 0.35rem;
-    }
-    
-    .otree-form-group .form-check-inline label {
+
+    .scale-option {
         text-align: center;
-        font-size: 0.75em;
-        margin: 0;
+        padding: 10px 5px;
+    }
+
+    .scale-option input[type="radio"] {
+        transform: scale(1.2);
+        margin-bottom: 8px;
+    }
+
+    .radio-label {
+        font-size: 0.8em;
+        margin-top: 8px;
+        display: block;
+        color: #495057;
         line-height: 1.2;
-        word-wrap: break-word;
-        max-width: 100%;
+    }
+
+    .question-item {
+        padding: 15px 0;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .question-item:last-child {
+        border-bottom: none;
     }
 </style>
 
@@ -39,8 +48,25 @@
         <strong>Political Ideology</strong>
     </div>
     <div class="card-body">
-        <div class="mb-3">
-            {{ formfield 'political_ideology' }}
+        <div class="question-item">
+            <p class="mb-2">Where would you place yourself on the <b>political spectrum</b>?</p>
+            <div class="likert-scale">
+                {% for i in range(1, 8) %}
+                    <div class="scale-option">
+                        <input type="radio" name="political_ideology" value="{{ i }}" id="political_ideology_{{ i }}" required>
+                        <label class="radio-label" for="political_ideology_{{ i }}">
+                            {% if i == 1 %}Very<br>left-leaning{% endif %}
+                            {% if i == 2 %}Left-<br>leaning{% endif %}
+                            {% if i == 3 %}Somewhat<br>left{% endif %}
+                            {% if i == 4 %}Neutral{% endif %}
+                            {% if i == 5 %}Somewhat<br>right{% endif %}
+                            {% if i == 6 %}Right-<br>leaning{% endif %}
+                            {% if i == 7 %}Very<br>right-leaning{% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ formfield_errors 'political_ideology' }}
         </div>
     </div>
 </div>
@@ -50,20 +76,67 @@
         <strong>Trust and Attitudes</strong>
     </div>
     <div class="card-body">
-        <div class="mb-4">
-            {{ formfield 'trust_in_government' }}
+        <div class="question-item">
+            <p class="mb-2">I <b>trust human experts</b> to provide accurate and reliable advice.</p>
+            <div class="likert-scale">
+                {% for i in range(1, 8) %}
+                    <div class="scale-option">
+                        <input type="radio" name="trust_in_government" value="{{ i }}" id="trust_in_government_{{ i }}" required>
+                        <label class="radio-label" for="trust_in_government_{{ i }}">
+                            {% if i == 1 %}Strongly<br>disagree{% endif %}
+                            {% if i == 2 %}Disagree{% endif %}
+                            {% if i == 3 %}Somewhat<br>disagree{% endif %}
+                            {% if i == 4 %}Neutral{% endif %}
+                            {% if i == 5 %}Somewhat<br>agree{% endif %}
+                            {% if i == 6 %}Agree{% endif %}
+                            {% if i == 7 %}Strongly<br>agree{% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ formfield_errors 'trust_in_government' }}
         </div>
         
-        <hr>
-        
-        <div class="mb-4">
-            {{ formfield 'trust_in_ai' }}
+        <div class="question-item">
+            <p class="mb-2">I <b>trust AI models</b> to provide accurate and reliable advice.</p>
+            <div class="likert-scale">
+                {% for i in range(1, 8) %}
+                    <div class="scale-option">
+                        <input type="radio" name="trust_in_ai" value="{{ i }}" id="trust_in_ai_{{ i }}" required>
+                        <label class="radio-label" for="trust_in_ai_{{ i }}">
+                            {% if i == 1 %}Strongly<br>disagree{% endif %}
+                            {% if i == 2 %}Disagree{% endif %}
+                            {% if i == 3 %}Somewhat<br>disagree{% endif %}
+                            {% if i == 4 %}Neutral{% endif %}
+                            {% if i == 5 %}Somewhat<br>agree{% endif %}
+                            {% if i == 6 %}Agree{% endif %}
+                            {% if i == 7 %}Strongly<br>agree{% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ formfield_errors 'trust_in_ai' }}
         </div>
         
-        <hr>
-        
-        <div class="mb-4">
-            {{ formfield 'risk_attitude' }}
+        <div class="question-item">
+            <p class="mb-2">I am generally <b>willing to take risks</b>.</p>
+            <div class="likert-scale">
+                {% for i in range(1, 8) %}
+                    <div class="scale-option">
+                        <input type="radio" name="risk_attitude" value="{{ i }}" id="risk_attitude_{{ i }}" required>
+                        <label class="radio-label" for="risk_attitude_{{ i }}">
+                            {% if i == 1 %}Strongly<br>disagree{% endif %}
+                            {% if i == 2 %}Disagree{% endif %}
+                            {% if i == 3 %}Somewhat<br>disagree{% endif %}
+                            {% if i == 4 %}Neutral{% endif %}
+                            {% if i == 5 %}Somewhat<br>agree{% endif %}
+                            {% if i == 6 %}Agree{% endif %}
+                            {% if i == 7 %}Strongly<br>agree{% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ formfield_errors 'risk_attitude' }}
         </div>
     </div>
 </div>
@@ -73,8 +146,25 @@
         <strong>AI Familiarity</strong>
     </div>
     <div class="card-body">
-        <div class="mb-3">
-            {{ formfield 'ai_familiarity' }}
+        <div class="question-item">
+            <p class="mb-2">I <b>regularly use AI tools</b> (e.g., ChatGPT, Copilot) in my daily activities.</p>
+            <div class="likert-scale">
+                {% for i in range(1, 8) %}
+                    <div class="scale-option">
+                        <input type="radio" name="ai_familiarity" value="{{ i }}" id="ai_familiarity_{{ i }}" required>
+                        <label class="radio-label" for="ai_familiarity_{{ i }}">
+                            {% if i == 1 %}Strongly<br>disagree{% endif %}
+                            {% if i == 2 %}Disagree{% endif %}
+                            {% if i == 3 %}Somewhat<br>disagree{% endif %}
+                            {% if i == 4 %}Neutral{% endif %}
+                            {% if i == 5 %}Somewhat<br>agree{% endif %}
+                            {% if i == 6 %}Agree{% endif %}
+                            {% if i == 7 %}Strongly<br>agree{% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ formfield_errors 'ai_familiarity' }}
         </div>
     </div>
 </div>

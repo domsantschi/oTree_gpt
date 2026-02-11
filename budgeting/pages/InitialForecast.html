@@ -48,7 +48,7 @@
         <div class="mb-3">
             <label class="form-label">Estimate (CHF <span id="sliderMinLabel"></span> - <span id="sliderMaxLabel"></span>)</label>
             <input type="range" class="form-range" id="forecastSlider"
-                   min="{{ slider_min }}" max="{{ slider_max }}" value="{{ last_year_actual }}" step="1">
+                   min="{{ slider_min }}" max="{{ slider_max }}" value="{{ last_year_actual }}" step="1000">
             <div class="text-center"><strong id="forecastValue">CHF <span id="initialForecastLabel"></span></strong></div>
             <input type="hidden" name="initial_forecast" id="initial_forecast" value="{{ last_year_actual }}">
         </div>
