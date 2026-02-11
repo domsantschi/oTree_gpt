@@ -175,6 +175,40 @@ class Player(BasePlayer):
     # Track consent decision
     declined_consent = models.BooleanField(initial=False)
     
+    # Scenario understanding check questions
+    scenario_q1 = models.StringField(
+        label="What is the main purpose of SecureHorizon's AI Insurance product?",
+        choices=[
+            "To sell AI software to businesses",
+            "To provide coverage when AI or GenAI systems cause harm",
+            "To train AI models for other companies",
+            "To replace human employees with AI systems",
+        ],
+        widget=widgets.RadioSelect,
+    )
+    
+    scenario_q2 = models.StringField(
+        label="Who is the AI Insurance product designed to cover?",
+        choices=[
+            "Only large corporations",
+            "Only government agencies",
+            "Businesses and individuals",
+            "Only AI developers",
+        ],
+        widget=widgets.RadioSelect,
+    )
+    
+    scenario_q3 = models.StringField(
+        label="Which of the following is NOT a type of coverage included in the AI Insurance product?",
+        choices=[
+            "AI Malfunction Coverage",
+            "AI Lockout Protection",
+            "AI Liability Shield",
+            "AI Profit Guarantee",
+        ],
+        widget=widgets.RadioSelect,
+    )
+    
     # Mediators - Information Perspective
     creative_thinking = models.IntegerField(
         label="Creative thinking about risks",
@@ -317,6 +351,7 @@ class Player(BasePlayer):
     screening_page_time = models.FloatField(doc="Time spent on screening page in seconds")
     introduction_page_time = models.FloatField(doc="Time spent on introduction page in seconds")
     background_page_time = models.FloatField(doc="Time spent on background page in seconds")
+    scenario_check_page_time = models.FloatField(doc="Time spent on scenario check page in seconds")
     clt_condition_page_time = models.FloatField(doc="Time spent on construal level condition page in seconds")
     spec_condition_page_time = models.FloatField(doc="Time spent on speculative design condition page in seconds")
     assessment_page_time = models.FloatField(doc="Time spent on assessment page in seconds")
@@ -483,6 +518,40 @@ class Background(Page):
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
         player.background_page_time = time.time() - player.participant._start_time
+
+class ScenarioCheck(Page):
+    form_model = 'player'
+    form_fields = ['scenario_q1', 'scenario_q2', 'scenario_q3']
+    
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.passed_screening
+    
+    @staticmethod
+    def get_timeout_seconds(player: Player):
+        import time
+        player.participant._start_time = time.time()
+        return None
+    
+    @staticmethod
+    def error_message(player: Player, values):
+        errors = []
+        # Q1: Correct answer is "To provide coverage when AI or GenAI systems cause harm"
+        if values.get('scenario_q1') != "To provide coverage when AI or GenAI systems cause harm":
+            errors.append('Question 1 is incorrect.')
+        # Q2: Correct answer is "Businesses and individuals"
+        if values.get('scenario_q2') != "Businesses and individuals":
+            errors.append('Question 2 is incorrect.')
+        # Q3: Correct answer is "AI Profit Guarantee" (the one NOT included)
+        if values.get('scenario_q3') != "AI Profit Guarantee":
+            errors.append('Question 3 is incorrect.')
+        
+        if errors:
+            return 'Some answers are incorrect. Please review the scenario and try again: ' + ' '.join(errors)
+    
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        player.scenario_check_page_time = time.time() - player.participant._start_time
 
 class CLT_Condition(Page):
     form_model = 'player'
@@ -715,6 +784,7 @@ page_sequence = [
     ScreenedOut,
     Introduction,
     Background,
+    ScenarioCheck,
     CLT_Condition,
     Spec_Condition,
     Assessment,
